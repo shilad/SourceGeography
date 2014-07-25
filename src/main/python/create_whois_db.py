@@ -4,8 +4,6 @@
 import sys
 import psycopg2
 import psycopg2.extensions
-psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
-psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 conn = psycopg2.connect(database = sys.argv[1], user = sys.argv[2], host = sys.argv[3])
 conn.set_client_encoding('UTF-8')
@@ -30,15 +28,28 @@ if cur.rowcount == 0:
     """)
     conn.commit()
 
+existing = set()
+cur.arraysize = 500
+cur.execute("SELECT domain FROM domains;")
+
+while True:
+    rows = cur.fetchmany(500)
+    if not rows:
+        break
+    for row in rows:
+        existing.add(row[0])
+
+print("Discovered %s existing domains" % len(existing))
+
 added = 0
 for line in open('../../../domains.txt'):
     domain = line.strip()
-    cur.execute("SELECT domain FROM domains where domain = %s", (domain,))
-    if cur.rowcount == 0:
+    if domain not in existing:
         added += 1
         cur.execute("INSERT into domains VALUES(%s)", (domain,))
         if added % 1000 == 0:
             print('adding domain %d' % added)
+            conn.commit()
 
 conn.commit()
 
