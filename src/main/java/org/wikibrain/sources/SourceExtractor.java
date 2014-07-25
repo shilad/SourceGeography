@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 /**
  * @author Shilad Sen
  */
-public class CitationAnalyzer {
-    private static final Logger LOG = Logger.getLogger(CitationAnalyzer.class.getName());
+public class SourceExtractor {
+    private static final Logger LOG = Logger.getLogger(SourceExtractor.class.getName());
 
     private final Language language;
     private final LocalPageDao pageDao;
@@ -42,7 +42,7 @@ public class CitationAnalyzer {
     private Map<LocalPage, Geometry> countries = new HashMap<LocalPage, Geometry>();
     private AtomicInteger invalidUrls = new AtomicInteger();
 
-    public CitationAnalyzer(Env env, Language language) throws ConfigurationException, DaoException {
+    public SourceExtractor(Env env, Language language) throws ConfigurationException, DaoException {
         this.language = language;
         this.pageDao = env.getConfigurator().get(LocalPageDao.class);
         this.spatialDao = env.getConfigurator().get(SpatialDataDao.class);
@@ -182,7 +182,7 @@ public class CitationAnalyzer {
 
     public static void main(String args[]) throws Exception {
         Env env = EnvBuilder.envFromArgs(args);
-        CitationAnalyzer analyzer = new CitationAnalyzer(env, Language.EN);
+        SourceExtractor analyzer = new SourceExtractor(env, Language.EN);
         analyzer.createCsv(new File("source_urls.tsv"), new File("invalid_urls.txt"), new File("completed_urls.txt"));
     }
 }
