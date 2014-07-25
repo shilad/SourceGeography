@@ -5,7 +5,7 @@ import sys
 import psycopg2
 import psycopg2.extensions
 
-conn = psycopg2.connect(database = sys.argv[1], user = sys.argv[2], host = sys.argv[3])
+conn = psycopg2.connect(host = sys.argv[1], user = sys.argv[2], password = sys.argv[3], database = sys.argv[4])
 conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
 
