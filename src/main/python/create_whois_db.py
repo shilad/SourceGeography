@@ -3,8 +3,12 @@
 
 import sys
 import psycopg2
+import psycopg2.extensions
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 conn = psycopg2.connect(database = sys.argv[1], user = sys.argv[2], host = sys.argv[3])
+conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
 
 cur.execute("select * from information_schema.tables where table_name=%s", ('domains',))

@@ -6,12 +6,14 @@ import time
 import traceback
 import pythonwhois
 
-SLEEP_TIME = 1
-
-
+import psycopg2.extensions
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 conn = psycopg2.connect(database = sys.argv[1], user = sys.argv[2], host = sys.argv[3])
+conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
+SLEEP_TIME = 1.8
 
 for i in range(1000):
     cur.execute("""
@@ -25,7 +27,8 @@ for i in range(1000):
     domain = cur.fetchone()[0]
     print('processing %s' % domain)
     try:
-        result = pythonwhois.net.get_whois_raw(domain)
+        records = pythonwhois.net.get_whois_raw(domain)
+        result = ('\n\n' + '=+' * 40 + '\n\n').join(records)
         cur.execute("""
             UPDATE domains
             SET completed = 'now()', status = 'C', message = %s
