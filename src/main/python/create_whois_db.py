@@ -9,7 +9,7 @@ conn = psycopg2.connect(host = sys.argv[1], user = sys.argv[2], password = sys.a
 conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
 
-cur.execute("select * from information_schema.tables where table_name=%s", ('domains',))
+cur.execute("select * from information_schema.tables where table_schema = 'public' and table_name=%s", ('domains',))
 if cur.rowcount == 0:
     cur.execute("""
         CREATE TABLE domains (
