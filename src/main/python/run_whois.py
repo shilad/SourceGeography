@@ -11,9 +11,9 @@ import psycopg2.extensions
 conn = psycopg2.connect(host = sys.argv[1], user = sys.argv[2], password = sys.argv[3], database = sys.argv[4])
 conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
-SLEEP_TIME = 1.8
+SLEEP_TIME = 1
 
-for i in range(1000):
+for i in range(1500):
     cur.execute("""
         BEGIN ISOLATION LEVEL SERIALIZABLE;
         UPDATE domains
