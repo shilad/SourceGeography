@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -x
+exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
+echo BEGIN
+
 PSQL_HOST=whois.clkcwsu8xzv8.us-east-1.rds.amazonaws.com
 PSQL_USER=shilad
 PSQL_PW=shiladsen
