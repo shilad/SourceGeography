@@ -10,5 +10,5 @@ yum install git python-pip python-psycopg2 -y &&
 rm -rf /root/SourceGeography &&
 git clone https://github.com/shilad/SourceGeography &&
 cd /root/SourceGeography/src/main/python &&
-python ./run_whois.py $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB &&
+python ./create_whois_db.py $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB &&
 shutdown -h now
