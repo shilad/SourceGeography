@@ -53,5 +53,7 @@ for line in open('../../../domains.txt'):
 conn.commit()
 
 print("Added %d new domains " % added)
+
+conn.autocommit()
 cur.execute('vacuum analyze;')
 
