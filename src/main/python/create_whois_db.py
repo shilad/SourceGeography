@@ -24,7 +24,6 @@ if cur.rowcount == 0:
     cur.execute("""
         CREATE INDEX domains_started_idx on domains(started);
         CREATE INDEX domains_domain_idx on domains(domain);
-        VACUUM ANALYZE;
     """)
     conn.commit()
 
@@ -54,4 +53,5 @@ for line in open('../../../domains.txt'):
 conn.commit()
 
 print("Added %d new domains " % added)
+cur.execute('vacuum analyze;')
 
