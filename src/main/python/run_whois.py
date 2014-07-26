@@ -15,7 +15,7 @@ SLEEP_TIME = 1
 
 for i in range(1500):
     cur.execute("""
-        BEGIN ISOLATION LEVEL SERIALIZABLE;
+        lock table domains in SHARE ROW EXCLUSIVE mode;
         UPDATE domains
         SET    started = 'now()'
         WHERE  domain = (SELECT domain FROM domains WHERE started IS NULL LIMIT 1)

@@ -83,6 +83,7 @@ def get_root_server(domain):
 	
 def whois_request(domain, server, port=43):
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sock.settimeout(10.0)
 	sock.connect((server, port))
 	sock.send(("%s\r\n" % domain).encode("utf-8"))
 	buff = b""
