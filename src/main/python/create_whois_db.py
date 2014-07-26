@@ -54,6 +54,6 @@ conn.commit()
 
 print("Added %d new domains " % added)
 
-conn.autocommit()
+conn.set_isolation_level(0)
 cur.execute('vacuum analyze;')
 
