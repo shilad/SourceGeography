@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class AllDomains {
     public static void main(String args[]) throws IOException {
-        File input = new File("../wikibrain/source_urls.tsv");
+        File input = new File("./source_urls.tsv");
         File output = new File("domains.txt");
         BufferedWriter writer = WpIOUtils.openWriter(output);
 
@@ -25,7 +25,8 @@ public class AllDomains {
                 domains.add(d);
             }
         }
-
         writer.close();
+
+        System.out.println("wrote " + domains.size() + " domains");
     }
 }

@@ -13,7 +13,7 @@ conn.set_client_encoding('UTF-8')
 cur = conn.cursor()
 SLEEP_TIME = 1
 
-for i in range(1500):
+for i in range(1000):
     cur.execute("""
         lock table domains in SHARE ROW EXCLUSIVE mode;
         UPDATE domains

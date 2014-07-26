@@ -2,8 +2,8 @@ package org.wikibrain.sources;
 
 import com.google.common.net.InternetDomainName;
 import com.vividsolutions.jts.geom.Geometry;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.plexus.util.FileUtils;
 import org.wikibrain.conf.ConfigurationException;
 import org.wikibrain.core.cmd.Env;
 import org.wikibrain.core.cmd.EnvBuilder;
@@ -60,9 +60,14 @@ public class SourceExtractor {
     }
 
     public void createCsv(File csv, File invalidFile, final File completedFile) throws DaoException, IOException {
+        Set<Integer> completed = new HashSet<Integer>();
+        for (String line : FileUtils.readLines(completedFile)) {
+            completed.add(Integer.valueOf(line.trim()));
+        }
         final Map<Integer, Geometry> geotags = spatialDao.getAllGeometriesInLayer("wikidata");
-        final BufferedWriter writer = WpIOUtils.openWriter(csv);
-        final BufferedWriter invalid = WpIOUtils.openWriter(invalidFile);
+        boolean exists = csv.exists();
+        final BufferedWriter writer = WpIOUtils.openWriterForAppend(csv);
+        final BufferedWriter invalid = WpIOUtils.openWriterForAppend(invalidFile);
         List<String> fields = Arrays.asList(
                 "language",
                 "articleId",
@@ -77,8 +82,11 @@ public class SourceExtractor {
                 "domain",
                 "effectiveDomain"
         );
-        writer.write(StringUtils.join(fields, "\t") + "\n");
+        if (!exists) {
+            writer.write(StringUtils.join(fields, "\t") + "\n");
+        }
         List<Integer> geoConcepts = new ArrayList<Integer>(geotags.keySet());
+        geoConcepts.removeAll(completed);
         Collections.shuffle(geoConcepts);
 
         ParallelForEach.loop(
@@ -96,7 +104,7 @@ public class SourceExtractor {
     }
 
     private void writeOneConcept(File completed, BufferedWriter writer, BufferedWriter invalid, int conceptId, Geometry articleGeo) throws DaoException, IOException {
-        FileUtils.fileAppend(completed.getAbsolutePath(), "" + conceptId + "\n");
+        FileUtils.write(completed, "" + conceptId + "\n", true);
 
         LocalPage article = getLocalPage(conceptId);
         LocalPage country = getContainingCountry(articleGeo);
@@ -183,6 +191,6 @@ public class SourceExtractor {
     public static void main(String args[]) throws Exception {
         Env env = EnvBuilder.envFromArgs(args);
         SourceExtractor analyzer = new SourceExtractor(env, Language.EN);
-        analyzer.createCsv(new File("source_urls.tsv"), new File("invalid_urls.txt"), new File("completed_urls.txt"));
+        analyzer.createCsv(new File("source_urls.tsv"), new File("invalid_urls.txt"), new File("completed_concepts.txt"));
     }
 }
