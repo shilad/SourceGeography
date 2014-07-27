@@ -10,7 +10,7 @@ require 'pg'
 
 conn = PG::Connection.open(:host => ARGV[0], :user => ARGV[1], :password => ARGV[2], :dbname => ARGV[3])
 
-for i in 0 .. 1000
+for i in 0 .. 750
     domain = ''
     conn.transaction do
       res = conn.exec_params('
@@ -44,7 +44,7 @@ for i in 0 .. 1000
            ', [e, domain])
         end
     end
-    sleep(2)
+    sleep(3)
 end
 
 
