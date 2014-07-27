@@ -17,6 +17,7 @@ if cur.rowcount == 0:
             started TIMESTAMP,
             completed TIMESTAMP,
             status VARCHAR,
+            server TEXT,
             error TEXT,
             message TEXT
         );

@@ -23,7 +23,6 @@ for i in range(1000):
     """)
     conn.commit()
     domain = cur.fetchone()[0]
-    print('processing %s' % domain)
     try:
         records = pythonwhois.net.get_whois_raw(domain)
         result = ('\n\n' + '=+' * 40 + '\n\n').join(records)
