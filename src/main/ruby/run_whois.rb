@@ -22,7 +22,6 @@ for i in 0 .. 750
       domain = res.getvalue(0, 0)
     end
     begin
-        z
         $stderr.puts "looking up #{domain}"
         r = Whois.whois(domain)
         sv = r.server.class.name.demodulize

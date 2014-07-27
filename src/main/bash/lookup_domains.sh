@@ -10,10 +10,11 @@ PSQL_PW=shiladsen
 PSQL_DB=whois
 
 yum update -y &&
-yum install git python-pip python-psycopg2 -y &&
+yum install git postgresql-devel ruby-devel gcc -y &&
+gem install whois pg &&
 rm -rf /root/SourceGeography &&
 cd /root &&
 git clone https://github.com/shilad/SourceGeography &&
-cd /root/SourceGeography/src/main/python &&
-python ./run_whois.py $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB &&
+cd /root/SourceGeography/src/main/ruby &&
+ruby ./run_whois.rb $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB &&
 shutdown -h now
