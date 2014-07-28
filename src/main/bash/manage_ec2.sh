@@ -16,7 +16,7 @@ while true; do
         --instance-initiated-shutdown-behavior terminate \
         --associate-public-ip-address
 
-    sleep 3000
+    sleep 3450
 
     ids=$( aws ec2 describe-instances | grep InstanceId | sed -e 's/.*: "//' | sed -e 's/",//' | tr '\n' ' ')
     aws ec2 terminate-instances --instance-ids ${ids}
