@@ -27,7 +27,8 @@ BATCH_SIZE = 100
 END_TIME = time.time() + 40 * 60
 BINARY_EXTS = set(['pdf', 'jpg', 'gif', 'xls', 'doc', 'png', 'zip', 'swf', 'tif', 'dot', 'jpeg', 'xlsx'])
 BLOCKSIZE = 1048576 # or some other, desired size in bytes
-DRY_RUN = False
+ENCODING_DETECT_BYTES = 10*1024*1024   # 10 MBs
+DRY_RUN = True
 
 
 def main():
@@ -106,7 +107,7 @@ def guess_charset(response, download):
         if encoding_works(download, charset):
             return charset
 
-    s = open(download, 'rb').read(10000)
+    s = open(download, 'rb').read(ENCODING_DETECT_BYTES)
     d = chardet.detect(s)
     charset = d['encoding']
     if charset and encoding_works(download, charset):
@@ -215,5 +216,5 @@ def reencode(src_path, src_encoding, dest_path, dest_encoding):
     dest_file.close()
 
 if __name__ == '__main__':
-    main()
-    #do_one_url('http://www.enfieldcs.enfield.sch.uk/index.shtml', 'z')
+    #main()
+    do_one_url('http://www.orleansonline.ca', 'z', 'foo')
