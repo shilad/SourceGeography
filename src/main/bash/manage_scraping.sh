@@ -13,6 +13,7 @@ while true; do
         --user-data file://${dir}/scrape_citations.sh \
         --instance-type t2.micro \
         --subnet-id subnet-18171730 \
+        --iam-instance-profile Name=myRole \
         --instance-initiated-shutdown-behavior terminate \
         --associate-public-ip-address
 

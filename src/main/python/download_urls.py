@@ -58,7 +58,7 @@ def main():
             os.system('mkdir -p foo/%s' % dest_dir)
             os.system('cp %s foo/%s' % (tar_path, dest))
         else:
-            pass
+            os.system('aws s3 cp %s s3://sourcegeography/scrape/%s' % (tar_path, dest))
 
         shutil.rmtree(batch_dir)
         os.unlink(tar_path)
@@ -177,12 +177,13 @@ def do_one_url(url, batch_id, dest_file):
             WHERE url = %s
         """, (response.geturl(), response.getcode(), dest_file, url_id, url))
     except urllib2.HTTPError as e:
-        sys.stderr.write('doing %s failed (%s %s)\n' % (url, e.code, e.reason))
+        reason = str(e)
+        sys.stderr.write('doing %s failed (%s %s)\n' % (url, e.code, reason))
         PG_CURSOR.execute("""
             UPDATE urls
             SET completed = 'now()', error = %s, status_code = %s, status_message = %s
             WHERE url = %s
-        """, ('http', e.code, e.reason, url))
+        """, ('http', e.code, reason, url))
     except httplib.BadStatusLine as e:
         sys.stderr.write('doing %s failed (bad status %s)\n' % (url, `e.line`))
         PG_CURSOR.execute("""
