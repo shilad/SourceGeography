@@ -134,14 +134,15 @@ def do_one_url(url, batch_id, dest_file):
     try:
         sys.stderr.write('doing %s\n' % url)
         urlinfo = urlparse.urlparse(url)
-        headers = {
-            'User-agent' : 'Mozilla/5.0',
-            'Host' : urlinfo.netloc
-        }
-        request = urllib2.Request(url, headers=headers)
-        opener1 = urllib2.HTTPRedirectHandler()
-        opener2 = urllib2.HTTPCookieProcessor()
-        opener3 = urllib2.build_opener(opener1, opener2)
+
+        request = urllib2.Request(url)
+        handler1 = urllib2.HTTPRedirectHandler()
+        handler2 = urllib2.HTTPCookieProcessor()
+        opener3 = urllib2.build_opener(handler1, handler2)
+        opener3.addheaders = [
+            ('User-agent' , 'Mozilla/5.0'),
+            ('Host' , urlinfo.netloc)
+        ]
         response = opener3.open(request, timeout=20.0)
 
         url_id = random_word(8)
