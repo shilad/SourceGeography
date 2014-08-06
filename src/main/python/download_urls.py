@@ -24,7 +24,7 @@ PG_CNX.set_client_encoding('UTF-8')
 PG_CURSOR = PG_CNX.cursor()
 SLEEP_TIME = 0
 BATCH_SIZE = 100
-END_TIME = time.time() + 50 * 60
+END_TIME = time.time() + 48 * 60
 BINARY_EXTS = set(['pdf', 'jpg', 'gif', 'xls', 'doc', 'png', 'zip', 'swf', 'tif', 'dot', 'jpeg', 'xlsx'])
 BLOCKSIZE = 1048576 # or some other, desired size in bytes
 DRY_RUN = False
