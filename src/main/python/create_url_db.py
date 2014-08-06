@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # pip install psycopg2
 
+import bz2
 import sys
 import psycopg2
 import psycopg2.extensions
@@ -44,7 +45,7 @@ while True:
 print("Discovered %s existing urls" % len(existing))
 
 added = 0
-for line in open('../../../urls.txt'):
+for line in bz2.BZ2File('../../../urls.txt.bz2', 'r'):
     url = line.strip()
     if url not in existing:
         added += 1
