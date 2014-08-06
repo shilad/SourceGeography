@@ -28,7 +28,7 @@ END_TIME = time.time() + 40 * 60
 BINARY_EXTS = set(['pdf', 'jpg', 'gif', 'xls', 'doc', 'png', 'zip', 'swf', 'tif', 'dot', 'jpeg', 'xlsx'])
 BLOCKSIZE = 1048576 # or some other, desired size in bytes
 ENCODING_DETECT_BYTES = 10*1024*1024   # 10 MBs
-DRY_RUN = True
+DRY_RUN = False
 
 
 def main():
