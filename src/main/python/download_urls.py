@@ -23,7 +23,7 @@ PG_CNX = psycopg2.connect(host = sys.argv[1], user = sys.argv[2], password = sys
 PG_CNX.set_client_encoding('UTF-8')
 PG_CURSOR = PG_CNX.cursor()
 SLEEP_TIME = 0
-BATCH_SIZE = 200
+BATCH_SIZE = 100
 END_TIME = time.time() + 40 * 60
 BINARY_EXTS = set(['pdf', 'jpg', 'gif', 'xls', 'doc', 'png', 'zip', 'swf', 'tif', 'dot', 'jpeg', 'xlsx'])
 BLOCKSIZE = 1048576 # or some other, desired size in bytes
