@@ -216,5 +216,5 @@ def reencode(src_path, src_encoding, dest_path, dest_encoding):
     dest_file.close()
 
 if __name__ == '__main__':
-    #main()
-    do_one_url('http://www.orleansonline.ca', 'z', 'foo')
+    main()
+    #do_one_url('http://www.orleansonline.ca', 'z', 'foo')
