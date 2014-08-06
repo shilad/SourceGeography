@@ -139,7 +139,7 @@ def do_one_url(url, batch_id, dest_file):
             'Host' : urlinfo.netloc
         }
         request = urllib2.Request(url, headers=headers)
-        response = urllib2.urlopen(request, timeout=20.0)
+        response = urllib2.build_opener(urllib2.HTTPCookieProcessor).open(request, timeout=20.0)
 
         url_id = random_word(8)
 
