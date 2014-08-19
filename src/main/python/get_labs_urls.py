@@ -9,6 +9,9 @@ import traceback
 
 LANGS = ['en', 'de', 'fr', 'nl', 'it', 'pl', 'es', 'ru', 'ja', 'pt', 'zh', 'sv', 'vi', 'uk', 'ca', 'no', 'fi', 'cs', 'hu', 'ko', 'fa', 'id', 'tr', 'ar', 'ro', 'sk', 'eo', 'da', 'sr', 'lt', 'ms', 'he', 'eu', 'sl', 'bg', 'kk', 'vo', 'hr', 'war', 'hi', 'et', 'gl', 'az', 'nn', 'simple', 'la', 'el', 'th', 'new', 'roa-rup', 'oc', 'sh', 'ka', 'mk', 'tl', 'ht', 'pms', 'te', 'ta', 'be-x-old', 'be', 'br', 'ceb', 'lv', 'sq', 'jv', 'mg', 'cy', 'lb', 'mr', 'is', 'bs', 'yo', 'an', 'lmo', 'hy', 'fy', 'bpy', 'ml', 'pnb', 'sw', 'bn', 'io', 'af', 'gu', 'zh-yue', 'ne', 'nds', 'ur', 'ku', 'uz', 'ast', 'scn', 'su', 'qu', 'diq', 'ba', 'tt', 'my', 'ga', 'cv', 'ia', 'nap', 'bat-smg', 'map-bms', 'wa', 'als', 'kn', 'am', 'gd', 'bug', 'tg', 'zh-min-nan', 'yi', 'vec', 'sco', 'hif', 'roa-tara', 'os', 'arz', 'nah', 'mzn', 'sah', 'ky', 'mn', 'sa', 'pam', 'hsb', 'li', 'mi', 'si', 'co', 'ckb', 'gan', 'glk', 'bo', 'fo', 'bar', 'bcl', 'ilo', 'mrj', 'se', 'fiu-vro', 'nds-nl', 'tk', 'vls', 'ps', 'gv', 'rue', 'dv', 'nrm', 'pag', 'pa', 'koi', 'rm', 'km', 'kv', 'udm', 'csb', 'mhr', 'fur', 'mt', 'zea', 'wuu', 'lij', 'ug', 'lad', 'pi', 'xmf', 'sc', 'bh', 'zh-classical', 'or', 'nov', 'ksh', 'ang', 'so', 'kw', 'stq', 'nv', 'hak', 'frr', 'ay', 'frp', 'ext', 'szl', 'pcd', 'ie', 'gag', 'haw', 'xal', 'ln', 'rw', 'pdc', 'pfl', 'vep', 'krc', 'crh', 'eml', 'gn', 'ace', 'to', 'ce', 'kl', 'arc', 'myv', 'dsb', 'as', 'bjn', 'pap', 'tpi', 'lbe', 'mdf', 'wo', 'jbo', 'kab', 'sn', 'av', 'cbk-zam', 'ty', 'srn', 'kbd', 'lo', 'lez', 'ab', 'mwl', 'ltg', 'na', 'ig', 'kg', 'tet', 'za', 'kaa', 'nso', 'zu', 'rmy', 'cu', 'tn', 'chr', 'chy', 'got', 'sm', 'bi', 'mo', 'bm', 'iu', 'pih', 'ik', 'ss', 'sd', 'pnt', 'cdo', 'ee', 'ha', 'ti', 'bxr', 'ts', 'om', 'ks', 'ki', 've', 'sg', 'rn', 'cr', 'dz', 'lg', 'ak', 'ff', 'tum', 'fj', 'st', 'tw', 'xh', 'ch', 'ny', 'ng', 'ii', 'cho', 'mh', 'aa', 'kj', 'ho', 'mus', 'kr', 'hz']
 
+# langs that failed the first time around
+#LANGS = [ 'bat-smg', 'be-x-old', 'bg', 'cbk-zam', 'cs', 'de', 'eo', 'fi', 'fiu-vro', 'id', 'it', 'map-bms', 'nds-nl', 'nl', 'no', 'pl', 'pt', 'roa-rup', 'roa-tara', 'sv', 'th', 'tr', 'zh-classical', 'zh', 'zh-min-nan', 'zh-yue', ]
+
 DB = None
 
 PATH='source_urls.tsv'
@@ -108,7 +111,8 @@ def process_page(lang, page_id, lat, lng):
         c.close()
 
 
-def connect(lang):
+def connect_orig(lang):
+    """ THis should work, but there's an error in WMF labs at the moment."""
     global DB
 
     if DB:
@@ -128,6 +132,27 @@ def connect(lang):
     except:
         warn('connection to %s failed' % lang)
         return False
+
+
+
+def connect(lang2):
+    global DB
+
+    if not DB:
+        lang = 'en'
+        name = lang + 'wiki_p'
+        host = lang + 'wiki.labsdb'
+        DB = MySQLdb.connect(
+                db=name,
+                read_default_file="~/replica.my.cnf", 
+                host=host,
+                use_unicode=True,
+                charset='utf8'
+            )
+    c = DB.cursor()
+    c.execute('use ' + lang2.replace('-', '_') + 'wiki_p;')
+    c.close()
+    return True
 
 
 def warn(message):
