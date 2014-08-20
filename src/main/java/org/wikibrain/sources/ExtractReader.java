@@ -62,7 +62,7 @@ public class ExtractReader implements Iterable<Citation> {
                         try {
                             buffer = new Citation(line);
                         } catch (IllegalArgumentException e) {
-                            LOG.info("Invalid line in " + file + ": " + line);
+                            LOG.info("Invalid line in " + file + ": " + line + e.getMessage());
                         }
                     }
                     if (!iter.hasNext()) {

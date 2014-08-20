@@ -25,13 +25,17 @@ public class Citation {
     private final String domain;
     private final String effectiveDomain;
 
+    private final URL url2;
+    private final String domain2;
+    private final String effectiveDomain2;
+
     public Citation(String line) {
         if (line.endsWith("\n")) {
             line = line.substring(0, line.length() - 1);
         }
-        String tokens[] = line.split("\t");
-        if (tokens.length != 12) {
-            throw new IllegalArgumentException("Invalid line in extract: " + line);
+        String tokens[] = line.split("\t", -1);
+        if (tokens.length != 15) {
+            throw new IllegalArgumentException("Invalid line in extract: " + line + " - invalid token count: " + tokens.length);
         }
         this.article = tokensToLocalPage(tokens[0], tokens[1], tokens[2]);
         this.articleLocation = tokensToPoint(tokens[3], tokens[4]);
@@ -47,15 +51,29 @@ public class Citation {
 
         this.domain = tokens[10];
         this.effectiveDomain = tokens[11];
+
+        if (tokens[12].isEmpty() && tokens[13].isEmpty() && tokens[14].isEmpty()) {
+            this.url2 = null;
+            this.domain2 = null;
+            this.effectiveDomain2 = null;
+        } else {
+            try {
+                this.url2 = new URL(tokens[12]);
+            } catch (MalformedURLException e) {
+                throw new IllegalArgumentException("Invalid URL: " + tokens[9]);
+            }
+            this.domain2 = tokens[13];
+            this.effectiveDomain2 = tokens[14];
+        }
     }
 
     private LocalPage tokensToLocalPage(String langToken, String idToken, String titleToken) {
         Language lang = Language.getByLangCode(langToken);
         String suffix = " (" + lang.getLangCode() + ")";
-        if (!titleToken.endsWith(suffix)) {
-            throw new IllegalArgumentException("Invalid title: " + titleToken);
+        String title = titleToken;
+        if (titleToken.endsWith(suffix)) {
+            title = titleToken.substring(0, titleToken.length() - suffix.length());
         }
-        String title = titleToken.substring(0, titleToken.length() - suffix.length());
         return new LocalPage(lang, Integer.valueOf(idToken), title);
     }
 
@@ -92,5 +110,17 @@ public class Citation {
 
     public String getEffectiveDomain() {
         return effectiveDomain;
+    }
+
+    public URL getUrl2() {
+        return url2;
+    }
+
+    public String getDomain2() {
+        return domain2;
+    }
+
+    public String getEffectiveDomain2() {
+        return effectiveDomain2;
     }
 }

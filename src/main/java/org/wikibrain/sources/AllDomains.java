@@ -19,8 +19,8 @@ public class AllDomains {
 
         Set<String> domains = new HashSet<String>();
         for (Citation cite : new ExtractReader(input)) {
-            String d = cite.getEffectiveDomain();
-            if (!domains.contains(d)) {
+            String d = cite.getEffectiveDomain2();
+            if (d != null && !domains.contains(d)) {
                 writer.write(d + "\n");
                 domains.add(d);
             }

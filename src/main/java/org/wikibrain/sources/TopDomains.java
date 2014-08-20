@@ -35,6 +35,9 @@ public class TopDomains {
         domainCounts = new HashMap<String, Double>();
         for (Citation citation : new ExtractReader(file)) {
             String d = citation.getEffectiveDomain();
+            if (d == null) {
+                continue;
+            }
             int n = citationsPerArticle.get(citation.getArticle().getLocalId());
             if (domainCounts.containsKey(d)) {
                 domainCounts.put(d, domainCounts.get(d) + 1.0 / n);
@@ -59,7 +62,7 @@ public class TopDomains {
     }
 
     public static void main(String args[]) {
-        TopDomains td = new TopDomains(new File("../wikibrain/source_urls.tsv"));
+        TopDomains td = new TopDomains(new File("./source_urls.tsv"));
         td.printTopDomains();
     }
 }
