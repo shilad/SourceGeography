@@ -137,7 +137,7 @@ def do_one_url(url, batch_id, dest_file):
     global RETRY_COUNT
     global RETRY_ERRORS
 
-    host = None
+    host = ''
     response = None
     try:
         sys.stderr.write('doing %s\n' % url)
