@@ -149,7 +149,7 @@ def do_one_url(url, batch_id, dest_file):
                 sys.stderr.write('retrying %s after %d attempts\n' % (host, RETRY_COUNT[host]))
             else:
                 sys.stderr.write('host %s in penalty box for attempt %d\n' % (host, RETRY_COUNT[host]))
-                time.sleep(1.0)
+                time.sleep(0.5)
                 raise urllib2.URLError('Penalty box error: ' + RETRY_ERRORS[host])
 
         request = urllib2.Request(url)
@@ -241,9 +241,7 @@ def clear_host(host):
 
 
 def try_again(retry_num):
-    # num is greater than 0 and a power of two
-    # http://code.activestate.com/recipes/577514-chek-if-a-number-is-a-power-of-two/
-    return retry_num > 1 and ((retry_num & (retry_num - 1)) == 0)
+    return retry_num in (2, 4, 8, 16) or (retry_num > 16 and retry_num % 16 == 0)
 
 def reencode(src_path, src_encoding, dest_path, dest_encoding):
     src_file = codecs.open(src_path, "r", src_encoding)
