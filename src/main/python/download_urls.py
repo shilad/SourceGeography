@@ -219,20 +219,17 @@ def do_one_url(url, batch_id, dest_file):
         """, ('http', e.line, url))
     except:
         e = traceback.format_exc(1)
+
         if not 'Penalty box' in e:
             traceback.print_exc(1)
             RETRY_ERRORS[host] = e
+        RETRY_COUNT[host] = RETRY_COUNT.get(host, 0) + 1
 
         PG_CURSOR.execute("""
             UPDATE urls
             SET completed = 'now()', error = %s, status_code = -2
             WHERE url = %s
         """, (e, url))
-
-        if host not in RETRY_COUNT:
-            RETRY_COUNT[host] = 0
-
-        RETRY_COUNT[host] += 1
 
     PG_CNX.commit()
 
