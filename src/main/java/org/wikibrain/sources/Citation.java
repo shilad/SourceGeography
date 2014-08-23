@@ -10,11 +10,21 @@ import org.wikibrain.core.model.LocalPage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Shilad Sen
  */
 public class Citation {
+    static List<String> INTERNAL_DOMAINS = Arrays.asList(
+            "wikimedia.org",
+            "wikipedia.org",
+            "toolserver.org",
+            "wmflabs.org"
+    );
+
+
     private final LocalPage article;
     private final Point articleLocation;
 
@@ -122,5 +132,18 @@ public class Citation {
 
     public String getEffectiveDomain2() {
         return effectiveDomain2;
+    }
+
+    public boolean isInternal() {
+        if (url2 == null) {
+            return false;
+        }
+        String host = url2.getHost().toLowerCase();
+        for (String domain : INTERNAL_DOMAINS) {
+            if (host.endsWith(domain)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

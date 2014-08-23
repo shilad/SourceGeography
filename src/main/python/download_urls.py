@@ -30,6 +30,9 @@ BLOCKSIZE = 1048576 # or some other, desired size in bytes
 ENCODING_DETECT_BYTES = 10*1024*1024   # 10 MBs
 DRY_RUN = False
 
+RETRY_COUNT = {}
+RETRY_ERRORS = {}
+
 
 def main():
     if not os.path.isdir('batches'):
@@ -131,10 +134,23 @@ def is_binary(url):
 
 
 def do_one_url(url, batch_id, dest_file):
+    global RETRY_COUNT
+    global RETRY_ERRORS
+
+    host = None
     response = None
     try:
         sys.stderr.write('doing %s\n' % url)
         urlinfo = urlparse.urlparse(url)
+        host = urlinfo.hostname
+
+        if host in RETRY_COUNT:
+            if try_again(RETRY_COUNT[host]):
+                sys.stderr.write('retrying %s after %d attempts\n' % (host, RETRY_COUNT[host]))
+            else:
+                sys.stderr.write('host %s in penalty box for attempt %d\n' % (host, RETRY_COUNT[host]))
+                time.sleep(1.0)
+                raise urllib2.URLError('Penalty box error: ' + RETRY_ERRORS[host])
 
         request = urllib2.Request(url)
         handler1 = urllib2.HTTPRedirectHandler()
@@ -181,6 +197,11 @@ def do_one_url(url, batch_id, dest_file):
             SET completed = 'now()', final_url = %s, status_code = %s, archive = %s, file = %s
             WHERE url = %s
         """, (response.geturl(), response.getcode(), dest_file, url_id, url))
+
+        if host in RETRY_COUNT:
+            del(RETRY_ERRORS[host])
+            del(RETRY_COUNT[host])
+
     except urllib2.HTTPError as e:
         reason = str(e)
         sys.stderr.write('doing %s failed (%s %s)\n' % (url, e.code, reason))
@@ -197,16 +218,30 @@ def do_one_url(url, batch_id, dest_file):
             WHERE url = %s
         """, ('http', e.line, url))
     except:
-        traceback.print_exc(1)
+        e = traceback.format_exc(1)
+        if not 'Penalty box' in e:
+            traceback.print_exc(1)
+            RETRY_ERRORS[host] = e
+
         PG_CURSOR.execute("""
             UPDATE urls
             SET completed = 'now()', error = %s, status_code = -2
             WHERE url = %s
-        """, (traceback.format_exc(1), url))
+        """, (e, url))
+
+        if host not in RETRY_COUNT:
+            RETRY_COUNT[host] = 0
+
+        RETRY_COUNT[host] += 1
 
     PG_CNX.commit()
 
     time.sleep(SLEEP_TIME)
+
+def try_again(retry_num):
+    # num is greater than 0 and a power of two
+    # http://code.activestate.com/recipes/577514-chek-if-a-number-is-a-power-of-two/
+    return retry_num > 1 and ((retry_num & (retry_num - 1)) == 0)
 
 def reencode(src_path, src_encoding, dest_path, dest_encoding):
     src_file = codecs.open(src_path, "r", src_encoding)
@@ -217,4 +252,6 @@ def reencode(src_path, src_encoding, dest_path, dest_encoding):
 
 if __name__ == '__main__':
     main()
-    #do_one_url('http://www.orleansonline.ca', 'z', 'foo')
+
+#    while True:
+#        do_one_url('http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=9800147asdfa3&natregadvancedsearch=Search', 'z', 'foo')

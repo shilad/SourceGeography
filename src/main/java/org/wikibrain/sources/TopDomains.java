@@ -34,7 +34,7 @@ public class TopDomains {
 
         domainCounts = new HashMap<String, Double>();
         for (Citation citation : new ExtractReader(file)) {
-            String d = citation.getEffectiveDomain();
+            String d = citation.getEffectiveDomain2();
             if (d == null) {
                 continue;
             }
