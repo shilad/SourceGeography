@@ -9,7 +9,7 @@ while true; do
     aws ec2 run-instances \
         --image-id ami-76817c1e \
         --count ${NUM_INSTANCES} \
-        --key-name sources-keypair \
+        --key-name shilads-aws-keypair \
         --user-data file://${dir}/scrape_citations.sh \
         --instance-type t2.micro \
         --subnet-id subnet-18171730 \
