@@ -137,7 +137,7 @@ def do_one_url(url, batch_id, dest_file):
     global RETRY_COUNT
     global RETRY_ERRORS
 
-    host = ''
+    host = None
     response = None
     try:
         sys.stderr.write('doing %s\n' % url)
@@ -160,7 +160,7 @@ def do_one_url(url, batch_id, dest_file):
             ('User-agent' , 'Mozilla/5.0'),
             ('Host' , urlinfo.netloc)
         ]
-        response = opener3.open(request, timeout=20.0)
+        response = opener3.open(request, timeout=10.0)
 
         url_id = random_word(8)
 
@@ -197,12 +197,10 @@ def do_one_url(url, batch_id, dest_file):
             SET completed = 'now()', final_url = %s, status_code = %s, archive = %s, file = %s
             WHERE url = %s
         """, (response.geturl(), response.getcode(), dest_file, url_id, url))
-
-        if host in RETRY_COUNT:
-            del(RETRY_ERRORS[host])
-            del(RETRY_COUNT[host])
+        clear_host(host)
 
     except urllib2.HTTPError as e:
+        clear_host(host)
         reason = str(e)
         sys.stderr.write('doing %s failed (%s %s)\n' % (url, e.code, reason))
         PG_CURSOR.execute("""
@@ -211,6 +209,7 @@ def do_one_url(url, batch_id, dest_file):
             WHERE url = %s
         """, ('http', e.code, reason, url))
     except httplib.BadStatusLine as e:
+        clear_host(host)
         sys.stderr.write('doing %s failed (bad status %s)\n' % (url, `e.line`))
         PG_CURSOR.execute("""
             UPDATE urls
@@ -235,6 +234,12 @@ def do_one_url(url, batch_id, dest_file):
 
     time.sleep(SLEEP_TIME)
 
+def clear_host(host):
+    if host in RETRY_COUNT:
+        del(RETRY_ERRORS[host])
+        del(RETRY_COUNT[host])
+
+
 def try_again(retry_num):
     # num is greater than 0 and a power of two
     # http://code.activestate.com/recipes/577514-chek-if-a-number-is-a-power-of-two/
@@ -250,5 +255,5 @@ def reencode(src_path, src_encoding, dest_path, dest_encoding):
 if __name__ == '__main__':
     main()
 
-#    while True:
-#        do_one_url('http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=9800147asdfa3&natregadvancedsearch=Search', 'z', 'foo')
+   # while True:
+   #     do_one_url('http://www.stateofgreen.com/en/Profiles/Bladt-Industries-A-S/Solutions/Gunfleet-Sands-Offshore', 'z', 'foo')
