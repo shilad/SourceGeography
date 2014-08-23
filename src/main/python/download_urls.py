@@ -51,7 +51,11 @@ def main():
         for url in urls:
             if time.time() > END_TIME:
                 break
-            do_one_url(url, batch_id, dest)
+            try:
+                do_one_url(url, batch_id, dest)
+            except:
+                sys.stderr.write('uncaught exception when processing ' + url + ':\n')
+                traceback.print_exc()
 
         tar = tarfile.open(tar_path, 'w:bz2', bufsize=BLOCKSIZE)
         tar.add(batch_dir, arcname=batch_id)
