@@ -16,5 +16,5 @@ rm -rf /root/SourceGeography &&
 cd /root &&
 git clone https://github.com/shilad/SourceGeography &&
 cd /root/SourceGeography/src/main/python &&
-python ./download_urls.py $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB &&
+python ./download_urls.py $PSQL_HOST $PSQL_USER $PSQL_PW $PSQL_DB
 shutdown -h now

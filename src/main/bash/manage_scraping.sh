@@ -2,22 +2,23 @@
 
 dir=$(cd $(dirname "$0") && pwd)
 
-NUM_INSTANCES=19
-
 while true; do
 
-    aws ec2 run-instances \
-        --image-id ami-76817c1e \
-        --count ${NUM_INSTANCES} \
-        --key-name shilads-aws-keypair \
-        --user-data file://${dir}/scrape_citations.sh \
+    ec2-request-spot-instances ami-76817c1e \
+        --region -us-east-1  \
+        --key shilads-aws-keypair \
+        --user-data-file file://${dir}/scrape_citations.sh \
         --instance-type t2.micro \
-        --subnet-id subnet-18171730 \
-        --iam-instance-profile Name=myRole \
-        --instance-initiated-shutdown-behavior terminate \
-        --associate-public-ip-address
+        --subnet subnet-18171730 \
+        --iam-profile Name=myRole \
+        --associate-public-ip-address \
+        --price .02 \
+        --instance-count 100 \
+        --type m1.micro \
+        --valid-until $(date -uv +1H '+%Y-%m-%dT%H:%M:%SZ') ||
+            { echo "spot instance request failed!" >&2; exit 1; }
 
-    sleep 3450
+    sleep 7050
 
     ids=$( aws ec2 describe-instances | grep InstanceId | sed -e 's/.*: "//' | sed -e 's/",//' | tr '\n' ' ')
     aws ec2 terminate-instances --instance-ids ${ids}
