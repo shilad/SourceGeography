@@ -5,16 +5,16 @@ dir=$(cd $(dirname "$0") && pwd)
 while true; do
 
     ec2-request-spot-instances ami-76817c1e \
-        --region -us-east-1  \
+        --region us-east-1  \
         --key shilads-aws-keypair \
-        --user-data-file file://${dir}/scrape_citations.sh \
+        --user-data-file ${dir}/scrape_citations.sh \
         --instance-type t2.micro \
         --subnet subnet-18171730 \
-        --iam-profile Name=myRole \
-        --associate-public-ip-address \
+        --iam-profile myRole \
+        --associate-public-ip-address true \
         --price .02 \
         --instance-count 100 \
-        --type m1.micro \
+        --instance-type t1.micro \
         --valid-until $(date -uv +1H '+%Y-%m-%dT%H:%M:%SZ') ||
             { echo "spot instance request failed!" >&2; exit 1; }
 
