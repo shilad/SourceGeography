@@ -14,7 +14,7 @@ while true; do
         --iam-profile myRole \
         --associate-public-ip-address true \
         --instance-initiated-shutdown-behavior terminate \
-        --instance-count 19 \
+        --instance-count 95 \
         --instance-type t2.micro  ||
             { echo "spot instance request failed!" >&2; exit 1; }
 
