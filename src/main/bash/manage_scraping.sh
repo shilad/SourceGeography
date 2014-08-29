@@ -23,5 +23,5 @@ while true; do
     ids=$( aws ec2 describe-instances | grep InstanceId | sed -e 's/.*: "//' | sed -e 's/",//' | tr '\n' ' ')
     aws ec2 terminate-instances --instance-ids ${ids}
 
-    sleep 300
+    sleep 1000
 done
