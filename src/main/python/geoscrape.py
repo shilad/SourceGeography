@@ -1,9 +1,15 @@
 """
 Requirements:
 
-install pdftotext (on Mac, brew install xpdf)
-install antiword (on Mac, brew install antiword)
-also: xlrd, BeautifulSoup
+    install pdftotext (on Mac, brew install xpdf)
+    install antiword (on Mac, brew install antiword)
+
+
+And three python modules (if you don't have sudo, use "pip install --user")
+
+    pip install xlrd
+    pip install beautifulsoup4
+    pip install psycopg2
 
 TODO: handle google books other isbns
 """
@@ -18,7 +24,6 @@ import psycopg2.extensions
 import shutil
 import sys
 import tarfile
-import urllib
 import xlrd
 from bs4 import BeautifulSoup
 
