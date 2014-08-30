@@ -3,7 +3,7 @@ Detects the langauge of scraped web resources.
 
 Requires:
 
-pip install --pre langid
+pip install langid  (on mac, pip install --pre langid)
 
 """
 
