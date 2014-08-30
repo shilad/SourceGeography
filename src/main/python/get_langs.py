@@ -9,6 +9,11 @@ pip install --pre langid
 
 import geoscrape
 import langid
+import sys
+
+if len(sys.argv) != 2:
+    sys.stdout.write('usage: %s base_scrape_dir\n' % sys.argv[0])
+    sys.exit(1)
 
 
 def process(web_resource):
@@ -25,7 +30,7 @@ def handle_result((url, lang)):
 f = open('url_langs.tsv', 'w')
 
 geoscrape.process_resources(
-    '/Users/shilad/Documents/IntelliJ/SourceGeography/scrape/',
+    sys.argv[1],
     process,
     handle_result)
 
