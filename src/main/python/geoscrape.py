@@ -63,17 +63,17 @@ class WebResource:
 
         content_type = self.get_content_type()
         try:
-            if 'html' in content_type:
-                return html_to_text(self.open_contents())
-            elif 'pdf' in content_type:
+            if 'pdf' in content_type or self.url.endswith('.pdf'):
                 return pdf_to_text(self.contents_path)
-            elif 'xml' in content_type:
-                return xml_to_text(self.open_contents())
-            elif 'msword' in content_type:
+            elif 'msword' in content_type or self.url.endswith('.doc'):
                 return word_to_text(self.contents_path)
-            elif 'excel' in content_type:
+            elif 'excel' in content_type or self.url.endswith('.xls') or self.url.endswith('.xlsx'):
                 return xls_to_text(self.contents_path)
-            elif 'text/plain' in content_type:
+            elif 'html' in content_type or self.url.endswith('.html'):
+                return html_to_text(self.open_contents())
+            elif 'xml' in content_type or self.url.endswith('.xml'):
+                return xml_to_text(self.open_contents())
+            elif 'text/plain' in content_type or self.url.endswith('.txt'):
                 return text_to_text(self.open_contents())
             elif self.is_binary():
                 return None
@@ -197,7 +197,7 @@ def xls_to_text(doc_path):
 def html_to_text(f):
     html = f.read()
     f.close()
-    soup = BeautifulSoup(html.encode('utf-8'))
+    soup = BeautifulSoup(html.encode('utf-8'), from_encoding='utf-8')
     return  soup.get_text(' ')
 
 def text_to_text(f):
@@ -208,7 +208,7 @@ def text_to_text(f):
 def xml_to_text(f):
     xml = f.read()
     f.close()
-    soup = BeautifulSoup(xml.encode('utf-8'), 'xml')
+    soup = BeautifulSoup(xml.encode('utf-8'), 'xml', from_encoding='utf-8')
     return  soup.get_text(' ')
 
 def init(host='localhost', user='shilad', password=None, db='whois'):
