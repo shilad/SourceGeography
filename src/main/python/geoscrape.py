@@ -62,18 +62,19 @@ class WebResource:
             return None
 
         content_type = self.get_content_type()
+        lurl = self.url.lower()
         try:
-            if 'pdf' in content_type or self.url.endswith('.pdf'):
+            if 'pdf' in content_type or lurl.endswith('.pdf'):
                 return pdf_to_text(self.contents_path)
-            elif 'msword' in content_type or self.url.endswith('.doc'):
+            elif 'msword' in content_type or lurl.endswith('.doc'):
                 return word_to_text(self.contents_path)
-            elif 'excel' in content_type or self.url.endswith('.xls') or self.url.endswith('.xlsx'):
+            elif 'excel' in content_type or lurl.endswith('.xls') or lurl.endswith('.xlsx'):
                 return xls_to_text(self.contents_path)
-            elif 'html' in content_type or self.url.endswith('.html'):
+            elif 'html' in content_type or lurl.endswith('.html'):
                 return html_to_text(self.open_contents())
-            elif 'xml' in content_type or self.url.endswith('.xml'):
+            elif 'xml' in content_type or lurl.endswith('.xml'):
                 return xml_to_text(self.open_contents())
-            elif 'text/plain' in content_type or self.url.endswith('.txt'):
+            elif 'text/plain' in content_type or lurl.endswith('.txt'):
                 return text_to_text(self.open_contents())
             elif self.is_binary():
                 return None
