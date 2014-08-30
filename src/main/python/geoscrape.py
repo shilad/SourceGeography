@@ -1,11 +1,17 @@
 """
 Requirements:
-pip install --pre langid
 
-pdfminer: http://euske.github.io/pdfminer/index.html
+install pdftotext (on Mac, brew install xpdf)
+install antiword (on Mac, brew install antiword)
+also: xlrd, BeautifulSoup
+
+TODO: handle google books other isbns
 """
 import codecs
-import langid
+import subprocess
+import tempfile
+import traceback
+import types
 import os
 import psycopg2
 import psycopg2.extensions
@@ -13,12 +19,11 @@ import shutil
 import sys
 import tarfile
 import urllib
+import xlrd
+from bs4 import BeautifulSoup
 
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.pdfpage import PDFPage
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
 from cStringIO import StringIO
+
 
 from multiprocessing import Lock, Pool
 
@@ -50,24 +55,74 @@ class WebResource:
     def get_text(self):
         if not os.path.isfile(self.contents_path):
             return None
-        if self.contents_path.endswith('utf8'):
-            return codecs.open(self.contents_path, 'r', encoding='utf-8').read(10*1024*1024)
-        elif self.is_pdf():
-            return pdf_to_text(self.contents_path)
 
-    def is_pdf(self):
-        if not self.contents_path.endswith('bin'):
-            return False
-        return self.url.lower().endswith('pdf') or 'pdf' in self.headers.get('content-type', '')
+        content_type = self.get_content_type()
+        try:
+            if 'html' in content_type:
+                return html_to_text(self.open_contents())
+            elif 'pdf' in content_type:
+                return pdf_to_text(self.contents_path)
+            elif 'xml' in content_type:
+                return xml_to_text(self.open_contents())
+            elif 'msword' in content_type:
+                return word_to_text(self.contents_path)
+            elif 'excel' in content_type:
+                return xls_to_text(self.contents_path)
+            elif 'text/plain' in content_type:
+                return text_to_text(self.open_contents())
+            elif self.is_binary():
+                return None
+            else:
+                return text_to_text(self.open_contents())
+        except:
+            warn('getting text for %s with content-type %s failed' % (self.url, content_type))
+            traceback.print_exc()
 
-    def get_lang(self):
-        text = self.get_text()
-        if text:
-            (lang, confidence) =  langid.classify(text)
-            if confidence >= 0.9:
-                return lang
-        return None
+    def is_binary(self):
+        return self.contents_path.endswith('bin')
 
+    def get_content_type(self):
+        return self.headers.get('content-type', '').split(';')[0].strip()
+
+    def open_contents(self):
+        if not os.path.isfile(self.contents_path):
+            return None
+        if self.contents_path.endswith('.bin'):
+            return open(self.contents_path, 'rb')
+        elif self.contents_path.endswith('.utf8'):
+            return codecs.open(self.contents_path, 'r', encoding='utf-8')
+        else:
+            raise AssertionError()
+
+
+def worker(archive, process_callback, result_callback):
+    results = []
+    for resource in archive_generator(archive):
+        try:
+            results.append((result_callback, process_callback(resource)))
+        except:
+            warn('worker failed:')
+            traceback.print_exc()
+    return results
+
+def worker_result(results):
+    for (cb, r) in results:
+        cb(r)
+
+def process_resources(base_dir, process_callback, result_callback):
+    """
+    :param base_dir:
+    :param resource_callback:
+    :param result_callback:
+    :return:
+    """
+
+    pool = Pool()
+    archives = list(archive_dirs(base_dir))
+    for a in archives:
+        r = pool.apply_async(worker, (a, process_callback, result_callback), callback=worker_result)
+    pool.close()
+    pool.join()
 
 def warn(message):
     sys.stderr.write(message + '\n')
@@ -100,63 +155,56 @@ def archive_generator(path):
         finally:
             shutil.rmtree(tmp_path, True)
 
-
-def get_webpage(url):
-    """
-        Given a url, return a dictionary containing information about the webpage:
-        {
-            url : the requested url
-            final-url : the url, after following any redirects
-            http-code : the numeric http status code of the request (2xx means successfull)
-            http-message : the textual http response
-            error : any error messsage associated with request
-            headers : dictionary containing http response headers
-            contents: contents of the http response
-            binary: whether the contents is binary (e.g. an image or pdf)
-        }
-        or None if there is no entry for the URL.
-    """
-    cur = CONN.cursor()
-    tmp_path = None
-    try:
-        cur.execute('select * from urls where url = %s', url)
-        if cur.rowcount == 0:
-            return None
-        row = cur.fetchone()
-        urllib.urlretrieve(S3_PREFIX + row['archive'], 'tmp/tmp.tar.bz2')
-        tmp_path = 'tmp/%s' + row['archive']
-        os.makedirs(tmp_path)
-        archive_path = tmp_path + '/archive.tar.bz'
-        tar = tarfile.open(archive_path, "r:bz2")
-        tar.extractall(archive_path)
-
-    finally:
-        cur.close()
-        shutil.rmtree(tmp_path)
-
-
-def pdf_to_text(data, max_length=10*1024*1024):
-    try:
-        fp = file(data, 'rb')
-        rsrcmgr = PDFResourceManager()
-        retstr = StringIO()
-        codec = 'utf-8'
-        laparams = LAParams()
-        device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-        # Create a PDF interpreter object.
-        interpreter = PDFPageInterpreter(rsrcmgr, device)
-        # Process each page contained in the document.
-
-        for page in PDFPage.get_pages(fp):
-            interpreter.process_page(page)
-            data =  retstr.getvalue()
-            if len(data) >= max_length:
-                break
-
-        return data
-    except:
-        warn('parsing of pdf %s failed' % data)
+def pdf_to_text(pdf_path):
+    fd, txt_path = tempfile.mkstemp()
+    os.close(fd)
+    os.unlink(txt_path)
+    r = subprocess.call(['pdftotext', '-enc', 'UTF-8', '-q', '-f', '0', '-l', '50', pdf_path, txt_path])
+    if not os.path.isfile(txt_path) or os.path.getsize(txt_path) == 0:
         return None
+    f = codecs.open(txt_path, 'r', encoding='utf-8')
+    s = f.read()
+    f.close()
+    return s
+
+def word_to_text(doc_path):
+    return subprocess.check_output(['antiword', doc_path])
+
+def xls_to_text(doc_path):
+    buffer = StringIO()
+    wb = xlrd.open_workbook(doc_path)
+    for i in xrange(wb.nsheets):
+        sh = wb.sheet_by_index(i)
+        for r in xrange(sh.nrows):
+            for v in sh.row_values(r):
+                if type(v) is types.StringType:
+                    buffer.write(v)
+                    buffer.write(' ')
+                elif type(v) is types.UnicodeType:
+                    buffer.write(v.encode('utf-8'))
+                    buffer.write(' ')
+            buffer.write('\n')
+
+    s = buffer.getvalue()
+    buffer.close()
+    return s
+
+def html_to_text(f):
+    html = f.read()
+    f.close()
+    soup = BeautifulSoup(html.encode('utf-8'))
+    return  soup.get_text(' ')
+
+def text_to_text(f):
+    txt = f.read()
+    f.close()
+    return txt
+
+def xml_to_text(f):
+    xml = f.read()
+    f.close()
+    soup = BeautifulSoup(xml.encode('utf-8'), 'xml')
+    return  soup.get_text(' ')
 
 def init(host='localhost', user='shilad', password=None, db='whois'):
     global CONN
@@ -173,6 +221,7 @@ def process_archive(f):
         if not lang: lang = 'unknown'
         results.append((resource.url, lang))
     return results
+
 
 if __name__ == '__main__':
     lock = Lock()
