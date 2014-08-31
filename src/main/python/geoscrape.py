@@ -171,6 +171,7 @@ def pdf_to_text(pdf_path):
     f = codecs.open(txt_path, 'r', encoding='utf-8')
     s = f.read()
     f.close()
+    os.unlink(txt_path)
     return s
 
 def word_to_text(doc_path):
@@ -199,7 +200,7 @@ def html_to_text(f):
     html = f.read()
     f.close()
     soup = BeautifulSoup(html.encode('utf-8'), from_encoding='utf-8')
-    return  soup.get_text(' ')
+    return soup.get_text(' ')
 
 def text_to_text(f):
     txt = f.read()
@@ -227,23 +228,3 @@ def process_archive(f):
         if not lang: lang = 'unknown'
         results.append((resource.url, lang))
     return results
-
-
-if __name__ == '__main__':
-    lock = Lock()
-    pool = Pool()
-    f = codecs.open('url_langs.tsv', 'w', encoding='utf-8')
-    archives = list(archive_dirs('/Users/shilad/Documents/IntelliJ/SourceGeography/scrape/'))
-    def handler(results):
-        lock.acquire()
-        try:
-            for (url, lang) in results:
-                f.write('%s\t%s\n' % (url, lang))
-        finally:
-            lock.release()
-
-    for a in archives:
-        r = pool.apply_async(process_archive, (a,), callback=handler)
-    pool.close()
-    pool.join()
-    f.close()
