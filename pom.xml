@@ -11,8 +11,8 @@
     <dependencies>
         <dependency>
             <groupId>org.wikibrainapi</groupId>
-            <artifactId>wikibrain-spatial</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <artifactId>wikibrain</artifactId>
+            <version>0.3.1</version>
         </dependency>
     </dependencies>
 
