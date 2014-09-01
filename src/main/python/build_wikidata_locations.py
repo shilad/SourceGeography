@@ -1,7 +1,9 @@
 # TODO: run for all languages
+import codecs
 import sys
 
 import country_info
+import inferrer
 
 from sgconstants import *
 
@@ -30,11 +32,47 @@ for line in open(PATH_WIKIDATA_DOMAIN_LOCATIONS):
     tokens = line.split('\t')
     (url, country, domain, top_domain) = tokens
     if country in country_names:
-        top_domains[top_domain] = country
-        exact_domains[domain] = country
+        top_domains[top_domain] = country_names[country]
+        exact_domains[domain] = country_names[country]
     else:
         warn('unknown country: ' + country)
 
+total = 0
+matches = 0
 
+f = codecs.open(PATH_WIKIDATA_URL_LOCATIONS, 'w', encoding='utf-8')
+inf = inferrer.Inferrer()
+for ui in inf.get_urls():
+    domain_parts = ui.domain.split('.')
 
+    subdomains = []
+    for i in range(len(domain_parts) - 1):
+        subdomains.append('.'.join(domain_parts[i:]))
 
+    country = None
+    for d in subdomains:
+        if d in exact_domains:
+            country = exact_domains[d]
+            break
+
+    if not country:
+        for d in subdomains:
+            if d in top_domains:
+                country = top_domains[d]
+                break
+
+    if country:
+        matches += 1
+        f.write(ui.url)
+        f.write('\t')
+        f.write(country.iso)
+        f.write('\n')
+
+    if total % 10000 == 0:
+        print('matched %d of %d' % (matches, total))
+
+    total += 1
+
+print('matched %d of %d' % (matches, total))
+
+f.close()

@@ -14,6 +14,8 @@ import urllib2
 
 from sgconstants import *
 
+GENERIC_CC_TLDS = set(['tv'])
+
 class UrlInfo:
     def __init__(self, url):
         self.url = url
@@ -21,6 +23,7 @@ class UrlInfo:
         self.whois = None
         self.wikidata = None
         self.tld = urllib2.urlparse.urlparse(url).netloc.split('.')[-1]
+        self.domain = urllib2.urlparse.urlparse(self.url).netloc
 
 def warn(message):
     sys.stderr.write(message + '\n')
@@ -36,6 +39,7 @@ class Inferrer:
         self.analyze_langs()
         self.read_page_langs()
         self.read_whois()
+        self.read_wikidata()
 
     def read_countries(self):
         for c in country_info.read_countries():
@@ -102,6 +106,20 @@ class Inferrer:
         # f.close()
         warn('finished reading %d whois entries' % num_whois)
 
+    def read_wikidata(self):
+        warn('reading wikidata results...')
+        n = 0
+        for line in open(PATH_WIKIDATA_URL_LOCATIONS):
+            tokens = line.strip().split('\t')
+            if len(tokens) == 2:
+                url = tokens[0]
+                iso = tokens[1]
+                self.urls[url].wikidata = iso
+                n += 1
+            else:
+                warn('invalid whois line: %s' % `line`)
+        warn('finished reading %d wikidata entries' % n)
+
     def stats(self):
         field_counts = collections.defaultdict(int)
         for ui in self.urls.values():
@@ -115,6 +133,8 @@ class Inferrer:
                 fields.append('tld')
             if ui.whois:
                 fields.append('whois')
+            if ui.wikidata:
+                fields.append('wikidata')
             field_counts['-'.join(fields)] += 1
 
         print('stats on fields:')
@@ -131,6 +151,21 @@ class Inferrer:
         tldc = self.tld_country.get(url_info.tld)
         whoisc = self.iso_countries.get(url_info.whois)
         langcs = self.lang_countries.get(url_info.lang, [])
+        wdc = self.iso_countries.get(url_info.wikidata)
+
+        if wdc and tldc and wdc != tldc:
+            warn("for url %s wdc=%s and tldc=%s disagree" % (url_info.url, wdc, tldc))
+
+        if wdc:
+            rule = 'wd'
+            if wdc == whoisc:
+                rule += '-whois'
+            if wdc in langcs:
+                rule += '-lang'
+            if wdc == tldc:
+                rule += '-tld'
+            if len(rule.split('-')) >= 2:
+                return (wdc, rule)
 
         if tldc:
             # is it a perfect match?
@@ -146,10 +181,15 @@ class Inferrer:
                 return (whoisc, 'whois-lang')
 
             # all three disagree (or some are missing)
-            return (tldc, 'tld')
+            if wdc and url_info.tld  in GENERIC_CC_TLDS:
+                return (wdc, 'wd')
+            else:
+                return (tldc, 'tld')
         else: # .com, .net, .info, .org, etc
             if whoisc in langcs:
                 return (whoisc, 'whois-lang')
+            elif wdc:
+                return (wdc, 'wd')
             elif whoisc:
                 return (whoisc, 'whois')
             elif langcs:

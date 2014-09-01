@@ -24,7 +24,7 @@ for ui in inf.get_urls():
     tokens = [rule, iso, ui.url, ui.lang, ui.whois, ui.tld, ui.wikidata]
     for (i, t) in enumerate(tokens):
         if i > 0: f.write('\t')
-        f.write('null' if t == None else t)
+        f.write('null' if t is None else t)
     f.write('\n')
     counts[rule] += 1
 f.close()
