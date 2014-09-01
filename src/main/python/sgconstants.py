@@ -1,3 +1,13 @@
+# Order of running steps:
+#
+# 1. Download source_urls.tsv
+# 2. Download whois_results2.tsv
+# 3. Build whois url file: python build_url_to_whois.py
+# 4. Build wikidata url file: python build_wikidata_locations.py
+# 5. Build prior distribution: python build_country_priors.py
+# 6. (Perhaps) Rerun step 5 to get a more accurate estimate.
+# 7. Run the inferrer:
+
 
 # path to raw soure urls file, created by running WmfExtractEnhancer on
 # the urls extracted by running get_labs_urls on tool labs

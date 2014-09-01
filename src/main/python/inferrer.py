@@ -8,6 +8,7 @@ Infers location of web pages based on four signals:
 
 import codecs
 import collections
+import os
 import country_info
 import sys
 import urllib2
@@ -65,9 +66,13 @@ class Inferrer:
                 print 'countries for %s are %s' % (lang, [c.name for c in self.lang_countries[lang]])
 
     def read_page_langs(self):
+        if not os.path.isfile(PATH_URL_LANGS):
+            warn('0 results not available...')
+            return
+
         warn('reading url webpage langs')
         num_langs = 0
-        for line in open(PATH_URL_LANGS):
+        for line in codecs.open(PATH_URL_LANGS, 'r', encoding='utf-8'):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]
@@ -85,10 +90,14 @@ class Inferrer:
         return self.urls.values()
 
     def read_whois(self):
+        if not os.path.isfile(PATH_URL_WHOIS):
+            warn('whois results not available...')
+            return
+
         warn('reading whois results...')
         # f = codecs.open('../../../url_whois_test.tsv', 'w', encoding='utf-8')
         num_whois = 0
-        for line in open(PATH_URL_WHOIS):
+        for line in codecs.open(PATH_URL_WHOIS, 'r', encoding='utf-8'):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]
@@ -107,9 +116,13 @@ class Inferrer:
         warn('finished reading %d whois entries' % num_whois)
 
     def read_wikidata(self):
+        if not os.path.isfile(PATH_WIKIDATA_URL_LOCATIONS):
+            warn('wikidata results not available...')
+            return
+
         warn('reading wikidata results...')
         n = 0
-        for line in open(PATH_WIKIDATA_URL_LOCATIONS):
+        for line in codecs.open(PATH_WIKIDATA_URL_LOCATIONS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]

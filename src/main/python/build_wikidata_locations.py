@@ -28,7 +28,7 @@ country_names['The Gambia'] = country_names['Gambia']
 exact_domains = {}
 top_domains = {}
 
-for line in open(PATH_WIKIDATA_DOMAIN_LOCATIONS):
+for line in codecs.open(PATH_WIKIDATA_DOMAIN_LOCATIONS, 'r', encoding='utf-8'):
     tokens = line.split('\t')
     (url, country, domain, top_domain) = tokens
     if country in country_names:
