@@ -88,12 +88,12 @@ class Inferrer:
         warn('reading whois results...')
         # f = codecs.open('../../../url_whois_test.tsv', 'w', encoding='utf-8')
         num_whois = 0
-        for line in open(PATH_URL_WHOIS_TEST):
+        for line in open(PATH_URL_WHOIS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]
-                if not url in self.urls: # testing hack...
-                    continue
+                #if not url in self.urls: # testing hack...
+                #    continue
                 # f.write(line)
                 whois = tokens[1]
                 if whois != '??':
