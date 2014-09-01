@@ -6,6 +6,7 @@ Requires:
 pip install langid  (on mac, pip install --pre langid)
 
 """
+import codecs
 
 import geoscrape
 import langid
@@ -27,7 +28,7 @@ def process(web_resource):
 def handle_result((url, lang)):
     f.write('%s\t%s\n' % (url, lang))
 
-f = open('url_langs.tsv', 'w')
+f = codecs.open('url_langs.tsv', 'w', encoding='utf-8')
 
 geoscrape.process_resources(
     sys.argv[1],
