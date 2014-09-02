@@ -5,11 +5,14 @@ Builds the background distribution of popularity for all countries.
 import collections
 
 import rule_inferrer
+import url_info
+
 from sgconstants import *
 
-inf = rule_inferrer.Inferrer()
+dao = url_info.UrlInfoDao()
+inf = rule_inferrer.Inferrer(dao)
 counts = collections.defaultdict(int)
-for ui in inf.get_urls():
+for ui in dao.get_urls():
     (country, rule) = inf.infer(ui)
     if len(rule.split('-')) >= 2:
         counts[country] += 1

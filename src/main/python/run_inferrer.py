@@ -10,15 +10,17 @@ import collections
 import sys
 import traceback
 
+import url_info
 import rule_inferrer
 
 from sgconstants import *
 
 
-inf = rule_inferrer.Inferrer()
+dao = url_info.UrlInfoDao()
+inf = rule_inferrer.Inferrer(dao)
 f = codecs.open(PATH_URL_RESULT, 'w', encoding='utf-8')
 counts = collections.defaultdict(int)
-for ui in inf.get_urls():
+for ui in dao.get_urls():
     try:
         (country, rule) = inf.infer(ui)
         iso = 'unknown'

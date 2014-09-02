@@ -95,6 +95,7 @@ class UrlInfoDao:
             return
 
         warn('reading whois results...')
+
         # f = codecs.open('../../../url_whois_test.tsv', 'w', encoding='utf-8')
         num_whois = 0
         for line in codecs.open(PATH_URL_WHOIS, 'r', encoding='utf-8'):
