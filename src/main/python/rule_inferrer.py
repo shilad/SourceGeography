@@ -56,7 +56,7 @@ class Inferrer:
 
         tldc = self.dao.tld_country.get(url_info.tld)
         whoisc = self.dao.iso_countries.get(url_info.whois)
-        langcs = self.dao.lang_countries.get(url_info.lang, [])
+        langcs = [c for (c, s) in self.dao.lang_countries.get(url_info.lang, [])]
         wdc = self.dao.iso_countries.get(url_info.wikidata)
 
         if wdc and tldc and wdc != tldc:

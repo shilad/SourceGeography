@@ -9,13 +9,13 @@ Infers location of web pages based on four signals:
 import codecs
 import collections
 import os
+import marshal
 import country_info
 import sys
 import urllib2
 
 from sgconstants import *
 
-GENERIC_CC_TLDS = set(['tv'])
 
 class UrlInfo:
     def __init__(self, url):
@@ -38,9 +38,19 @@ class UrlInfoDao:
         self.lang_countries = collections.defaultdict(list)      # ISO lang code to ISO country codes
         self.read_countries()
         self.analyze_langs()
+
+        datafiles = [PATH_URL_LANGS, PATH_URL_WHOIS, PATH_WIKIDATA_URL_LOCATIONS]
+        self.urls = self.get_cached_datastructure(datafiles)
+        if self.urls:
+            warn('sucessfully loaded urls from cache')
+            return
+
         self.read_page_langs()
         self.read_whois()
         self.read_wikidata()
+
+        warn('saving urls to cache for future use')
+        self.put_cached_datastructure(datafiles, self.urls)
 
     def read_countries(self):
         for c in country_info.read_countries():
@@ -61,7 +71,8 @@ class UrlInfoDao:
         for lang, country_scores in lang2countries.items():
             country_scores.sort()
             country_scores.reverse()
-            self.lang_countries[lang] = [c for (score, c) in country_scores]
+            sum_scores = 1.0 * sum([s for (s, c) in country_scores])
+            self.lang_countries[lang] = [(c, score/sum_scores) for (score, c) in country_scores]
             if len(country_scores) > 2:
                 print 'countries for %s are %s' % (lang, [c.name for c in self.lang_countries[lang]])
 
@@ -135,3 +146,27 @@ class UrlInfoDao:
             else:
                 warn('invalid whois line: %s' % `line`)
         warn('finished reading %d wikidata entries' % n)
+
+    def get_cached_datastructure(self, data_files):
+        p = PATH_DAO_CACHE + '/' + self.get_cache_key(data_files)
+        if not os.path.isfile(p):
+            return None
+        for df in data_files:
+            if not os.path.isfile(df) or os.path.getmtime(p) < os.path.getmtime(df):
+                return None
+        f = open(p, 'rb')
+        r = marshal.load(f)
+        f.close()
+        return r
+
+    def get_cache_key(self, data_files):
+        return str(abs(hash(','.join(data_files))))
+
+    def put_cached_datastructure(self, data_files, obj):
+        if not os.path.isdir(PATH_DAO_CACHE):
+            os.makedirs(PATH_DAO_CACHE)
+        p = PATH_DAO_CACHE + '/' + self.get_cache_key(data_files)
+        warn('reading cached entry for %s' % data_files)
+        f = open(p, 'wb')
+        marshal.dump(obj, f)
+        f.close()

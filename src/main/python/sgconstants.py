@@ -23,6 +23,8 @@ PATH_WHOIS_RAW = '../../../dat/whois_results3.txt'
 PATH_URL_WHOIS = '../../../dat/url_whois.tsv'
 PATH_URL_WHOIS_TEST = '../../../dat/url_whois_test.tsv'
 
+# Number of times each url is referenced
+PATH_URL_COUNTS = '../../../dat/url_counts.tsv'
 
 # Country info from geonames
 PATH_COUNTRY_INFO = '../../../dat/countryInfo.txt'
@@ -38,4 +40,7 @@ PATH_WIKIDATA_URL_LOCATIONS = '../../../dat/url_wikidata_locations.tsv'
 
 # Final result file
 PATH_URL_RESULT = '../../../dat/url_locations.tsv'
+
+# Binary versions of large data structures cached for efficiency
+PATH_DAO_CACHE = '../../../dat/dao-cache'
 
