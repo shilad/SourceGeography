@@ -40,17 +40,17 @@ class UrlInfoDao:
         self.analyze_langs()
 
         datafiles = [PATH_URL_LANGS, PATH_URL_WHOIS, PATH_WIKIDATA_URL_LOCATIONS]
-        self.urls = self.get_cached_datastructure(datafiles)
-        if self.urls:
-            warn('sucessfully loaded urls from cache')
-            return
+        #self.urls = self.get_cached_datastructure(datafiles)
+        #if self.urls:
+        #    warn('sucessfully loaded urls from cache')
+        #    return
 
         self.urls = {}              # url -> url info
         self.read_page_langs()
         self.read_whois()
         self.read_wikidata()
 
-        warn('saving urls to cache for future use')
+        #warn('saving urls to cache for future use')
         #self.put_cached_datastructure(datafiles, self.urls)
 
     def read_countries(self):

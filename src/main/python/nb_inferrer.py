@@ -18,7 +18,31 @@ class NaiveBayesInferrer:
             raise Exception('no country priors!')
 
     def infer(self, url_info):
+        result = {}
 
+        for f in self.features:
+            (conf, dist) = f.infer(url_info)
+            if conf == 0:
+                dist = dict(self.prior)
+            else:
+                union = set(self.prior.keys()).union(dist.keys())
+                for c in union:
+                    dist[c] = conf * dist.get(c, 0.0) + (1.0 - conf) * self.prior.get(c)
+
+            if not result:
+                result = dist
+            else:
+                for (c, prob) in dist.items():
+                    result[c] *= prob
+
+        if not result:
+            return None
+
+        total = sum(result.values())
+        for (c, prob) in result.items():
+            result[c] = result[c] / total
+
+        return result
 
 
 class WhoisFeature:
@@ -27,8 +51,8 @@ class WhoisFeature:
 
     def infer(self, url_info):
         if not url_info.whois:
-            return None
-        return (0.80, { url_info.whois : 1.0 })
+            return (0, {})
+        return (0.85, { url_info.whois : 1.0 })
 
 
 class WikidataFeature:
@@ -37,7 +61,7 @@ class WikidataFeature:
 
     def infer(self, url_info):
         if not url_info.wikidata:
-            return None
+            return (0, {})
         return (0.90, { url_info.wikidata : 1.0 })
 
 
@@ -47,13 +71,13 @@ class LanguageFeature:
 
     def infer(self, url_info):
         if not url_info.lang or not url_info.lang in self.dao.lang_countries:
-            return None
+            return (0, {})
 
         candidates = {}
         for (country, prob) in self.dao.lang_countries[url_info.lang]:
             candidates[country.iso] = prob
 
-        return (0.75, candidates)
+        return (0.80, candidates)
 
 class TldFeature:
     def __init__(self, dao):
@@ -67,4 +91,4 @@ class TldFeature:
             iso = self.dao.tld_countries[tld].iso
             return (0.95, { iso : 1.0 })
         else:
-            return None
+            return (0, {})
