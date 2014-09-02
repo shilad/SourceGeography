@@ -28,6 +28,13 @@ class UrlInfo(object):
         self.domain = url2host(self.url)
         self.tld = self.domain.split('.')[-1]
 
+    def __repr__(self):
+        return 'UrlInfo{ url=%s lang=%s whois=%s wikidata=%s domain=%s tld=%s }' % \
+               (self.url, self.lang, self.whois, self.wikidata, self.domain, self.tld)
+
+    def __str__(self):
+        return `self`
+
 
 def read_urls():
     f = sg_open(PATH_URL_INTERESTING)
@@ -187,6 +194,18 @@ class UrlInfoDao:
 
         self.url_db.commit()
 
+    def get_url(self, url):
+        c = self.url_db.cursor()
+        try:
+            for row in c.execute('SELECT url, lang, whois, wikidata FROM URL_INFO WHERE url=?', (url,)):
+                ui = UrlInfo(row[0])
+                ui.lang = row[1]
+                ui.whois = row[2]
+                ui.wikidata = row[3]
+                return ui
+            return None
+        finally:
+            c.close()
 
     def get_urls(self):
         c = self.url_db.cursor()
@@ -206,3 +225,4 @@ class UrlInfoDao:
 
 if __name__ == '__main__':
     dao = UrlInfoDao()
+    print dao.get_url('http://google.com')
