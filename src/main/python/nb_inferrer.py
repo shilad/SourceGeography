@@ -7,6 +7,38 @@ class NaiveBayesInferrer:
 
 
 class WhoisFeature:
+    def __init__(self, dao):
+        self.dao = dao
+
+    def infer(self, url_info):
+        if not url_info.whois:
+            return None
+        return (0.80, { url_info.whois : 1.0 })
+
+
+class WikidataFeature:
+    def __init__(self, dao):
+        self.dao = dao
+
+    def infer(self, url_info):
+        if not url_info.wikidata:
+            return None
+        return (0.90, { url_info.wikidata : 1.0 })
+
+
+class LanguageFeature:
+    def __init__(self, dao):
+        self.dao = dao
+
+    def infer(self, url_info):
+        if not url_info.lang or not url_info.lang in self.dao.lang_countries:
+            return None
+
+        candidates = {}
+        for (country, prob) in self.dao.lang_countries[url_info.lang]:
+            candidates[country.iso] = prob
+
+        return (0.75, candidates)
 
 class TldFeature:
     def __init__(self, dao):
@@ -15,8 +47,9 @@ class TldFeature:
     def infer(self, url_info):
         tld = url_info.tld
         if tld in ('mil', 'gov'):
-            return { 'us' : 1.0 }
+            return (1.0, { 'us' : 1.0 })
         elif tld not in GENERIC_TLDS and tld in self.dao.tld_countries:
-            return self.dao.tld_countries[tld].iso
+            iso = self.dao.tld_countries[tld].iso
+            return (0.95, { iso : 1.0 })
         else:
             return None

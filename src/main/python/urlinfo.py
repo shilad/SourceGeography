@@ -74,7 +74,7 @@ class UrlInfoDao:
             sum_scores = 1.0 * sum([s for (s, c) in country_scores])
             self.lang_countries[lang] = [(c, score/sum_scores) for (score, c) in country_scores]
             if len(country_scores) > 2:
-                print 'countries for %s are %s' % (lang, [c.name for c in self.lang_countries[lang]])
+                print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
 
     def read_page_langs(self):
         if not os.path.isfile(PATH_URL_LANGS):

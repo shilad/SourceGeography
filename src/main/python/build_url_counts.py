@@ -1,15 +1,19 @@
 import codecs
 import collections
+import urlinfo
 
 from sgconstants import *
 
+
+dao = urlinfo.UrlInfoDao()
 url_counts = collections.defaultdict(int)
 
 for line in codecs.open(PATH_SOURCE_URLS, 'r', encoding='utf-8'):
     tokens = line.split('\t')
     if len(tokens) >= 13:
         url = tokens[12].strip()
-        url_counts[url] += 1
+        if url in dao.urls:
+            url_counts[url] += 1
 
 
 f = codecs.open(PATH_URL_COUNTS, 'w', encoding='utf-8')

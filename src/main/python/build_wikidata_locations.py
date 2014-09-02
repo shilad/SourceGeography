@@ -2,7 +2,7 @@
 import codecs
 import sys
 
-import url_info
+import urlinfo
 import country_info
 import rule_inferrer
 
@@ -42,7 +42,7 @@ total = 0
 matches = 0
 
 f = codecs.open(PATH_WIKIDATA_URL_LOCATIONS, 'w', encoding='utf-8')
-dao = url_info.UrlInfoDao()
+dao = urlinfo.UrlInfoDao()
 inf = rule_inferrer.Inferrer(dao)
 for ui in dao.get_urls():
     domain_parts = ui.domain.split('.')

@@ -10,13 +10,13 @@ import collections
 import sys
 import traceback
 
-import url_info
+import urlinfo
 import rule_inferrer
 
 from sgconstants import *
 
 
-dao = url_info.UrlInfoDao()
+dao = urlinfo.UrlInfoDao()
 inf = rule_inferrer.Inferrer(dao)
 f = codecs.open(PATH_URL_RESULT, 'w', encoding='utf-8')
 counts = collections.defaultdict(int)
