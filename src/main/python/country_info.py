@@ -1,3 +1,4 @@
+import codecs
 import os
 from sgconstants import *
 
@@ -27,7 +28,7 @@ class Country:
 def read_countries():
     countries = []
     iso_countries = {}
-    f = open(PATH_COUNTRY_INFO)
+    f = codecs.open(PATH_COUNTRY_INFO, 'r', encoding='utf-8')
     for line in f:
         if line.startswith('#'):
             continue
