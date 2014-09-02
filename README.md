@@ -41,6 +41,7 @@ Recreating this project:
 1. Place Dave's whois results in `dat/whois_results3.tsv`
 2. Build url to country file based on whois: `python build_url_to_whois.py`
 3. Build url to country file based on wikidata: `python build_wikidata_locations.py`
+4. Build the SQL database by running `python urlinfo.py`
 4. Build prior country distribution: `python build_country_priors.py`
 
 ### Infer locations
