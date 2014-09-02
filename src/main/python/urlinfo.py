@@ -64,7 +64,7 @@ class UrlInfoDao:
         except:
             try: self.url_db.close()
             except: pass
-            shutil.rmtree(PATH_DAO_CACHE, True)
+            silentremove(PATH_DAO_CACHE)
             raise
 
     def read_countries(self):
@@ -186,7 +186,7 @@ class UrlInfoDao:
         self.url_db = sqlite3.connect(PATH_DAO_CACHE)
 
     def rebuild_db(self):
-        shutil.rmtree(PATH_DAO_CACHE, True)
+        silentremove(PATH_DAO_CACHE)
 
         infos = {}
 
@@ -246,6 +246,15 @@ class UrlInfoDao:
 
     def get_countries(self):
         return self.tld_country.values()
+
+import os, errno
+
+def silentremove(filename):
+    try:
+        os.remove(filename)
+    except OSError as e: # this would be "except OSError, e:" before Python 2.6
+        if e.errno != errno.ENOENT: # errno.ENOENT = no such file or directory
+            raise # re-raise exception if a different error occured
 
 if __name__ == '__main__':
     dao = UrlInfoDao()
