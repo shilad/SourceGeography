@@ -42,7 +42,7 @@ PATH_WIKIDATA_URL_LOCATIONS = '../../../dat/url_wikidata_locations.tsv'
 PATH_URL_RESULT = '../../../dat/url_locations.tsv'
 
 # Binary versions of large data structures cached for efficiency
-PATH_DAO_CACHE = '../../../dat/dao-cache'
+PATH_DAO_CACHE = '../../../dat/dao-cache.bin'
 
 
 def warn(message):

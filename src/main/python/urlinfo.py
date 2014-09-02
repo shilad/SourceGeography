@@ -4,18 +4,22 @@ Infers location of web pages based on four signals:
 - country TLDs
 - Language of web page
 - Wikidata country source
+
 """
 
 import collections
 import os
-import marshal
+import shutil
+import sqlite3
+
 import country_info
-import urllib2
 
 from sg_utils import *
 
 
-class UrlInfo:
+class UrlInfo(object):
+    __slots__ = ['url', 'lang', 'whois', 'wikidata', 'domain', 'tld']
+
     def __init__(self, url):
         self.url = url
         self.lang = None
@@ -23,6 +27,7 @@ class UrlInfo:
         self.wikidata = None
         self.domain = url2host(self.url)
         self.tld = self.domain.split('.')[-1]
+
 
 def read_urls():
     f = sg_open(PATH_URL_INTERESTING)
@@ -34,24 +39,19 @@ class UrlInfoDao:
     def __init__(self):
         self.iso_countries = {}    # ISO country code to country object
         self.tld_country = {}      # TLD code to country object
-        self.urls = {}              # url -> url info
+        self.url_db = None
+
         self.lang_countries = collections.defaultdict(list)      # ISO lang code to ISO country codes
         self.read_countries()
         self.analyze_langs()
 
-        datafiles = [PATH_URL_LANGS, PATH_URL_WHOIS, PATH_WIKIDATA_URL_LOCATIONS]
-        #self.urls = self.get_cached_datastructure(datafiles)
-        #if self.urls:
-        #    warn('sucessfully loaded urls from cache')
-        #    return
+        self.try_to_open_db()
+        if self.url_db:
+           warn('sucessfully loaded urls from cache')
+           return
 
-        self.urls = {}              # url -> url info
-        self.read_page_langs()
-        self.read_whois()
-        self.read_wikidata()
-
-        #warn('saving urls to cache for future use')
-        #self.put_cached_datastructure(datafiles, self.urls)
+        warn('saving urls to cache for future use')
+        self.build_cached_datastructure()
 
     def read_countries(self):
         for c in country_info.read_countries():
@@ -77,7 +77,7 @@ class UrlInfoDao:
             if len(country_scores) > 2:
                 print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
 
-    def read_page_langs(self):
+    def read_page_langs(self, urls):
         if not os.path.isfile(PATH_URL_LANGS):
             warn('0 results not available...')
             return
@@ -90,21 +90,15 @@ class UrlInfoDao:
                 url = tokens[0]
                 lang = tokens[1]
                 if lang != 'unknown':
-                    if not url in self.urls:
-                        self.urls[url] = UrlInfo(url)
-                    self.urls[url].lang = lang
+                    if not url in urls:
+                        urls[url] = UrlInfo(url)
+                    urls[url].lang = lang
                     num_langs += 1
             else:
                 warn('invalid whois line: %s' % `line`)
         warn('finished reading %d url lang entries' % num_langs)
 
-    def get_urls(self):
-        return self.urls.values()
-
-    def get_countries(self):
-        return self.tld_country.values()
-
-    def read_whois(self):
+    def read_whois(self, urls):
         if not  os.path.isfile(PATH_URL_WHOIS):
             warn('whois results not available...')
             return
@@ -118,15 +112,15 @@ class UrlInfoDao:
                 url = tokens[0]
                 whois = tokens[1]
                 if whois != '??':
-                    if not url in self.urls:
-                        self.urls[url] = UrlInfo(url)
-                    self.urls[url].whois = whois
+                    if not url in urls:
+                        urls[url] = UrlInfo(url)
+                    urls[url].whois = whois
                     num_whois += 1
             else:
                 warn('invalid whois line: %s' % `line`)
         warn('finished reading %d whois entries' % num_whois)
 
-    def read_wikidata(self):
+    def read_wikidata(self, urls):
         if not os.path.isfile(PATH_WIKIDATA_URL_LOCATIONS):
             warn('wikidata results not available...')
             return
@@ -138,34 +132,61 @@ class UrlInfoDao:
             if len(tokens) == 2:
                 url = tokens[0]
                 iso = tokens[1]
-                if url not in self.urls:
-                    self.urls[url] = UrlInfo(url)
-                self.urls[url].wikidata = iso
+                if url not in urls:
+                    urls[url] = UrlInfo(url)
+                urls[url].wikidata = iso
                 n += 1
             else:
                 warn('invalid whois line: %s' % `line`)
         warn('finished reading %d wikidata entries' % n)
 
-    def get_cached_datastructure(self, data_files):
-        p = PATH_DAO_CACHE + '/' + self.get_cache_key(data_files)
-        if not os.path.isfile(p):
+    def try_to_open_db(self):
+        if not os.path.isfile(PATH_DAO_CACHE):
             return None
-        for df in data_files:
-            if not os.path.isfile(df) or os.path.getmtime(p) < os.path.getmtime(df):
+
+        datafiles = [PATH_URL_LANGS, PATH_URL_WHOIS, PATH_WIKIDATA_URL_LOCATIONS, PATH_URL_COUNTS]
+        for df in datafiles:
+            if not os.path.isfile(df) or os.path.getmtime(PATH_DAO_CACHE) < os.path.getmtime(df):
                 return None
-        f = open(p, 'rb')
-        r = marshal.load(f)
-        f.close()
-        return r
 
-    def get_cache_key(self, data_files):
-        return str(abs(hash(','.join(data_files))))
+        self.url_db = sqlite3.connect(PATH_DAO_CACHE)
 
-    def put_cached_datastructure(self, data_files, obj):
-        if not os.path.isdir(PATH_DAO_CACHE):
-            os.makedirs(PATH_DAO_CACHE)
-        p = PATH_DAO_CACHE + '/' + self.get_cache_key(data_files)
-        warn('reading cached entry for %s' % data_files)
-        f = open(p, 'wb')
-        marshal.dump(obj, f)
-        f.close()
+    def rebuild_db(self):
+        shutil.rmtree(PATH_DAO_CACHE, True)
+
+        infos = {}
+
+        self.read_page_langs(infos)
+        self.read_whois(infos)
+        self.read_wikidata(infos)
+
+        self.url_db = sqlite3.connect(PATH_DAO_CACHE)
+
+        c = self.url_db.cursor()
+        c.execute("""
+            CREATE TABLE URL_INFO
+            (url TEXT primary key, lang TEXT, whois TEXT, wikidata TEXT, domain TEXT, tld TEXT)
+        """)
+        c.comit()
+
+        urls = sorted(infos.keys())
+
+        for i in xrange(0, len(infos), 10000):
+            if i % 100000 == 0:
+                warn('inserting ' % i)
+
+            batch = [infos[u] for u in urls[i:(i+10000)]]
+            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?",
+                [(u.url, u.lang, u.whois, u.wikidata, u.domain, u.tld) for u in batch])
+
+        c.commit()
+
+
+    def get_urls(self):
+        return self.url_db.values() # FIXME
+
+    def get_countries(self):
+        return self.tld_country.values()
+
+if __name__ == '__main__':
+    dao = UrlInfoDao()

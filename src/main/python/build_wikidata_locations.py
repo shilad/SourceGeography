@@ -35,7 +35,6 @@ total = 0
 matches = 0
 
 f = sg_open(PATH_WIKIDATA_URL_LOCATIONS, 'w')
-dao = urlinfo.UrlInfoDao()
 for url in urlinfo.read_urls():
     domain_parts = url2host(url).split('.')
 
