@@ -71,7 +71,7 @@ class UrlInfoDao:
         for lang, country_scores in lang2countries.items():
             country_scores.sort()
             country_scores.reverse()
-            sum_scores = 1.0 * sum([s for (s, c) in country_scores])
+            sum_scores = 1.0 * sum([s for (s, c) in country_scores]) + 1.0
             self.lang_countries[lang] = [(c, score/sum_scores) for (score, c) in country_scores]
             if len(country_scores) > 2:
                 print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
