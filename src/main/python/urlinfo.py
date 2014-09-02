@@ -45,6 +45,7 @@ class UrlInfoDao:
             warn('sucessfully loaded urls from cache')
             return
 
+        self.urls = {}              # url -> url info
         self.read_page_langs()
         self.read_whois()
         self.read_wikidata()
