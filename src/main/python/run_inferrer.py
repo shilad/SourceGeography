@@ -10,12 +10,12 @@ import collections
 import sys
 import traceback
 
-import inferrer
+import rule_inferrer
 
 from sgconstants import *
 
 
-inf = inferrer.Inferrer()
+inf = rule_inferrer.Inferrer()
 f = codecs.open(PATH_URL_RESULT, 'w', encoding='utf-8')
 counts = collections.defaultdict(int)
 for ui in inf.get_urls():

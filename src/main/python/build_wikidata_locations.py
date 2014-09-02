@@ -3,7 +3,7 @@ import codecs
 import sys
 
 import country_info
-import inferrer
+import rule_inferrer
 
 from sgconstants import *
 
@@ -41,7 +41,7 @@ total = 0
 matches = 0
 
 f = codecs.open(PATH_WIKIDATA_URL_LOCATIONS, 'w', encoding='utf-8')
-inf = inferrer.Inferrer()
+inf = rule_inferrer.Inferrer()
 for ui in inf.get_urls():
     domain_parts = ui.domain.split('.')
 

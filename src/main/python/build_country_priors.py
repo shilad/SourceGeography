@@ -4,10 +4,10 @@ Builds the background distribution of popularity for all countries.
 
 import collections
 
-import inferrer
+import rule_inferrer
 from sgconstants import *
 
-inf = inferrer.Inferrer()
+inf = rule_inferrer.Inferrer()
 counts = collections.defaultdict(int)
 for ui in inf.get_urls():
     (country, rule) = inf.infer(ui)
