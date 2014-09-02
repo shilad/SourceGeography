@@ -22,9 +22,10 @@ prev_urls = {}
 f = sg_open(PATH_URL_WHOIS, 'w')
 for line in sg_open(PATH_SOURCE_URLS):
     tokens = line.strip().split('\t')
-    if len(tokens) != 2:
+    if len(tokens) != 15:
+        num_invalid += 1
         continue
-    url = tokens[0].strip()
+    url = tokens[9].strip()
     if not url in interesting:
         continue
     num_total += 1

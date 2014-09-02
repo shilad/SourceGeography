@@ -18,19 +18,20 @@ from sg_utils import *
 
 
 class UrlInfo(object):
-    __slots__ = ['url', 'lang', 'whois', 'wikidata', 'domain', 'tld']
+    __slots__ = ['url', 'lang', 'whois', 'wikidata', 'domain', 'tld', 'count']
 
     def __init__(self, url):
         self.url = url
         self.lang = None
         self.whois = None
         self.wikidata = None
+        self.count = 1
         self.domain = url2host(self.url)
         self.tld = self.domain.split('.')[-1]
 
     def __repr__(self):
-        return 'UrlInfo{ url=%s lang=%s whois=%s wikidata=%s domain=%s tld=%s }' % \
-               (self.url, self.lang, self.whois, self.wikidata, self.domain, self.tld)
+        return 'UrlInfo{ url=%s n=%s lang=%s whois=%s wikidata=%s domain=%s tld=%s }' % \
+               (self.url, self.count, self.lang, self.whois, self.wikidata, self.domain, self.tld)
 
     def __str__(self):
         return `self`
@@ -153,6 +154,26 @@ class UrlInfoDao:
                 warn('invalid whois line: %s' % `line`)
         warn('finished reading %d wikidata entries' % n)
 
+    def read_counts(self, urls):
+        if not os.path.isfile(PATH_URL_COUNTS):
+            warn('counts results not available...')
+            return
+
+        warn('reading wikidata results...')
+        n = 0
+        for line in sg_open(PATH_URL_COUNTS):
+            tokens = line.strip().split('\t')
+            if len(tokens) == 2:
+                url = tokens[0]
+                url_count = int(tokens[1])
+                if url not in urls:
+                    urls[url] = UrlInfo(url)
+                urls[url].count = url_count
+                n += 1
+            else:
+                warn('invalid url_count line: %s' % `line`)
+        warn('finished reading %d url count entries' % n)
+
     def try_to_open_db(self):
         if not os.path.isfile(PATH_DAO_CACHE):
             return None
@@ -172,13 +193,14 @@ class UrlInfoDao:
         self.read_page_langs(infos)
         self.read_whois(infos)
         self.read_wikidata(infos)
+        self.read_counts(infos)
 
         self.url_db = sqlite3.connect(PATH_DAO_CACHE)
 
         c = self.url_db.cursor()
         c.execute("""
             CREATE TABLE URL_INFO
-            (url TEXT primary key, lang TEXT, whois TEXT, wikidata TEXT)
+            (url TEXT primary key, count INTEGER, lang TEXT, whois TEXT, wikidata TEXT)
         """)
         self.url_db.commit()
 
@@ -189,19 +211,20 @@ class UrlInfoDao:
                 warn('inserting %s' % i)
 
             batch = [infos[u] for u in urls[i:(i+10000)]]
-            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?)",
-                [(u.url, u.lang, u.whois, u.wikidata, u.domain, u.tld) for u in batch])
+            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?,?)",
+                [(u.url, u.count, u.lang, u.whois, u.wikidata, u.domain, u.tld) for u in batch])
 
         self.url_db.commit()
 
     def get_url(self, url):
         c = self.url_db.cursor()
         try:
-            for row in c.execute('SELECT url, lang, whois, wikidata FROM URL_INFO WHERE url=?', (url,)):
+            for row in c.execute('SELECT url, count, lang, whois, wikidata FROM URL_INFO WHERE url=?', (url,)):
                 ui = UrlInfo(row[0])
-                ui.lang = row[1]
-                ui.whois = row[2]
-                ui.wikidata = row[3]
+                ui.count = row[1]
+                ui.lang = row[2]
+                ui.whois = row[3]
+                ui.wikidata = row[4]
                 return ui
             return None
         finally:
@@ -210,11 +233,12 @@ class UrlInfoDao:
     def get_urls(self):
         c = self.url_db.cursor()
         try:
-            for row in c.execute('SELECT url, lang, whois, wikidata FROM URL_INFO'):
+            for row in c.execute('SELECT url, count, lang, whois, wikidata FROM URL_INFO'):
                 ui = UrlInfo(row[0])
-                ui.lang = row[1]
-                ui.whois = row[2]
-                ui.wikidata = row[3]
+                ui.count = row[1]
+                ui.lang = row[2]
+                ui.whois = row[3]
+                ui.wikidata = row[4]
                 yield ui
         finally:
             c.close()

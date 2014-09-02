@@ -1,5 +1,6 @@
 # According to Google (https://support.google.com/webmasters/answer/1347922?hl=en)
 import sys
+import urlinfo
 
 GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws'.split(','))
 
@@ -100,3 +101,18 @@ class TldFeature:
             return (0.95, { iso : 1.0 })
         else:
             return (0, {})
+
+if __name__ == '__main__':
+    dao = urlinfo.UrlInfoDao()
+    inf = NaiveBayesInferrer(dao)
+
+    for line in open('../../../dat/2012_test.tsv'):
+        tokens = line.strip().split()
+        url = tokens[0]
+        cc = tokens[1]
+        print 'getting', url
+        ui = dao.get_url(url)
+        if ui:
+            print 'found', url
+        else:
+            print 'missing', url
