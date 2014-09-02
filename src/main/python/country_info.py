@@ -1,6 +1,6 @@
 import codecs
 import os
-from sgconstants import *
+from sg_utils import *
 
 
 class Country:

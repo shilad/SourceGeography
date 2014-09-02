@@ -6,14 +6,9 @@ Infers location of web pages based on four signals:
 - Wikidata country source
 """
 
-import codecs
 import collections
-import os
-import country_info
-import sys
-import urllib2
 
-from sgconstants import *
+from sg_utils import *
 
 GENERIC_CC_TLDS = set(['tv'])
 

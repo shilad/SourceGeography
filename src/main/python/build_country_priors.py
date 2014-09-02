@@ -7,7 +7,7 @@ import collections
 import rule_inferrer
 import urlinfo
 
-from sgconstants import *
+from sg_utils import *
 
 dao = urlinfo.UrlInfoDao()
 inf = rule_inferrer.Inferrer(dao)

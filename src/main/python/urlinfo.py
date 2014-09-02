@@ -6,15 +6,13 @@ Infers location of web pages based on four signals:
 - Wikidata country source
 """
 
-import codecs
 import collections
 import os
 import marshal
 import country_info
-import sys
 import urllib2
 
-from sgconstants import *
+from sg_utils import *
 
 
 class UrlInfo:
@@ -23,12 +21,14 @@ class UrlInfo:
         self.lang = None
         self.whois = None
         self.wikidata = None
-        self.tld = urllib2.urlparse.urlparse(url).netloc.split('.')[-1]
-        self.domain = urllib2.urlparse.urlparse(self.url).netloc
+        self.domain = url2host(self.url)
+        self.tld = self.domain.split('.')[-1]
 
-def warn(message):
-    sys.stderr.write(message + '\n')
-
+def read_urls():
+    f = sg_open(PATH_URL_INTERESTING)
+    for line in f:
+        yield line.strip()
+    f.close()
 
 class UrlInfoDao:
     def __init__(self):
@@ -84,7 +84,7 @@ class UrlInfoDao:
 
         warn('reading url webpage langs')
         num_langs = 0
-        for line in codecs.open(PATH_URL_LANGS, 'r', encoding='utf-8'):
+        for line in sg_open(PATH_URL_LANGS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]
@@ -105,21 +105,17 @@ class UrlInfoDao:
         return self.tld_country.values()
 
     def read_whois(self):
-        if not   os.path.isfile(PATH_URL_WHOIS):
+        if not  os.path.isfile(PATH_URL_WHOIS):
             warn('whois results not available...')
             return
 
         warn('reading whois results...')
 
-        # f = codecs.open('../../../url_whois_test.tsv', 'w', encoding='utf-8')
         num_whois = 0
-        for line in codecs.open(PATH_URL_WHOIS, 'r', encoding='utf-8'):
+        for line in sg_open(PATH_URL_WHOIS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]
-                #if not url in self.urls: # testing hack...
-                #    continue
-                # f.write(line)
                 whois = tokens[1]
                 if whois != '??':
                     if not url in self.urls:
@@ -128,7 +124,6 @@ class UrlInfoDao:
                     num_whois += 1
             else:
                 warn('invalid whois line: %s' % `line`)
-        # f.close()
         warn('finished reading %d whois entries' % num_whois)
 
     def read_wikidata(self):
@@ -138,7 +133,7 @@ class UrlInfoDao:
 
         warn('reading wikidata results...')
         n = 0
-        for line in codecs.open(PATH_WIKIDATA_URL_LOCATIONS):
+        for line in sg_open(PATH_WIKIDATA_URL_LOCATIONS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
                 url = tokens[0]

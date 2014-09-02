@@ -2,33 +2,34 @@
 Builds the mapping from urls to whois countries.
 """
 
-import codecs
-import sys
-from sgconstants import *
+from sg_utils import *
+
+import urlinfo
 
 
 domain_countries = {}
-for line in codecs.open(PATH_WHOIS_RAW, 'r', encoding='utf-8'):
+for line in sg_open(PATH_WHOIS_RAW):
     tokens = line.strip().split('\t')
     if tokens[1] != '??':
         domain_countries[tokens[0]] = tokens[1]
 
+interesting = set(urlinfo.read_urls())
 
 num_invalid = 0
 num_total = 0
 num_matches = 0
 prev_urls = {}
-f = codecs.open(PATH_URL_WHOIS, 'w', encoding='utf-8')
-for line in codecs.open(PATH_SOURCE_URLS, 'r', encoding='utf-8'):
+f = sg_open(PATH_URL_WHOIS, 'w')
+for line in sg_open(PATH_SOURCE_URLS):
+    tokens = line.strip().split('\t')
+    if len(tokens) != 2:
+        continue
+    url = tokens[0].strip()
+    if not url in interesting:
+        continue
     num_total += 1
     if num_total % 100000 == 0:
-        print 'matched %d of %d (%d are invalid)' % (num_matches, num_total, num_invalid)
-    tokens = line.strip().split('\t')
-    if len(tokens) != 15:
-        num_invalid += 1
-        #sys.stderr.write('invalid line: %s\n' % `line`)
-        continue
-    url = tokens[9].strip()
+        warn('matched %d of %d (%d are invalid)' % (num_matches, num_total, num_invalid))
     if url in prev_urls:
         num_matches += prev_urls[url]
         continue

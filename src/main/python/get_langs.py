@@ -11,7 +11,7 @@ import codecs
 import geoscrape
 import langid
 import sys
-import sgconstants
+from sg_utils import *
 
 if len(sys.argv) != 2:
     sys.stdout.write('usage: %s base_scrape_dir\n' % sys.argv[0])
@@ -29,7 +29,7 @@ def process(web_resource):
 def handle_result((url, lang)):
     f.write('%s\t%s\n' % (url, lang))
 
-f = codecs.open(sgconstants.PATH_SOURCE_URLS, 'w', encoding='utf-8')
+f = sg_open(PATH_SOURCE_URLS, 'w')
 
 geoscrape.process_resources(
     sys.argv[1],

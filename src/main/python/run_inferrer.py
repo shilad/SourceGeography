@@ -5,20 +5,17 @@ Infers location of web pages based on four signals:
 - Language of web page
 - Wikidata country source
 """
-import codecs
 import collections
-import sys
 import traceback
 
 import urlinfo
 import rule_inferrer
-
-from sgconstants import *
+from sg_utils import *
 
 
 dao = urlinfo.UrlInfoDao()
 inf = rule_inferrer.Inferrer(dao)
-f = codecs.open(PATH_URL_RESULT, 'w', encoding='utf-8')
+f = sg_open(PATH_URL_RESULT, 'w')
 counts = collections.defaultdict(int)
 for ui in dao.get_urls():
     try:
@@ -32,7 +29,7 @@ for ui in dao.get_urls():
         f.write('\n')
         counts[rule] += 1
     except:
-        sys.stderr.write('decoding %s failed: ' % ui.url)
+        warn('decoding %s failed: ' % ui.url)
         traceback.print_exc()
 f.close()
 

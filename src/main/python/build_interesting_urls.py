@@ -1,7 +1,4 @@
-import codecs
-import sys
-
-from sgconstants import *
+from sg_utils import *
 
 CONTENT_TYPE_KEEPERS = set([
     'text/html',
@@ -32,7 +29,7 @@ CONTENT_TYPE_KEEPERS = set([
 
 import geoscrape
 
-f = codecs.open('../../../dat/interesting_urls.txt', 'w', encoding='utf-8')
+f = sg_open('../../../dat/interesting_urls.txt', 'w')
 def process(web_resource):
     return web_resource.url, web_resource.get_content_type()
 

@@ -1,15 +1,8 @@
 # TODO: run for all languages
-import codecs
-import sys
-
 import urlinfo
 import country_info
-import rule_inferrer
 
-from sgconstants import *
-
-def warn(message):
-    sys.stderr.write(message + '\n')
+from sg_utils import *
 
 country_names = {}
 
@@ -29,7 +22,7 @@ country_names['The Gambia'] = country_names['Gambia']
 exact_domains = {}
 top_domains = {}
 
-for line in codecs.open(PATH_WIKIDATA_DOMAIN_LOCATIONS, 'r', encoding='utf-8'):
+for line in sg_open(PATH_WIKIDATA_DOMAIN_LOCATIONS):
     tokens = line.split('\t')
     (url, country, domain, top_domain) = tokens
     if country in country_names:
@@ -41,11 +34,10 @@ for line in codecs.open(PATH_WIKIDATA_DOMAIN_LOCATIONS, 'r', encoding='utf-8'):
 total = 0
 matches = 0
 
-f = codecs.open(PATH_WIKIDATA_URL_LOCATIONS, 'w', encoding='utf-8')
+f = sg_open(PATH_WIKIDATA_URL_LOCATIONS, 'w')
 dao = urlinfo.UrlInfoDao()
-inf = rule_inferrer.Inferrer(dao)
-for ui in dao.get_urls():
-    domain_parts = ui.domain.split('.')
+for url in urlinfo.read_urls():
+    domain_parts = url2host(url).split('.')
 
     subdomains = []
     for i in range(len(domain_parts) - 1):
@@ -65,7 +57,7 @@ for ui in dao.get_urls():
 
     if country:
         matches += 1
-        f.write(ui.url)
+        f.write(url)
         f.write('\t')
         f.write(country.iso)
         f.write('\n')
