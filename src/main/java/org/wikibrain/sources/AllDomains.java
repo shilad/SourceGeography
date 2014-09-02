@@ -13,8 +13,8 @@ import java.util.Set;
  */
 public class AllDomains {
     public static void main(String args[]) throws IOException {
-        File input = new File("./source_urls.tsv");
-        File output = new File("domains.txt");
+        File input = new File("./dat/source_urls.tsv");
+        File output = new File("./dat/domains.txt");
         BufferedWriter writer = WpIOUtils.openWriter(output);
 
         Set<String> domains = new HashSet<String>();

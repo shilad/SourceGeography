@@ -90,7 +90,7 @@ class Inferrer:
         return self.urls.values()
 
     def read_whois(self):
-        if not os.path.isfile(PATH_URL_WHOIS):
+        if not   os.path.isfile(PATH_URL_WHOIS):
             warn('whois results not available...')
             return
 
@@ -127,6 +127,8 @@ class Inferrer:
             if len(tokens) == 2:
                 url = tokens[0]
                 iso = tokens[1]
+                if url not in self.urls:
+                    self.urls[url] = UrlInfo(url)
                 self.urls[url].wikidata = iso
                 n += 1
             else:

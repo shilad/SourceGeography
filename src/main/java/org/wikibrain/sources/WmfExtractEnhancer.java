@@ -311,6 +311,6 @@ public class WmfExtractEnhancer {
     public static void main(String args[]) throws Exception {
         Env env = EnvBuilder.envFromArgs(args);
         WmfExtractEnhancer analyzer = new WmfExtractEnhancer(env, Language.EN);
-        analyzer.createCsv(new File("wmf_source_urls.tsv.bz2"), new File("source_urls.tsv"), new File("invalid_urls.txt"));
+        analyzer.createCsv(new File("dat/wmf_source_urls.tsv.bz2"), new File("dat/source_urls.tsv"), new File("dat/invalid_urls.txt"));
     }
 }

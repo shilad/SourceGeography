@@ -39,8 +39,8 @@ public class AllUrls {
     public static void main(String args[]) throws IOException {
         URLSet urls = new URLSet();
 
-        File input = new File("./source_urls.tsv");
-        File output = new File("urls.txt");
+        File input = new File("./dat/source_urls.tsv");
+        File output = new File("dat/all_urls.txt");
         BufferedWriter writer = WpIOUtils.openWriter(output);
 
         for (Citation cite : new ExtractReader(input)) {
