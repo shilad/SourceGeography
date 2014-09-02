@@ -51,7 +51,13 @@ class UrlInfoDao:
            return
 
         warn('saving urls to cache for future use')
-        self.build_cached_datastructure()
+        try:
+            self.rebuild_db()
+        except:
+            try: self.url_db.close()
+            except: pass
+            shutil.rmtree(PATH_DAO_CACHE, True)
+            raise
 
     def read_countries(self):
         for c in country_info.read_countries():
@@ -83,7 +89,7 @@ class UrlInfoDao:
             return
 
         warn('reading url webpage langs')
-        num_langs = 0
+        count = 0
         for line in sg_open(PATH_URL_LANGS):
             tokens = line.strip().split('\t')
             if len(tokens) == 2:
@@ -93,10 +99,10 @@ class UrlInfoDao:
                     if not url in urls:
                         urls[url] = UrlInfo(url)
                     urls[url].lang = lang
-                    num_langs += 1
+                    count += 1
             else:
                 warn('invalid whois line: %s' % `line`)
-        warn('finished reading %d url lang entries' % num_langs)
+        warn('finished reading %d url lang entries' % count)
 
     def read_whois(self, urls):
         if not  os.path.isfile(PATH_URL_WHOIS):
@@ -165,25 +171,35 @@ class UrlInfoDao:
         c = self.url_db.cursor()
         c.execute("""
             CREATE TABLE URL_INFO
-            (url TEXT primary key, lang TEXT, whois TEXT, wikidata TEXT, domain TEXT, tld TEXT)
+            (url TEXT primary key, lang TEXT, whois TEXT, wikidata TEXT)
         """)
-        c.comit()
+        self.url_db.commit()
 
         urls = sorted(infos.keys())
 
         for i in xrange(0, len(infos), 10000):
             if i % 100000 == 0:
-                warn('inserting ' % i)
+                warn('inserting %s' % i)
 
             batch = [infos[u] for u in urls[i:(i+10000)]]
-            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?",
+            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?)",
                 [(u.url, u.lang, u.whois, u.wikidata, u.domain, u.tld) for u in batch])
 
-        c.commit()
+        self.url_db.commit()
 
 
     def get_urls(self):
-        return self.url_db.values() # FIXME
+        c = self.url_db.cursor()
+        try:
+            for row in c.execute('SELECT url, lang, whois, wikidata FROM URL_INFO'):
+                ui = UrlInfo(row[0])
+                ui.lang = row[1]
+                ui.whois = row[2]
+                ui.wikidata = row[3]
+                yield ui
+        finally:
+            c.close()
+
 
     def get_countries(self):
         return self.tld_country.values()
