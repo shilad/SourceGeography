@@ -212,7 +212,7 @@ class UrlInfoDao:
 
             batch = [infos[u] for u in urls[i:(i+10000)]]
             c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?,?)",
-                [(u.url, u.count, u.lang, u.whois, u.wikidata, u.domain, u.tld) for u in batch])
+                [(u.url, u.count, u.lang, u.whois, u.wikidata) for u in batch])
 
         self.url_db.commit()
 
