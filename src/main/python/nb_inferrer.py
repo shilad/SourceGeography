@@ -3,7 +3,22 @@ GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws'.sp
 
 class NaiveBayesInferrer:
     def __init__(self, dao):
-        pass
+        self.dao = dao
+        self.features = [
+            WhoisFeature(dao),
+            WikidataFeature(dao),
+            LanguageFeature(dao),
+            TldFeature(dao)
+        ]
+        self.prior = {}
+        for c in dao.get_countries():
+            if c.prior:
+                self.prior[c.iso] = c.prior
+        if len(self.prior) == 0:
+            raise Exception('no country priors!')
+
+    def infer(self, url_info):
+
 
 
 class WhoisFeature:

@@ -51,7 +51,7 @@ class UrlInfoDao:
         self.read_wikidata()
 
         warn('saving urls to cache for future use')
-        self.put_cached_datastructure(datafiles, self.urls)
+        #self.put_cached_datastructure(datafiles, self.urls)
 
     def read_countries(self):
         for c in country_info.read_countries():
@@ -100,6 +100,9 @@ class UrlInfoDao:
 
     def get_urls(self):
         return self.urls.values()
+
+    def get_countries(self):
+        return self.tld_country.values()
 
     def read_whois(self):
         if not   os.path.isfile(PATH_URL_WHOIS):
