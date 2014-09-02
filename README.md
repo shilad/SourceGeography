@@ -35,11 +35,14 @@ Recreating this project:
 3. Copy the S3 directories with the scrape to your computer (careful! this is about 0.5 TB).
 4. Give Dave Musicant the postgres dump and ask him to extract admin countries for the whois results.
 
-## Infer locations
-
-1. Place Dave's whois results in `dat/whois_results2.tsv`
+# Prepare to infer locations
+1. Build set of "interesting" (e.g. non-multimedia) URLs `python build_interesting_urls.py`.
+2. Build counts for each url `python build_url_counts.py`.
+1. Place Dave's whois results in `dat/whois_results3.tsv`
 2. Build url to country file based on whois: `python build_url_to_whois.py`
 3. Build url to country file based on wikidata: `python build_wikidata_locations.py`
 4. Build prior country distribution: `python build_country_priors.py`
-5. (Perhaps) Rerun previous step to get a more accurate estimate.
+
+## Infer locations
+
 6. Run the inferrer:
