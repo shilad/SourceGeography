@@ -8,8 +8,6 @@ Infers location of web pages based on four signals:
 """
 
 import collections
-import os
-import shutil
 import sqlite3
 
 import country_info
@@ -211,7 +209,7 @@ class UrlInfoDao:
                 warn('inserting %s' % i)
 
             batch = [infos[u] for u in urls[i:(i+10000)]]
-            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?,?,?)",
+            c.executemany("INSERT INTO URL_INFO VALUES(?,?,?,?,?)",
                 [(u.url, u.count, u.lang, u.whois, u.wikidata) for u in batch])
 
         self.url_db.commit()
@@ -250,6 +248,11 @@ class UrlInfoDao:
 import os, errno
 
 def silentremove(filename):
+    """
+    Silently remove a file, from http://stackoverflow.com/a/10840586/141245
+    :param filename:
+    :return:
+    """
     try:
         os.remove(filename)
     except OSError as e: # this would be "except OSError, e:" before Python 2.6
