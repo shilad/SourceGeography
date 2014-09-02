@@ -1,4 +1,6 @@
 # According to Google (https://support.google.com/webmasters/answer/1347922?hl=en)
+import sys
+
 GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws'.split(','))
 
 class NaiveBayesInferrer:
@@ -42,7 +44,13 @@ class NaiveBayesInferrer:
         for (c, prob) in result.items():
             result[c] = result[c] / total
 
-        return result
+        top = sorted(result, key=result.get, reverse=True)
+        sys.stderr.write('top for %s:' % url_info.url[:20])
+        for c in top[:5]:
+            sys.stderr.write(' %s=%.3f' % (c, result[c]))
+        sys.stderr.write('\n')
+
+        return (self.dao.iso_countries[top[0]], 'nb')
 
 
 class WhoisFeature:
