@@ -28,10 +28,10 @@
     <tbody>
         <tr>
             <td>
-                WP language edition: <input type="text" size="4" name="lang">
+                WP language edition: <input type="text" size="4" name="lang" value="all">
             </td>
             <td>
-                Include articles in country: <input type="text" size="20" name="country">
+                Visualize articles in country: <input type="text" size="20" name="country" value="all">
             </td>
             <td>
                 <input type="button" value="go" name="go" id="go">
@@ -40,7 +40,30 @@
     </tbody>
 </table>
 
-<div id="world-map" style="width: 600px; height: 400px"></div>
+<div class="results">
+    <h3>LOADING....</h3>
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <div class="world-map" style="width: 600px; height: 400px"></div>
+            </td>
+            <td>
+                <table class="data">
+                    <thead><tr>
+                        <th>Country</th>
+                        <th>Citations from country</th>
+                        <th>%</th>
+                    </tr></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>

@@ -1,8 +1,38 @@
 #fields td {
     padding : 20px;
+    border-bottom : solid 1px #ccc;
 }
 
 #lang_field,
 #country_field {
 
+}
+
+.results {
+    padding : 20px;
+}
+div.results table.data tbody {
+    height : 800px;
+    overflow: auto;
+}
+
+table.data tbody {
+    font-size : 12px;
+}
+table.data td {
+    width: 150px;
+}
+table.data td:first-child {
+    width: 50px;
+}
+table.data td:last-child {
+    width: 50px;
+}
+
+table.data > tbody, table.data thead > tr {
+    display: block;
+}
+
+table td {
+    vertical-align: top;
 }

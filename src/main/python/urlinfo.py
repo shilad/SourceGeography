@@ -67,14 +67,14 @@ class UrlInfoDao:
             raise
 
     def read_countries(self):
-        countries = country_info.read_countries()
-        for c in countries:
+        self.countries = country_info.read_countries()
+        for c in self.countries:
             self.iso_countries[c.iso] = c
             self.tld_countries[c.tld] = c
 
         # Build raw priors
         hasPrior = len([c for c in self.get_countries() if c.prior is not None]) > 0
-        for c in countries:
+        for c in self.countries:
             if hasPrior:
                 self.country_priors[c] = c.prior if c.prior else 0.0
             else:
@@ -82,8 +82,8 @@ class UrlInfoDao:
 
         # Add equal smoothing constant that sums to 1% of total.
         total = sum(self.country_priors.values()) * 1.01
-        smoothing_k = total * 0.01 / len(countries)
-        for c in countries:
+        smoothing_k = total * 0.01 / len(self.countries)
+        for c in self.countries:
             self.country_priors[c] = (self.country_priors[c] + smoothing_k) / total
 
         self.iso_countries['uk'] = self.iso_countries['gb']         # hack - uk is "unofficial" gb
@@ -103,8 +103,8 @@ class UrlInfoDao:
             country_scores.reverse()
             sum_scores = 1.0 * sum([s for (s, c) in country_scores]) + 0.000001
             self.lang_countries[lang] = [(c, score/sum_scores) for (score, c) in country_scores]
-            if len(country_scores) > 2:
-                print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
+            #if len(country_scores) > 2:
+            #    print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
 
     def read_page_langs(self, urls):
         if not os.path.isfile(PATH_URL_LANGS):
@@ -260,7 +260,7 @@ class UrlInfoDao:
 
 
     def get_countries(self):
-        return self.tld_countries.values()
+        return self.countries
 
 import os, errno
 

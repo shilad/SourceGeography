@@ -30,7 +30,7 @@ f.close()
 predictions = {}
 
 for line in sg_open(PATH_URL_RESULT):
-    tokens = line.strip.split('\t')
+    tokens = line.strip().split('\t')
     if len(tokens) >= 4:
         url = tokens[3]
         chosen = tokens[1]
@@ -40,36 +40,55 @@ for line in sg_open(PATH_URL_RESULT):
 # next, summarize counts by language and country
 
 url_counts = collections.defaultdict(int)
-accumulator = {}
+accumulator = collections.defaultdict(int)
 successes = 0
 total = 0
+missing = collections.Counter()
 
 for line in sg_open(PATH_SOURCE_URLS):
     total += 1
     tokens = line.strip().split('\t')
+
+    if len(tokens) < 13:
+        continue
+
     lang = tokens[0]
     title = tokens[6]
     url = tokens[12]
-    country = title_to_country.get(title)
-    if not country:
-        warn('unknown country title: ' + `title`)
+
+    if total % 1000000 == 0:
+        warn('matched %d of %d records, total %d distinct (lang, containing_country, source_country) entries' %
+             (successes, total, len(accumulator)))
+    containing_country = title_to_country.get(title)
+    if not containing_country:
+        missing[title] += 1
+        #warn('unknown containing country title: ' + `title`)
         continue
 
     if not url in predictions:
         continue
 
-    successes += 1
     n = url_counts[url]
     url_counts[url] += 1
     choices = predictions[url].split(',')
     iso = choices[n % len(choices)]
-    predicted = dao.iso_countries[]
+    predicted_country = dao.iso_countries.get(iso)
+    if not predicted_country:
+        warn('unknown predicted country iso code: ' + `iso`)
+        continue
+
+    successes += 1
+
+    key = (lang, containing_country, predicted_country)
+    accumulator[key] += 1
 
 
+print('results for missing are ' + `missing`)
 
+data = []
+for ((lang, containing_country, predicted_country), n) in accumulator.items():
+    data.append((lang, containing_country.iso, predicted_country.iso, n))
 
-    key = (lang, country, )
-    if not lang in accumulator:
-        accumulator[lang] =
-
-
+f = sg_open('../../../web/counts.json', 'w')
+json.dump(data, f)
+f.close()
