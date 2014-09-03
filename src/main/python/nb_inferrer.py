@@ -64,7 +64,7 @@ class NaiveBayesInferrer:
     def infer(self, url_info):
         _, result = self.infer_dist(url_info)
         if not result:
-            return (0, None)
+            return (None, 'nb-0')
 
         top = sorted(result, key=result.get, reverse=True)
         if DEBUG:
@@ -73,7 +73,9 @@ class NaiveBayesInferrer:
                 sys.stderr.write(' %s=%.3f' % (c, result[c]))
             sys.stderr.write('\n')
 
-        return (self.dao.iso_countries[top[0]], 'nb')
+        r = 1 + int(result[top[0]] * 9)    # a number between 1 and 9
+
+        return (self.dao.iso_countries[top[0]], 'nb-' + str(r))
 
 
 class WhoisFeature:

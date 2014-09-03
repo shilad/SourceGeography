@@ -15,10 +15,16 @@ if os.path.isfile(PATH_COUNTRY_PRIOR): os.unlink(PATH_COUNTRY_PRIOR)
 dao = urlinfo.UrlInfoDao()
 inf = nb_inferrer.NaiveBayesInferrer(dao)
 counts = collections.defaultdict(int)
+total = 0
+matched = 0
 for ui in dao.get_urls():
+    total += 1
     (country, rule) = inf.infer(ui)
-    if len(rule.split('-')) >= 2:
+    if rule >= 'nb-8':
         counts[country] += 1
+        matched += 1
+    if total % 100000 == 0:
+        warn('identified %d of %d with high enough confidence for inclusion of prior' % (matched, total))
 
 f = open(PATH_COUNTRY_PRIOR, 'w')
 total = sum(counts.values())

@@ -94,7 +94,7 @@ class UrlInfoDao:
 
         for c in self.iso_countries.values():
             for (i, l) in enumerate(c.cleaned_langs):
-                p = c.prior if c.prior is None else c.prior
+                p = self.country_priors[c]
                 s = p * 1.0 / ((i+1) ** 2.5)
                 lang2countries[l].append((s, c))
 
