@@ -15,10 +15,15 @@ class NaiveBayesInferrer:
             LanguageFeature(dao),
             TldFeature(dao)
         ]
+
+        usePrior = len([c for c in dao.get_countries() if c.prior is not None]) > 0
         self.prior = {}
         for c in dao.get_countries():
-            if c.prior:
-                self.prior[c.iso] = c.prior
+            self.prior[c.iso] = c.prior if usePrior else c.popuarlity
+        total = sum(self.prior.values()) + 0.000001
+        for c in self.prior:
+            self.prior[c] /= total
+
         if len(self.prior) == 0:
             raise Exception('no country priors!')
 
