@@ -37,7 +37,7 @@ for ui in dao.get_urls():
         rule = 'null'
         if dist:
             top = sorted(dist.keys(), key=dist.get, reverse=True)[0]
-            rule = '%s-%.2d' % (inf.name , int(max(dist.values()) * 20) / 20.0)
+            rule = '%s-%.2d' % (inf.name , int(max(dist.values()) * 20))
             chosen = [weighted_choice(dist) for i in range(ui.count)]
         tokens = [top, ','.join(chosen), rule, ui.url, ui.lang, ui.whois, ui.tld, ui.wikidata]
         for (i, t) in enumerate(tokens):
