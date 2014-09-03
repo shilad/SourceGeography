@@ -44,6 +44,8 @@ PATH_URL_RESULT = '../../../dat/url_locations.tsv'
 # Binary versions of large data structures cached for efficiency
 PATH_DAO_CACHE = '../../../dat/dao-cache.bin'
 
+# Path to the 2012 data
+PATH_2012 = '../../../dat/2012_test.tsv'
 
 def warn(message):
     sys.stderr.write(message + '\n')

@@ -20,6 +20,7 @@ def warn(message):
 class Inferrer:
     def __init__(self, url_info_dao):
         self.dao = url_info_dao
+        self.name = 'rule'
 
     def stats(self):
         field_counts = collections.defaultdict(int)
@@ -44,12 +45,12 @@ class Inferrer:
 
     def infer(self, url_info):
         if url_info.tld in ('mil', 'gov'):
-            return (self.dao.tld_contries['us'], 'milgov')
+            return (self.dao.tld_countries['us'], 'milgov')
 
         if url_info.whois and url_info.whois not in self.dao.iso_countries:
             warn("unknown whois entry: %s" % url_info.whois)
 
-        tldc = self.dao.tld_contries.get(url_info.tld)
+        tldc = self.dao.tld_countries.get(url_info.tld)
         whoisc = self.dao.iso_countries.get(url_info.whois)
         langcs = [c for (c, s) in self.dao.lang_countries.get(url_info.lang, [])]
         wdc = self.dao.iso_countries.get(url_info.wikidata)
