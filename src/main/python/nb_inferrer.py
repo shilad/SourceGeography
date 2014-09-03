@@ -68,7 +68,7 @@ class NaiveBayesInferrer:
     def infer(self, url_info):
         _, result = self.infer_dist(url_info)
         if not result:
-            return None
+            return (0, None)
 
         top = sorted(result, key=result.get, reverse=True)
         if DEBUG:
