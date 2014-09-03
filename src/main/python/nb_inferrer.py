@@ -2,6 +2,8 @@
 import sys
 import urlinfo
 
+from sg_utils import *
+
 DEBUG = False
 GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws,int'.split(','))
 
@@ -73,9 +75,14 @@ class NaiveBayesInferrer:
                 sys.stderr.write(' %s=%.3f' % (c, result[c]))
             sys.stderr.write('\n')
 
-        r = 1 + int(result[top[0]] * 9)    # a number between 1 and 9
+        best = top[0]
+        r = 1 + int(result[best] * 9)    # a number between 1 and 9
 
-        return (self.dao.iso_countries[top[0]], 'nb-' + str(r))
+        if best not in self.dao.iso_countries:
+            warn('unknown country: %s' % best)
+            return (None, 'nb-0')
+
+        return (self.dao.iso_countries[best], 'nb-' + str(r))
 
 
 class WhoisFeature:
