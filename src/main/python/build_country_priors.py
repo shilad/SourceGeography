@@ -4,13 +4,13 @@ Builds the background distribution of popularity for all countries.
 
 import collections
 
-import rule_inferrer
+import nb_inferrer
 import urlinfo
 
 from sg_utils import *
 
 dao = urlinfo.UrlInfoDao()
-inf = rule_inferrer.Inferrer(dao)
+inf = nb_inferrer.NaiveBayesInferrer(dao)
 counts = collections.defaultdict(int)
 for ui in dao.get_urls():
     (country, rule) = inf.infer(ui)
