@@ -9,12 +9,12 @@ import collections
 import traceback
 
 import urlinfo
-import rule_inferrer
+import nb_inferrer
 from sg_utils import *
 
 
 dao = urlinfo.UrlInfoDao()
-inf = rule_inferrer.Inferrer(dao)
+inf = nb_inferrer.NaiveBayesInferrer(dao)
 f = sg_open(PATH_URL_RESULT, 'w')
 counts = collections.defaultdict(int)
 for ui in dao.get_urls():
