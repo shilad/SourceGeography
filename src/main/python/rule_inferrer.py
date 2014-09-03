@@ -44,12 +44,12 @@ class Inferrer:
 
     def infer(self, url_info):
         if url_info.tld in ('mil', 'gov'):
-            return (self.dao.tld_country['us'], 'milgov')
+            return (self.dao.tld_contries['us'], 'milgov')
 
         if url_info.whois and url_info.whois not in self.dao.iso_countries:
             warn("unknown whois entry: %s" % url_info.whois)
 
-        tldc = self.dao.tld_country.get(url_info.tld)
+        tldc = self.dao.tld_contries.get(url_info.tld)
         whoisc = self.dao.iso_countries.get(url_info.whois)
         langcs = [c for (c, s) in self.dao.lang_countries.get(url_info.lang, [])]
         wdc = self.dao.iso_countries.get(url_info.wikidata)

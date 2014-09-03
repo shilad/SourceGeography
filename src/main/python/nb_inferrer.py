@@ -2,7 +2,7 @@
 import sys
 import urlinfo
 
-GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws'.split(','))
+GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws,int'.split(','))
 
 class NaiveBayesInferrer:
     def __init__(self, dao):
@@ -26,30 +26,41 @@ class NaiveBayesInferrer:
 
         for f in self.features:
             (conf, dist) = f.infer_dist(url_info)
-            if conf == 0:
-                dist = dict(self.prior)
-            else:
-                union = set(self.prior.keys()).union(dist.keys())
-                for c in union:
-                    dist[c] = conf * dist.get(c, 0.0) + (1.0 - conf) * self.prior.get(c)
+            if conf == 0 or not dist:
+                continue
+
+            union = set(self.prior.keys()).union(dist.keys())
+            for c in union:
+                dist[c] = (conf * dist.get(c, 0.0) + (1.0 - conf) * self.prior.get(c, 0.0)) ** conf
+
+            total = sum(dist.values()) + 0.00001
+            for c in dist:
+                dist[c] /= total
+
+            if True:
+                top = sorted(dist, key=dist.get, reverse=True)
+                sys.stderr.write('%s\'s top for %s:' % (f.name, url_info.url[:20]))
+                for c in top[:5]:
+                    sys.stderr.write(' %s=%.5f' % (c, dist[c]))
+                sys.stderr.write('\n')
 
             if not result:
-                result = dist
+                result.update(dist)
             else:
                 for (c, prob) in dist.items():
-                    result[c] *= prob
+                    result[c] = result.get(c, 0.000001) * prob
 
         if not result:
-            return None
+            return (0.0, {})
 
         total = sum(result.values())
         for (c, prob) in result.items():
             result[c] = result[c] / total
 
-        return result
+        return (1.0, result)
 
     def infer(self, url_info):
-        result = self.infer_dist(url_info)
+        _, result = self.infer_dist(url_info)
         if not result:
             return None
 
@@ -70,7 +81,7 @@ class WhoisFeature:
     def infer_dist(self, url_info):
         if not url_info.whois:
             return (0, {})
-        return (0.85, { url_info.whois : 1.0 })
+        return (0.90, { url_info.whois : 1.0 })
 
 
 class WikidataFeature:
@@ -81,7 +92,7 @@ class WikidataFeature:
     def infer_dist(self, url_info):
         if not url_info.wikidata:
             return (0, {})
-        return (0.90, { url_info.wikidata : 1.0 })
+        return (0.92, { url_info.wikidata : 1.0 })
 
 
 class LanguageFeature:
@@ -97,7 +108,7 @@ class LanguageFeature:
         for (country, prob) in self.dao.lang_countries[url_info.lang]:
             candidates[country.iso] = prob
 
-        return (0.80, candidates)
+        return (0.40, candidates)
 
 class TldFeature:
     def __init__(self, dao):
@@ -118,27 +129,33 @@ class TldFeature:
 def read_test(dao):
     test = {}
     missing = []
+    #for line in ['http://rsssf.com/tablesi/ital-intres1970.html nl']:
     for line in open('../../../dat/2012_test.tsv'):
         tokens = line.strip().split()
         url = tokens[0]
         cc = tokens[1]
         ui = dao.get_url(url)
-        if ui:
-            missing.append(ui)
+        if not ui:
+            missing.append(url)
         else:
             test[url] = (ui, cc.lower())
 
     print 'missing urls: (%d of %d)' % (len(missing), len(missing) + len(test))
-    for url in missing:
-        print '\t%s' % (url,)
+    #for url in missing:
+    #    print '\t%s' % (url,)
     print
 
     return test
 
+def normalize_cc(cc):
+    cc = cc.lower()
+    if cc == 'uk': cc = 'gb'
+    return cc
+
 def test_feature(feat, test):
     num_missing = 0
-    num_correct = 0
 
+    correct = []
     wrong = []
 
     for url in test:
@@ -149,15 +166,17 @@ def test_feature(feat, test):
             continue
 
         top = sorted(dist, key=dist.get, reverse=True)
-        if top[0] == actual_cc:
-            num_correct += 1
+        if normalize_cc(top[0]) == normalize_cc(actual_cc):
+            correct.append((url, actual_cc, top[:3]))
         else:
             wrong.append((url, actual_cc, top[:3]))
 
     print 'Feature %s had %d correct, %d wrong, %d missing. Wrong are:' % \
-          (feat.name, num_correct, len(wrong), num_missing)
+          (feat.name, len(correct), len(wrong), num_missing)
+    for w in correct:
+        print '\tcorrect: %s actual=%s pred=%s' % w
     for w in wrong:
-        print '\t%s actual=%s pred=%s' % w
+        print '\twrong: %s actual=%s pred=%s' % w
     print
 
 if __name__ == '__main__':
@@ -168,6 +187,7 @@ if __name__ == '__main__':
     inf = NaiveBayesInferrer(dao)
     for feat in inf.features:
         test_feature(feat, test)
+
 
     # test the feature on ourself
     test_feature(inf, test)

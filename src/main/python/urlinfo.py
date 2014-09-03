@@ -44,7 +44,7 @@ def read_urls():
 class UrlInfoDao:
     def __init__(self):
         self.iso_countries = {}    # ISO country code to country object
-        self.tld_country = {}      # TLD code to country object
+        self.tld_countries = {}      # TLD code to country object
         self.url_db = None
 
         self.lang_countries = collections.defaultdict(list)      # ISO lang code to ISO country codes
@@ -68,7 +68,7 @@ class UrlInfoDao:
     def read_countries(self):
         for c in country_info.read_countries():
             self.iso_countries[c.iso] = c
-            self.tld_country[c.tld] = c
+            self.tld_countries[c.tld] = c
 
         self.iso_countries['uk'] = self.iso_countries['gb']         # hack - uk is "unofficial" gb
 
@@ -243,7 +243,7 @@ class UrlInfoDao:
 
 
     def get_countries(self):
-        return self.tld_country.values()
+        return self.tld_countries.values()
 
 import os, errno
 
@@ -261,4 +261,5 @@ def silentremove(filename):
 
 if __name__ == '__main__':
     dao = UrlInfoDao()
+
     print dao.get_url('http://google.com')
