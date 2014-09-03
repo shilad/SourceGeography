@@ -21,7 +21,7 @@ for ui in dao.get_urls():
     total += 1
     (country, rule) = inf.infer(ui)
     if rule >= 'nb-8':
-        counts[country] += 1
+        counts[country] += ui.count
         matched += 1
     if total % 100000 == 0:
         warn('identified %d of %d with high enough confidence for inclusion of prior' % (matched, total))
