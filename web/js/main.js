@@ -41,12 +41,10 @@ function init() {
 
 
 $(function(){
-    $('.world-map:first-of-type').vectorMap();
 
     $.getJSON( "countries.json",
         function( data ) {
             countries = data;
-            console.log('loaded ' + data.length + ' countries');
             if (counts.length > 0) {
                 init();
             }
@@ -55,7 +53,6 @@ $(function(){
     $.getJSON( "counts.json",
         function( data ) {
             counts = data;
-            console.log('loaded ' + data.length + ' counts');
             if (countries.length > 0) {
                 init();
             }
@@ -97,23 +94,27 @@ function visualize() {
 
     for (var i = 0; i < counts.length; i++) {
         var row = counts[i];
-        if (lang != 'all' && row[0] != lang) {
+        var l = row[0];
+        var cc1 = row[1];
+        var cc2 = row[2].toUpperCase();
+        var n = row[3];
+        if (lang != 'all' && l != lang) {
             continue;
         }
-        if (country_iso != 'all' && row[1] != country_iso) {
+        if (country_iso != 'all' && cc1 != country_iso) {
             continue;
         }
-        if (filtered[row[2]]) {
-            filtered[row[2]] += row[3];
+        if (filtered[cc2]) {
+            filtered[cc2] += n;
         } else {
-            filtered[row[2]] = row[3];
+            filtered[cc2] = n;
         }
-        total += row[3];
+        total += n;
     }
 
-    console.log('found ' + filtered.length + ' unique matches');
+    console.log(filtered);
 
-    var label = "Estimated geographic distribution of source publishers for ";
+    var label = "Results for ";
     if (lang == 'all') {
         label += 'all WP language editions';
     } else {
@@ -127,17 +128,32 @@ function visualize() {
     }
 
     var div = $("div.results:first-of-type");
-    div.find("h3").text(label);
+    div.find("h4").text(label);
 
     var rows = "";
-    var countries = keys_sorted_by_value(filtered);
-    for (var i = 0; i < countries.length; i++) {
-        var c = countries[i];
+    var ordered_countries = keys_sorted_by_value(filtered);
+    for (var i = 0; i < ordered_countries.length; i++) {
+        var c = ordered_countries[i];
         var n = filtered[c];
         var p = 100.0 * n / total;
         rows += "<tr><td>" + c + "</td><td>" + n + "</td><td>" + p.toFixed(2) + "%</td></tr>"
     }
     div.find("table.data tbody").html(rows);
+
+    $('.world-map:first-of-type').empty().vectorMap({
+        map: 'world_mill_en',
+        series: {
+            regions: [{
+                values: filtered,
+                scale: ['#C8EEFF', '#0071A4'],
+                normalizeFunction: 'polynomial'
+            }]
+        },
+        onRegionLabelShow   : function(e, el, code){
+            var p = (100.0 * filtered[code] / total).toFixed(2);
+            el.html(el.html()+' ('+p+'%)');
+        }
+    });
 
     return false;
 }
