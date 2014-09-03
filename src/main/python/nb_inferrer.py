@@ -2,6 +2,7 @@
 import sys
 import urlinfo
 
+DEBUG = False
 GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws,int'.split(','))
 
 class NaiveBayesInferrer:
@@ -37,7 +38,7 @@ class NaiveBayesInferrer:
             for c in dist:
                 dist[c] /= total
 
-            if True:
+            if DEBUG:
                 top = sorted(dist, key=dist.get, reverse=True)
                 sys.stderr.write('%s\'s top for %s:' % (f.name, url_info.url[:20]))
                 for c in top[:5]:
@@ -65,10 +66,11 @@ class NaiveBayesInferrer:
             return None
 
         top = sorted(result, key=result.get, reverse=True)
-        sys.stderr.write('top for %s:' % url_info.url[:20])
-        for c in top[:5]:
-            sys.stderr.write(' %s=%.3f' % (c, result[c]))
-        sys.stderr.write('\n')
+        if DEBUG:
+            sys.stderr.write('top for %s:' % url_info.url[:20])
+            for c in top[:5]:
+                sys.stderr.write(' %s=%.3f' % (c, result[c]))
+            sys.stderr.write('\n')
 
         return (self.dao.iso_countries[top[0]], 'nb')
 
