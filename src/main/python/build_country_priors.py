@@ -3,11 +3,14 @@ Builds the background distribution of popularity for all countries.
 """
 
 import collections
+import os
 
 import nb_inferrer
 import urlinfo
 
 from sg_utils import *
+
+if os.path.isfile(PATH_COUNTRY_PRIOR): os.unlink(PATH_COUNTRY_PRIOR)
 
 dao = urlinfo.UrlInfoDao()
 inf = nb_inferrer.NaiveBayesInferrer(dao)
