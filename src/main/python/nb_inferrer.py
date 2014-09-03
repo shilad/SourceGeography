@@ -19,7 +19,7 @@ class NaiveBayesInferrer:
         usePrior = len([c for c in dao.get_countries() if c.prior is not None]) > 0
         self.prior = {}
         for c in dao.get_countries():
-            self.prior[c.iso] = c.prior if usePrior else c.popularity
+            self.prior[c.iso] = c.prior if usePrior else c.population
         total = sum(self.prior.values()) + 0.000001
         for c in self.prior:
             self.prior[c] /= total
