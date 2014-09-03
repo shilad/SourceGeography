@@ -32,20 +32,19 @@ counts = collections.defaultdict(int)
 for ui in dao.get_urls():
     try:
         (conf, dist) = inf.infer_dist(ui)
-        for i in range(ui.count):
-            chosen = 'null'
-            top = 'null'
-            rule = 'null'
-            if dist:
-                top = sorted(dist.keys(), key=dist.get, reverse=True)[0]
-                chosen = weighted_choice(dist)
-                rule = '%s-%.2d' % (inf.name , int(max(dist.values()) * 20) / 20.0)
-            tokens = [chosen, top, rule, ui.url, ui.lang, ui.whois, ui.tld, ui.wikidata]
-            for (i, t) in enumerate(tokens):
-                if i > 0: f.write('\t')
-                f.write('null' if t is None else t)
-            f.write('\n')
-            counts[rule] += 1
+        chosen = []
+        top = 'null'
+        rule = 'null'
+        if dist:
+            top = sorted(dist.keys(), key=dist.get, reverse=True)[0]
+            rule = '%s-%.2d' % (inf.name , int(max(dist.values()) * 20) / 20.0)
+            chosen = [weighted_choice(dist) for i in range(ui.count)]
+        tokens = [top, ','.join(chosen), rule, ui.url, ui.lang, ui.whois, ui.tld, ui.wikidata]
+        for (i, t) in enumerate(tokens):
+            if i > 0: f.write('\t')
+            f.write('null' if t is None else t)
+        f.write('\n')
+        counts[rule] += ui.count
     except:
         warn('decoding %s failed: ' % ui.url)
         traceback.print_exc()
