@@ -14,6 +14,7 @@ class Country:
         self.langs = row_tokens[15].split(',')
         self.cleaned_langs = [l.lower().split('-')[0] for l in self.langs]
         self.prior = None   # Prior probability of the country generating a webpage
+        self.title = None   # Article title in English Wikipedia
 
     def __str__(self):
         return self.name
@@ -24,6 +25,16 @@ class Country:
             (self.name, self.iso, self.iso3, self.fips, self.population, self.tld, self.cleaned_langs, self.prior)
         )
 
+TITLE_MAPPING = {
+    'Macedonia': 'Republic of Macedonia',
+    'Bahamas': 'The Bahamas',
+    'Georgia': 'Georgia (country)',
+    'Ireland': 'Republic of Ireland',
+    'Palestinian Territory': 'Palestine',
+    'Macao': 'Macau',
+    'U.S. Virgin Islands': 'United States Virgin Islands',
+    'Gambia': 'The Gambia'
+}
 
 def read_countries():
     countries = []
@@ -34,6 +45,8 @@ def read_countries():
             continue
         c = Country(line.strip().split('\t'))
         countries.append(c)
+        c.title = TITLE_MAPPING.get(c.name, c.name)
+
         iso_countries[c.iso] = c
 
     if os.path.isfile(PATH_COUNTRY_PRIOR):
