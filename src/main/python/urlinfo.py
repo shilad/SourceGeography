@@ -43,8 +43,9 @@ def read_urls():
 
 class UrlInfoDao:
     def __init__(self):
-        self.iso_countries = {}    # ISO country code to country object
-        self.tld_countries = {}      # TLD code to country object
+        self.iso_countries = {}     # ISO country code to country object
+        self.tld_countries = {}     # TLD code to country object
+        self.country_priors = {}    # country to smoothed prior distribution
         self.url_db = None
 
         self.lang_countries = collections.defaultdict(list)      # ISO lang code to ISO country codes
@@ -66,18 +67,34 @@ class UrlInfoDao:
             raise
 
     def read_countries(self):
-        for c in country_info.read_countries():
+        countries = country_info.read_countries()
+        for c in countries:
             self.iso_countries[c.iso] = c
             self.tld_countries[c.tld] = c
+
+        # Build raw priors
+        hasPrior = len([c for c in self.get_countries() if c.prior is not None]) > 0
+        for c in countries:
+            if hasPrior:
+                self.country_priors[c] = c.prior if c.prior else 0.0
+            else:
+                self.country_priors[c] = c.population if c.population else 0.0
+
+        # Add equal smoothing constant that sums to 1% of total.
+        total = sum(self.country_priors.values()) * 1.01
+        smoothing_k = total * 0.01 / len(countries)
+        for c in countries:
+            self.country_priors[c] = (self.country_priors[c] + smoothing_k) / total
 
         self.iso_countries['uk'] = self.iso_countries['gb']         # hack - uk is "unofficial" gb
 
     def analyze_langs(self):
         lang2countries = collections.defaultdict(list)
 
+
         for c in self.iso_countries.values():
             for (i, l) in enumerate(c.cleaned_langs):
-                p = c.population if c.prior is None else c.prior
+                p = c.prior if c.prior is None else c.prior
                 s = p * 1.0 / ((i+1) ** 2.5)
                 lang2countries[l].append((s, c))
 
