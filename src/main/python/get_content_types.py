@@ -1,12 +1,17 @@
+import collections
 import geoscrape
+import sys
 
-f = open('content_types.txt', 'w')
 def process(web_resource):
     return web_resource.get_content_type()
 
+counts = collections.defaultdict(int)
 def handle_result(content_type):
-    f.write(content_type + '\n')
+    counts[content_type] += 1
 
-geoscrape.process_resources('/Users/shilad/Documents/IntelliJ/SourceGeography/scrape/', process, handle_result)
+geoscrape.process_resources(sys.argv[1], process, handle_result)
 
+f = open('dat/content_types.txt', 'w')
+for t in counts:
+    f.write('%s\t%d\n' % (t, counts[t]))
 f.close()
