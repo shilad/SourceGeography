@@ -8,10 +8,10 @@ function init() {
     }
     console.log('loaded ' + iso2countries.length + ' countries');
 
-    var langs = ['all'];
+    var langs = [];
     var lang_obj = {};
 
-    var observed_countries = ['all'];
+    var observed_countries = [];
     var country_obj = {};
 
     for (var i = 0; i < counts.length; i++) {
@@ -29,17 +29,21 @@ function init() {
         }
     }
 
+    langs.sort();
+    observed_countries.sort();
+    langs.splice(0, 0, 'all');
+    observed_countries.splice(0, 0, 'all');
 
     console.log('loaded ' + langs.length + ' langs');
     console.log('loaded ' + observed_countries.length + ' observed countries');
 
     $("input[name='lang']").autocomplete({
         source : langs, minLength : 0, delay : 0, autoFocus : true,
-        close : function() { visualize(); return true; }
+        close : function() { $(this).blur(); visualize(); return true; }
     });
     $("input[name='country']").autocomplete({
         source : observed_countries, minLength : 0, delay : 0, autoFocus : true,
-        close : function() { visualize(); return true; }
+        close : function() { $(this).blur(); visualize(); return true; }
     });
     $("input[type='text']").bind('focus', function(){
         $(this).val('');
