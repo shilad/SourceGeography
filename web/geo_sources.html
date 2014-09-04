@@ -23,48 +23,50 @@
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
+<div id="main">
+    <h1>Estimated geographic distribution of Wikipedia source publishers</h1>
 
-<table id="fields">
-    <tbody>
-        <tr>
-            <td>
-                WP language edition: <input type="text" size="4" name="lang" value="all">
-            </td>
-            <td>
-                Visualize articles in country: <input type="text" size="20" name="country" value="all">
-            </td>
-            <td>
-                <input type="button" value="go" name="go" id="go">
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="results">
-    <h3>LOADING....</h3>
-    <table>
+    <table id="fields">
         <tbody>
-        <tr>
-            <td>
-                <div class="world-map" style="width: 600px; height: 400px"></div>
-            </td>
-            <td>
-                <table class="data">
-                    <thead><tr>
-                        <th>Country</th>
-                        <th>Citations from country</th>
-                        <th>%</th>
-                    </tr></thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    WP language edition: <input type="text" size="4" name="lang" value="all">
+                </td>
+                <td>
+                    Visualize articles in country: <input type="text" size="20" name="country" value="all">
+                </td>
+                <td>
+                    <input type="button" value="go" name="go" id="go">
+                </td>
+            </tr>
         </tbody>
     </table>
 
-</div>
+    <div class="results">
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <h4>LOADING....</h4>
+                    <div class="world-map" style="width: 600px; height: 400px"></div>
+                </td>
+                <td>
+                    <table class="data">
+                        <thead><tr>
+                            <th>country</th>
+                            <th># citations from country</th>
+                            <th>%</th>
+                        </tr></thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+    </div>
+</div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 <script src="js/vendor/jquery-ui.min.js"></script>
