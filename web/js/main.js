@@ -29,12 +29,23 @@ function init() {
         }
     }
 
+
     console.log('loaded ' + langs.length + ' langs');
     console.log('loaded ' + observed_countries.length + ' observed countries');
 
-    $("input[name='lang']").autocomplete({ source : langs, minLength : 0});
-    $("input[name='country']").autocomplete({ source : observed_countries, minLength : 0});
-    $("input[type='text']").bind('focus', function(){ $(this).autocomplete("search"); } );
+    $("input[name='lang']").autocomplete({
+        source : langs, minLength : 0, delay : 0, autoFocus : true,
+        close : function() { visualize(); return true; }
+    });
+    $("input[name='country']").autocomplete({
+        source : observed_countries, minLength : 0, delay : 0, autoFocus : true,
+        close : function() { visualize(); return true; }
+    });
+    $("input[type='text']").bind('focus', function(){
+        $(this).val('');
+        $(this).autocomplete("search");
+    } );
+
 
     visualize();
 }
@@ -157,7 +168,7 @@ function visualize() {
     }
     div.find("table.data tbody").html(rows);
 
-    $('.world-map:first-of-type').empty().vectorMap({
+    var map_params = {
         backgroundColor: '#666',
         map: 'world_mill_en',
         series: {
@@ -170,8 +181,35 @@ function visualize() {
         onRegionLabelShow   : function(e, el, code){
             var p = (100.0 * filtered[code] / total).toFixed(2);
             el.html(el.html()+' ('+p+'%)');
+        },
+        regionStyle : {
+            initial: {
+                fill: 'white',
+                "fill-opacity": 1,
+                stroke: 'none',
+                "stroke-width": 0,
+                "stroke-opacity": 1
+            },
+            hover: {
+                "fill-opacity": 0.8
+            },
+            selected: {
+                stroke: 'red',
+                "stroke-width": 2
+            },
+            selectedHover: {
+            }
+        },
+        onRegionClick : function(e, iso, isSelected) {
+            $("input[name='country']").val(iso2countries[iso.toLowerCase()].name);
+            $(".jvectormap-label").remove();
+            visualize();
         }
-    });
+    };
+    if (country_iso != 'all') {
+        map_params.selectedRegions = country_iso.toUpperCase();
+    }
+    var map = $('.world-map:first-of-type').empty().vectorMap(map_params);
 
     return false;
 }
