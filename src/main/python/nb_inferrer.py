@@ -1,10 +1,11 @@
-# According to Google (https://support.google.com/webmasters/answer/1347922?hl=en)
 import sys
 import urlinfo
 
 from sg_utils import *
 
 DEBUG = False
+
+# According to Google (https://support.google.com/webmasters/answer/1347922?hl=en)
 GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws,int'.split(','))
 
 class NaiveBayesInferrer:
