@@ -6,7 +6,10 @@ from sg_utils import *
 
 import nb_inferrer
 import rule_inferrer
+import baseline_inferrer
 
+
+TEST_ALG = 'baseline'
 
 def read_test(dao, path):
     test = {}
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     dao = urlinfo.UrlInfoDao()
     test = read_test(dao, PATH_2012)
 
-    if False:
+    if TEST_ALG == 'nb':
         # test each individual feature
         inf = nb_inferrer.NaiveBayesInferrer(dao)
         for feat in inf.features:
@@ -84,9 +87,14 @@ if __name__ == '__main__':
 
         # test the feature on ourself
         test_feature(inf, test)
-    else:
+    elif TEST_ALG == 'rule':
         # test each individual feature
         inf = rule_inferrer.Inferrer(dao)
         test_feature(inf, test)
+    elif TEST_ALG == 'baseline':
+        inf = baseline_inferrer.BaselineInferrer(dao)
+        test_feature(inf, test)
+    else:
+        raise Exception('unknown algorithm: ' + TEST_ALG)
 
 
