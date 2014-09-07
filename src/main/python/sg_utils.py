@@ -2,7 +2,6 @@
 
 # path to raw soure urls file, created by running WmfExtractEnhancer on
 # the urls extracted by running get_labs_urls on tool labs
-import codecs
 import urllib2
 import sys
 
@@ -50,8 +49,18 @@ PATH_2012 = '../../../dat/2012_test.tsv'
 def warn(message):
     sys.stderr.write(message + '\n')
 
+
+# The encoded reader from io is faster but only available in Python >= 2.6
+try:
+    import io
+    enc_open = io.open
+except:
+    import codecs
+    enc_open = codecs.open
+
+
 def sg_open(path, mode='r'):
-    return codecs.open(path, mode, encoding='utf-8')
+    return enc_open(path, mode, encoding='utf-8')
 
 def url2host(url):
     return urllib2.urlparse.urlparse(url).netloc

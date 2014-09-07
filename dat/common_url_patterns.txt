@@ -1,0 +1,408 @@
+
+Best url was http://tools.wmflabs.org/geohack/geohack.php?pagename=Otter_Highlands&params=80_38_S_30_0_W_ with 1496 neighbors:
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=List_of_villages_in_Michigan&params=43.001144_N_84.846942_W_&title=Pewamo
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=36th_meridian_east&params=11_30_S_36_0_E_type:country&title=Mozambique
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=List_of_rocks_in_Western_Australia,_L-N&params=28_37_22_S_121_52_3_E_
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=St._Xavier,_Montana&params=45_27_34_N_107_43_35_W_type:city
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Blackey,_Kentucky&params=37_8_25_N_82_58_46_W_type:city
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Clemons,_Iowa&params=42_6_51_N_93_9_30_W_type:city
+	http://tools.wmflabs.org/os/coor_g/?pagename=Scotscalder_railway_station&params=ND096560_region:GB_scale:25000
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Goyeneche_Palace,_Illana&params=40.184403_N_-2.90787_E_type:landmark
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=%C5%A0auk%C4%97nai&params=55_48_40_N_22_53_0_E_type:city(721)_region:LT
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Hartland_Township,_Michigan&params=42_41_41_N_83_42_13_W_
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Chalvagne&params=43_56_57_N_6_48_41_E_type:river_region:FR
+	http://tools.wmflabs.org/geohack/geohack.php?pagename=Su%C5%82kowice,_Krak%C3%B3w_County&params=50_14_N_19_56_E_type:city_region:PL
+
+Best url was http://books.google.com/books?id=zdwpAAAAQBAJ&pg=PA108#v=onepage&q&f=false with 73 neighbors:
+	http://books.google.com/books?id=9V1IAAAAMAAJ&pg=PA108#v=onepage&q&f=false
+	http://books.google.com/books?id=hMFlGd1kbZQC&pg=PA24
+	http://books.google.com/books?id=kifRAAAAMAAJ&pg=PA715
+	http://books.google.com/books?id=SGUZAAAAMAAJ&vq=the+discovery+of+the+north-west+passage
+	http://books.google.com/books?id=zx0DAAAAYAAJ
+	http://books.google.com/books?id=PcQpAAAAYAAJ&q=montclair+2853+5147
+	http://books.google.com/books?id=o8X5krq3fP8C&pg=PA302#v=onepage&q&f=false
+	http://books.google.com/books?id=hhgF6KD7BlcC
+	http://books.google.com/books?id=SXQaAAAAYAAJ&dq=two+years+before+the+mast&printsec=frontcover#v=onepage&q&f=false
+	http://books.google.com/books?id=jX4UAAAAYAAJ&pg=PA279#v=onepage&q&f=false
+	http://books.google.com/books?id=bpZ2-_AJ4AcC&pg=PA211&dq=keith+stroup+dix&hl=en&sa=X&ei=f1flUfilIqjLyQGxgYGwDA&ved=0CC8Q6AEwAA#v=onepage&q=keith%20stroup%20dix&f=false
+	http://books.google.com/books?id=RXQgqekmP2AC&lpg=PA14&dq=rising%20sun%20indiana&pg=PA26#v=onepage&q=rising%20sun%20indiana&f=false
+
+Best url was http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-wls&id=2904&descriptionlang=en&description=Pencoed+Castle&lat=51.600331770635&lon=-2.8586421009703&categories= with 62 neighbors:
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-wls&id=16013&descriptionlang=en&description=Braich-y-Ceunant&lat=52.746832868922&lon=-3.8333962862476&categories=
+	http://commons.wikimedia.org/wiki/special:uploadWizard?campaign=wlm-cn&id=6-726&descriptionlang=en&description=%5B%5BStudy+Platform+of%5D%5D+%5B%5BChen+Zi%27ang%5D%5D&lat=&lon=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&id=&descriptionlang=en&description=Huntingtower+Castle&lat=56.40945&lon=-3.48833
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-wls&id=4710&descriptionlang=en&description=Nannau&lat=52.770262189187&lon=-3.8645326383865&categories=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=&id=&descriptionlang=en&description=North+Blackruthven&lat=56.40261&lon=-3.51658&categories=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wsm&id=86003030&descriptionlang=en&description=%5B%5B:en:Fitz-Hugh+Hall%7CFitz-Hugh+Hall%5D%5D&lat=32.338333&lon=-90.878056
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-wls&id=8726&descriptionlang=en&description=Barn+at+Cefn+Ceido+Farm&lat=52.3026129254&lon=-3.4920383897087&categories=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wsm&id=02001681&descriptionlang=en&description=%5B%5B:en:Morris+Rees+III+House%7CMorris+Rees+III+House%5D%5D&lat=39.357222&lon=-78.085
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-sct&id=36234&descriptionlang=en&description=St+Patrick%27s+Roman+Catholic+Church&lat=55.975605&lon=-4.053531&categories=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-in&id=N-MP-227&descriptionlang=en&description=Fresce+paintings&lat=&lon=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlm-gb-wls&id=19237&descriptionlang=en&description=Plas+Glyn-y-Weddw&lat=52.854336937916&lon=-4.4831992464192&categories=
+	http://commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wsm&id=88000370&descriptionlang=en&description=%5B%5B:en:James+Wilhoite+House%7CJames+Wilhoite+House%5D%5D&lat=35.755278&lon=-86.681667
+
+Best url was http://www.census.gov/prod/www/abs/decennial/index.html with 42 neighbors:
+	http://www.census.gov/prod/www/decennial.html
+	http://www.census.gov/2010census/popmap/ipmtext.php?fl=06:0681869
+	http://www.census.gov/prod/cen1990/cp1/cp-1-23.pdf
+	http://www.census.gov/popest/geographic/boundary_changes/index.html
+	http://www.census.gov/geo/maps-data/data/docs/gazetteer/2010_place_list_17.txt
+	http://www.census.gov/population/cencounts/il190090.txt
+	http://www.census.gov/prod/www/abs/decennial/
+	http://www.census.gov/popest/cities/tables/SUB-EST2004-04-12.xls
+	http://www.census.gov/population/www/documentation/twps0027/tab04.txt
+	http://www.census.gov/geo/www/gazetteer/gazette.html
+	http://www.census.gov/popest/archives/1990s/boundary_changes/38.html
+	http://www.census.gov/popest/cities/tables/SUB-EST2009-04-19.xls
+
+Best url was http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_SF1/GCTP7.ST16?slice=GEO~0400000US34 with 39 neighbors:
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/0600000US5513988475
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_SF1/GCTPH1.ST16/0400000US34
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/00_SF1/DP1/0600000US3401938610
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/1600000US0526110
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/0600000US4200546456
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/1600000US1743445
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/00_SF1/DP1/1600000US3468370
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/DPDP1/1600000US3481042
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/1600000US3750820
+	http://factfinder2.census.gov/bkmk/table/1.0/en/PEP/2012/PEPANNRES/0400000US34.06100
+	http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/10_5YR/DP03/0600000US3401972510
+	http://factfinder2.census.gov/bkmk/table/1.0/en/DEC/10_DP/G001/0600000US4201577176
+
+Best url was http://geonames.usgs.gov/pls/gnispublic/f?p=gnispq:3:::NO::P3_FID:0195526 with 34 neighbors:
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:2395477
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:675128
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:1621295
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:633673
+	http://geonames.usgs.gov/apex/f?p=gnispq:5:::NO::P5_ANTAR_ID:8114
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:1729716
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:1625820
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:64050
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:631772
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:1741061
+	http://geonames.usgs.gov/pls/gazpublic/getgooglemap?p_lat=42.6786448&p_longi=-82.5118533&fid=1624417
+	http://geonames.usgs.gov/apex/f?p=gnispq:3:::NO::P3_FID:2389696
+
+Best url was http://www.worldcat.org/oclc/638416534 with 26 neighbors:
+	http://www.worldcat.org/oclc/1744740
+	http://www.worldcat.org/oclc/182615621
+	http://www.worldcat.org/oclc/62895346
+	http://www.worldcat.org/issn/1742-3406
+	http://www.worldcat.org/oclc/55846357
+	http://www.worldcat.org/oclc/57577446
+	http://www.worldcat.org/issn/0277-9358
+	http://www.worldcat.org/oclc/154114243
+	http://www.worldcat.org/oclc/179279677
+	http://www.worldcat.org/oclc/228266687
+	http://www.worldcat.org/identities/lccn-n79-053665
+	http://www.worldcat.org/oclc/22347651
+
+Best url was http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=82004548&natregadvancedsearch=Search with 24 neighbors:
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=80003811&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=95001319&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=90000951&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=76002185&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=85003525&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=88000330&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=83000662&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=85002373&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=11000085&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=85003214&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=74000645&natregadvancedsearch=Search
+	http://nrhp.focus.nps.gov/natregadvancedsearch.do?searchType=natregadvanced&selectedCollections=NPS%20Digital%20Library&referenceNumber=70000869&natregadvancedsearch=Search
+
+Best url was http://news.bbc.co.uk/1/hi/northern_ireland/8613978.stm with 22 neighbors:
+	http://news.bbc.co.uk/1/hi/special_report/1998/04/98/microsoft/215645.stm
+	http://news.bbc.co.uk/1/hi/england/suffolk/7258115.stm
+	http://news.bbc.co.uk/2/hi/8643602.stm
+	http://news.bbc.co.uk/1/hi/england/humber/6324301.stm
+	http://news.bbc.co.uk/1/hi/entertainment/7408006.stm
+	http://news.bbc.co.uk/1/shared/bsp/hi/elections/euro/09/html/ukregion_999999.stm
+	http://news.bbc.co.uk/sport1/hi/football/4353732.stm
+	http://news.bbc.co.uk/1/hi/england/shropshire/6240030.stm
+	http://news.bbc.co.uk/onthisday/hi/dates/stories/february/10/newsid_2539000/2539231.stm
+	http://news.bbc.co.uk/2/hi/in_depth/7798036.stm
+	http://news.bbc.co.uk/1/shared/bsp/hi/education/05/school_tables/secondary_schools/html/875_4165.stm
+	http://news.bbc.co.uk/2/hi/uk_news/education/7434463.stm
+
+Best url was http://quickfacts.census.gov/qfd/states/47/47163.html with 19 neighbors:
+	http://quickfacts.census.gov/qfd/states/12/12009.html
+	http://quickfacts.census.gov/qfd/states/40/40057.html
+	http://quickfacts.census.gov/qfd/states/31/31143.html
+	http://quickfacts.census.gov/qfd/states/26/26097.html
+	http://quickfacts.census.gov/qfd/states/26/26121.html
+	http://quickfacts.census.gov/qfd/states/54/54007.html
+	http://quickfacts.census.gov/qfd/states/40/40101.html
+	http://quickfacts.census.gov/qfd/states/19/1973290.html
+	http://quickfacts.census.gov/qfd/states/02/02198.html
+	http://quickfacts.census.gov/qfd/states/08/08015.html
+	http://quickfacts.census.gov/qfd/states/39/39079.html
+	http://quickfacts.census.gov/qfd/states/48/4865726.html
+
+Best url was http://www.weatherbase.com/weather/weather.php3?s=865831&cityname=Vinton-Iowa with 16 neighbors:
+	http://www.weatherbase.com/weather/weather-summary.php3?s=547414&cityname=Kempner,+Texas,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=251130&cityname=Chidester,+Arkansas,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=446282&cityname=Hillside,+New+Jersey,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=76030&cityname=Rimrock,+Arizona,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=724329&cityname=Bruceville,+Indiana,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weatherall.php3?s=47370&refer=&units=us
+	http://www.weatherbase.com/weather/weather-summary.php3?s=48210&cityname=Falkville,+Alabama,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=260522&cityname=Lexington,+Mississippi,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=681944&cityname=Winchester,+Virginia,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=686724&cityname=Santaquin,+Utah,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=582340&cityname=Fullerton,+California,+United+States+of+America&units=
+	http://www.weatherbase.com/weather/weather-summary.php3?s=409663&cityname=Narberth,+Pennsylvania,+United+States+of+America&units=
+
+Best url was http://www.nytimes.com/1982/02/01/sports/islanders-father-figure.html with 16 neighbors:
+	http://www.nytimes.com/2006/07/01/arts/music/01beth.html?fta=y
+	http://www.nytimes.com/2003/06/01/sports/baseball-walking-in-his-father-s-footsteps.html
+	http://www.nytimes.com/2001/01/21/us/dr-dorothy-horstmann-89-made-strides-in-polio-research.html
+	http://www.nytimes.com/2009/07/07/books/07kaku.html
+	http://www.nytimes.com/2011/05/02/world/asia/osama-bin-laden-is-killed.html
+	http://www.nytimes.com/2006/03/18/international/europe/18serbia.html
+	http://www.nytimes.com/2006/01/24/business/media/24cnd-network.html?bl
+	http://www.nytimes.com/1998/07/26/weekinreview/ideas-trends-southern-curse-why-america-s-murder-rate-is-so-high.html
+	http://www.nytimes.com/2000/02/23/nyregion/murray-bernstein-west-side-sturgeon-king-dies-at-87.html
+	http://www.nytimes.com/2001/03/08/nyregion/queens-to-detroit-a-bangladeshi-passage.html?pagewanted=all&src=pm
+	http://www.nytimes.com/2004/03/20/nyregion/bergen-county-house-on-historic-register-is-fire-victim.html?pagewanted=1
+	http://www.nytimes.com/2010/02/25/business/global/25iht-rshanpol.html
+
+Best url was http://www.state.nj.us/transportation/refdata/sldiag/mileage_Middlesex.pdf with 14 neighbors:
+	http://www.state.nj.us/state/elections/election-results/2011-capemay-co-summary-report.pdf
+	http://www.state.nj.us/state/elections/election-results/2004-presidential_passaic_co_2004.pdf
+	http://www.state.nj.us/education/finance/sf/dfg.shtml
+	http://www.state.nj.us/state/elections/election-results/2011-salem-co-summary-report.pdf
+	http://www.state.nj.us/state/elections/election-results/2011-morris-co-summary-report.pdf
+	http://www.state.nj.us/state/elections/2012-congressional-districts/njcd-2011-plan-components-county-mcd.pdf
+	http://www.state.nj.us/state/elections/election-results/2008-gen-elect-presidential-results-bergen.pdf
+	http://www.state.nj.us/state/elections/election-results/2011-hunterdon-co-summary-report.pdf
+	http://www.state.nj.us/state/elections/election-results/2004-presidential_bergen_co_2004.pdf
+	http://www.state.nj.us/state/elections/election-results/2011-bergen-co-summary-report.pdf
+	http://www.state.nj.us/transportation/refdata/sldiag/mileage_Bergen.pdf
+	http://www.state.nj.us/transportation/refdata/sldiag/00000095__-.pdf#page=32
+
+Best url was http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881521513774E0440003BA962ED3'&Diacritics=DC with 13 neighbors:
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881519A63774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA885167543774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA8814F2EA3774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA8814F7FE3774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881502E33774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881518203774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA88151D1E3774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA885171B33774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA8852EC493774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881519483774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA88150F8F3774E0440003BA962ED3'&Diacritics=DC
+	http://geonames.nga.mil/namesgaz/detaillinksearch.asp?G_NAME='32FA881505073774E0440003BA962ED3'&Diacritics=DC
+
+Best url was http://edwardbetts.com/find_link?q=Army_Peak with 13 neighbors:
+	http://edwardbetts.com/find_link?q=Isaac_Stern_House
+	http://edwardbetts.com/find_link?q=Whitworth_Ridge
+	http://edwardbetts.com/find_link?q=Mithur
+	http://edwardbetts.com/find_link?q=Charlesworth_Cliffs
+	http://edwardbetts.com/find_link?q=Kruostas
+	http://edwardbetts.com/find_link?q=Monte_Secco
+	http://edwardbetts.com/find_link?q=Osprey,_Ontario
+	http://edwardbetts.com/find_link?q=Construction_Point
+	http://edwardbetts.com/find_link?q=Cockscomb_Buttress
+	http://edwardbetts.com/find_link?q=Facultad_de_Ciencias_Medicas_Sancti_Spiritus
+	http://edwardbetts.com/find_link?q=V%C3%B8rterkaka_Nunatak
+	http://edwardbetts.com/find_link?q=Nipe_Glacier
+
+Best url was http://www.webcitation.org/6PenEro5r with 12 neighbors:
+	http://www.webcitation.org/6PTzm8I6U
+	http://www.webcitation.org/6AGTZMPHG
+	http://www.webcitation.org/5zy9hg7e3
+	http://www.webcitation.org/63UuOo99s
+	http://www.webcitation.org/6D8OhUxOS
+	http://www.webcitation.org/6BuWj60AF
+	http://www.webcitation.org/6AGQFygmz
+	http://www.webcitation.org/5yo0n91QT
+	http://www.webcitation.org/5hZkCj1Nj
+	http://www.webcitation.org/6GOkVetcG
+	http://www.webcitation.org/64hqYQvsW
+	http://www.webcitation.org/5rRuMtUmh
+
+Best url was http://www.ksdot.org/BurTransPlan/maps/RRStateMap.asp with 11 neighbors:
+	http://www.ksdot.org/burtransplan/maps/city-pdf/rantoul.pdf
+	http://www.ksdot.org/burtransplan/maps/county-pdf/kingman.PDF
+	http://www.ksdot.org/bureaus/burtransplan/maps/PastPublishedCounty.asp
+	http://www.ksdot.org/burtransplan/maps/city-pdf/tyro.pdf
+	http://www.ksdot.org/burtransplan/maps/city-pdf/quenemo.pdf
+	http://www.ksdot.org/Assets/wwwksdotorg/bureaus/burTransPlan/maps/city-pdf/ford.pdf
+	http://www.ksdot.org/Assets/wwwksdotorg/bureaus/burTransPlan/maps/county-pdf/sherman.PDF
+	http://www.ksdot.org/Assets/wwwksdotorg/bureaus/burTransPlan/maps/city-pdf/gypsum.PDF
+	http://www.ksdot.org/burtransplan/maps/city-pdf/macksville.PDF
+	http://www.ksdot.org/burtransplan/maps/SpecialInterestStateMaps/HistoricalKansas1918.pdf
+	http://www.ksdot.org/burtransplan/maps/HistoricStateMaps.asp
+
+Best url was http://list.english-heritage.org.uk/resultsingle.aspx?uid=1139274 with 11 neighbors:
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1171901
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1375839
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1000566
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1251249
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1230241
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1230242
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1376134
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1196361
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1161844
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1363073
+	http://list.english-heritage.org.uk/resultsingle.aspx?uid=1388349
+
+Best url was http://www2.census.gov/prod2/decennial/documents/37749197v1p37_ch02.pdf with 11 neighbors:
+	http://www2.census.gov/prod2/decennial/documents/03815512v1ch08.pdf
+	http://www2.census.gov/geo/maps/general_ref/cousub_outline/cen2k_pgsz/ne_cosub.pdf
+	http://www2.census.gov/prod2/decennial/documents/36894832v3ch3.pdf
+	http://www2.census.gov/prod2/decennial/documents/1850c-11.pdf
+	http://www2.census.gov/prod2/decennial/documents/37749197v1p38ch2.pdf
+	http://www2.census.gov/prod2/decennial/documents/1980a_maABC-01.pdf
+	http://www2.census.gov/acs2010_5yr/summaryfile/UserTools/Geography/NJ.xls
+	http://www2.census.gov/prod2/decennial/documents/23761117v1ch08.pdf
+	http://www2.census.gov/prod2/decennial/documents/41084506no553ch2.pdf
+	http://www2.census.gov/prod2/decennial/documents/1860a-08.pdf
+	http://www2.census.gov/geo/pvs/bas/bas11/st05_ar/cou/c05009_boone/BAS11C20500900000_000.pdf
+
+Best url was http://www.city-data.com/city/Wallkill-New-York.html with 10 neighbors:
+	http://www.city-data.com/city/Montville-Maine.html
+	http://www.city-data.com/city/Bent-Creek-North-Carolina.html
+	http://www.city-data.com/township/Fairview-Jefferson-KS.html
+	http://www.city-data.com/township/Rock-Creek-Jefferson-KS.html
+	http://www.city-data.com/city/Long-Beach-Indiana.html
+	http://www.city-data.com/city/Cologne-Minnesota.html
+	http://www.city-data.com/city/Fairlee-Vermont.html
+	http://www.city-data.com/city/Huntingdon-Tennessee.html
+	http://www.city-data.com/city/Eagle-Grove-Iowa.html
+	http://www.city-data.com/city/Glasgow-Montana.html
+
+Best url was http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/20.xls with 9 neighbors:
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/29.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/09.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/12.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/03.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/28.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/17.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/22.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/11.xls
+	http://www.amar.org.ir/DesktopModules/FTPManager/upload/upload2360/newjkh/newjkh/07.xls
+
+Best url was http://factfinder.census.gov/servlet/GCTTable?_bm=y&-geo_id=04000US25&-_box_head_nbr=GCT-T1&-ds_name=PEP_2009_EST&-_lang=en&-format=ST-9&-_sse=on with 9 neighbors:
+	http://factfinder.census.gov/servlet/SAFFFacts?_event=Search&geo_id=&_geoContext=&_street=&_county=&_cityTown=Abingdon&_state=04000US17&_zip=&_lang=en&_sse=on
+	http://factfinder.census.gov/servlet/ADPTable?_bm=y&-geo_id=16000US1214400&-qr_name=ACS_2006_EST_G00_DP2&-gc_url=&-ds_name=ACS_2006_EST_G00_&-_lang=en&-redoLog=false&-_sse=on
+	http://factfinder.census.gov/servlet/MapItDrawServlet?geo_id=86000US48647&_bucket_id=50&tree_id=420&context=AdvSearch&_lang=en
+	http://factfinder.census.gov/servlet/SAFFFacts?_event=Search&geo_id=86000US47906&_geoContext=01000US%7C86000US47906&_street=&_county=west+lafayette&_cityTown=west+lafayette&_state=04000US18
+	http://factfinder.census.gov/servlet/MapItDrawServlet?geo_id=86000US49799&_bucket_id=50&tree_id=420&context=AdvSearch&_lang=en
+	http://factfinder.census.gov/servlet/ReferenceMapFramesetServlet?_bm=y&-geo_id=86000US48838&-_yp=Census%202000&-tree_id=420&-_lang=en
+	http://factfinder.census.gov/servlet/DTTable?_bm=y&-context=dt&-ds_name=DEC_2000_SF1_U&-mt_name=DEC_2000_SF1_U_P001&-CONTEXT=dt&-tree_id=4001&-all_geo_types=N&-geo_id=06000US2701929726&-search_results=01000US&-format=&-_lang=en
+	http://factfinder.census.gov/servlet/MapItDrawServlet?geo_id=86000US49036&_bucket_id=50&tree_id=420&context=AdvSearch&_lang=en
+	http://factfinder.census.gov/servlet/MapItDrawServlet?geo_id=86000US48617&_bucket_id=50&tree_id=420&context=AdvSearch&_lang=en
+
+Best url was http://en.wiktionary.org/wiki/Special:Search/Kaohsiung with 9 neighbors:
+	http://en.wiktionary.org/wiki/Special:Search/Cayman_Islands
+	http://en.wiktionary.org/wiki/Special:Search/Vancouver
+	http://en.wiktionary.org/wiki/Special:Search/Naples
+	http://en.wiktionary.org/wiki/Alps
+	http://en.wiktionary.org/wiki/Special:Search/Reading,_Pennsylvania
+	http://en.wiktionary.org/wiki/Special:Search/Barbados
+	http://en.wiktionary.org/wiki/Special:Search/Stralsund
+	http://en.wiktionary.org/wiki/Special:Search/Oxnard
+	http://en.wiktionary.org/wiki/Special:Search/Montenegro
+
+Best url was http://www.tshaonline.org/handbook/online/articles/RR/hlr50.html with 8 neighbors:
+	http://www.tshaonline.org/handbook/online/articles/qbc17
+	http://www.tshaonline.org/handbook/online/articles/BB/hlb60.html
+	http://www.tshaonline.org/handbook/online/articles/hnr45
+	http://www.tshaonline.org/handbook/online/articles/RR/hvr72.html
+	http://www.tshaonline.org/handbook/online/articles/hcm19
+	http://www.tshaonline.org/handbook/online/articles/hlb43
+	http://www.tshaonline.org/handbook/online/articles/fli12
+	http://www.tshaonline.org/handbook/online/articles/ueb01
+
+Best url was http://books.google.com/books?id=1QOvJ14Jxv8C&printsec=frontcover&dq=Peter+Green.+Alexander+to+Actium:+Historical+Evolution+of+the+Hellenistic+Age&sig=KHWN8PWjpilUsCDi0a6mRjqFC5s with 7 neighbors:
+	http://books.google.com/books?id=E_bNNJIFdVUC&pg=PA43&dq=Haus+Vaterland+Erlebnisgastronomie&hl=en&ei=MjqvTYPTPMbfiAKBnbDHDA&sa=X&oi=book_result&ct=result&resnum=5&ved=0CEAQ6AEwBA#v=snippet&q=wurde%20das%20neue%20Flaggschiff%20des%20Unternehmens&f=false
+	http://books.google.com/books?id=qsk_AQAAMAAJ&pg=PA254&lpg=PA254&dq=monongah+1891+circuit+court+established&source=bl&ots=QnUEeWt9GI&sig=b8kvND1g_S4ItVFAZwuQw8KVXL8&hl=en&sa=X&ei=T0GeU_O1KI_hsATEz4HICw&ved=0CEUQ6AEwCTgK#v=onepage&q&f=false
+	http://books.google.com/books?id=4vOJ15vTZV4C&pg=PA60&lpg=PA60&dq=&source=web&ots=hkDuOYZzif&sig=5bdCF8ngI2-pMblXVAiS1B57zyI&hl=en&sa=X&oi=book_result&resnum=1&ct=result#PPA60,M1
+	http://books.google.com/books?id=UJqxGH_QuXcC&pg=PA280&dq=Bay%E1%B8%8D%C4%81%CA%BE+means+%22white%22+in+Arabic&hl=ar&ei=th6ETp2kJI6r8QPgr9w0&sa=X&oi=book_result&ct=result&resnum=2&ved=0CDsQ6AEwAQ#v=onepage&q&f=false
+	http://books.google.com/?id=UKfoHi5412UC&pg=PA132&dq=%22victoria+memorial%22+calcutta+belfast+-wikipedia
+	http://books.google.com/books?id=kAGYhdVBirUC&pg=PA148&lpg=PA148&dq=%22Foumban+Nkounja+Airport%22&source=bl&ots=a9zSc7FiYP&sig=enSkpT8hwQP_5Kyt5DXsirn32Jk&hl=en&ei=2pIhSqL_EZPFtgeOgt3WBg&sa=X&oi=book_result&ct=result&resnum=10#PPA149,M1
+	http://books.google.com/books?id=qp8ocRg7r2sC&pg=PA73&dq=Thessalonica+second+city+Byzantine+Empire+population&hl=en&ei=6QxHTpuaJ8ORswbioOy8Bw&sa=X&oi=book_result&ct=result&resnum=5&ved=0CDsQ6AEwBA#v=onepage&q=Thessalonica&f=false
+
+Best url was http://www.nps.gov/grca/naturescience/mollusks.htm with 7 neighbors:
+	http://www.nps.gov/linc/index.htm
+	http://www.nps.gov/history/nr/travel/atlanta/har.htm
+	http://www.nps.gov/elis/faqs.htm
+	http://www.nps.gov/history/nr/nrlist.htm
+	http://www.nps.gov/diversity/stonewall.htm
+	http://www.nps.gov/history/NR/nrlist.htm
+	http://www.nps.gov/history/nr/travel/VAmainstreet/lex.htm
+
+Best url was http://en.wikiversity.org/wiki/Special:Search/Italy with 7 neighbors:
+	http://en.wikiversity.org/wiki/Special:Search/Alaska
+	http://en.wikiversity.org/wiki/Special:Search/Russia
+	http://en.wikiversity.org/wiki/Special:Search/Houston
+	http://en.wikiversity.org/wiki/Special:Search/Jalpaiguri
+	http://en.wikiversity.org/wiki/Special:Search/Eidgah,_Kheri
+	http://en.wikiversity.org/wiki/Special:Search/Alao
+	http://en.wikiversity.org/wiki/Special:Search/Taipei
+
+Best url was http://www.fcc.gov/fcc-bin/tvq?call=K30MJ-D with 7 neighbors:
+	http://www.fcc.gov/fcc-bin/fmq?call=KESS
+	http://www.fcc.gov/fcc-bin/tvq?call=WLPX-TV
+	http://www.fcc.gov/fcc-bin/fmq?call=WJMN
+	http://www.fcc.gov/fcc-bin/tvq?call=K26GI
+	http://www.fcc.gov/fcc-bin/amq?call=WPOL
+	http://www.fcc.gov/fcc-bin/tvq?call=K34JV-D
+	http://www.fcc.gov/fcc-bin/tvq?call=KIMA-TV
+
+Best url was http://news.google.com/newspapers?id=qJ0zAAAAIBAJ&pg=7297,1804425 with 6 neighbors:
+	http://news.google.com/newspapers?id=IrdeAAAAIBAJ&sjid=aTAMAAAAIBAJ&pg=1003,2245308
+	http://news.google.com/newspapers?nid=HPvNdXBGwkEC
+	http://news.google.com/newspapers?nid=2506&dat=19600906&id=15JJAAAAIBAJ&sjid=SQwNAAAAIBAJ&pg=5123,997261
+	http://news.google.com/newspapers?id=QSlWAAAAIBAJ&sjid=ZuQDAAAAIBAJ&pg=4351,1445185
+	http://news.google.com/newspapers?id=NmhFAAAAIBAJ&sjid=RbwMAAAAIBAJ&pg=1396,1486548&dq=toston-dam&hl=en
+	http://news.google.com/newspapers?id=FyJVAAAAIBAJ&sjid=hDsNAAAAIBAJ&pg=6284,4444206&dq=brad-faxon+oceanport&hl=en
+
+Best url was http://www.nj.com/news/index.ssf/2009/04/morris_county_parks_scare_off.html with 6 neighbors:
+	http://www.nj.com/specialprojects/index.ssf?/specialprojects/greatday/whoswho.html
+	http://www.nj.com/suburbannews/index.ssf/2009/09/njdot_to_construct_new_bus_tur.html
+	http://www.nj.com/politics/index.ssf/2013/10/booker_is_officially_a_us_senator_after_being_sworn_in.html
+	http://www.nj.com/news/index.ssf/2010/01/local_leaders_in_new_jersey_ge.html
+	http://www.nj.com/news/local/index.ssf/2010/09/hillside_mayor_starts_campaign.html
+	http://www.nj.com/news/local/index.ssf/2010/05/clark_native_set_to_lead_one_o.html
+
+Best url was http://en.wikibooks.org/wiki/Special:Search/Colombia with 6 neighbors:
+	http://en.wikibooks.org/wiki/Special:Search/Slovenia
+	http://en.wikibooks.org/wiki/Special:Search/West_Virginia
+	http://en.wikibooks.org/wiki/Special:Search/Grand_Canyon
+	http://en.wikibooks.org/wiki/Special:Search/Menorca
+	http://en.wikibooks.org/wiki/Special:Search/Russia
+	http://en.wikibooks.org/wiki/Special:Search/Agriculture_colleges
+
+Best url was http://pdfhost.focus.nps.gov/docs/NRHP/Text/64000066.pdf with 6 neighbors:
+	http://pdfhost.focus.nps.gov/docs/NHLS/Photos/75000076.pdf
+	http://pdfhost.focus.nps.gov/docs/NRHP/Text/85000476.pdf
+	http://pdfhost.focus.nps.gov/docs/NRHP/Text/77000360.pdf
+	http://pdfhost.focus.nps.gov/docs/NRHP/Photos/85001900.pdf
+	http://pdfhost.focus.nps.gov/docs/NRHP/Text/00000295.pdf
+	http://pdfhost.focus.nps.gov/docs/NRHP/Text/64000831.pdf
+
+Best url was http://dx.doi.org/10.1177%2F0094582X9201900312 with 6 neighbors:
+	http://dx.doi.org/10.1038%2F466170a
+	http://dx.doi.org/10.1016%2FS0895-9811(98)00005-4
+	http://dx.doi.org/10.1073%2Fpnas.80.16.4988
+	http://dx.doi.org/10.1038%2Fngeo1671
+	http://dx.doi.org/10.1111%2Fj.1523-1739.2005.00680.x
+	http://dx.doi.org/10.1038%2Fngeo1212
+
+Best url was http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/hlt-fst/pd-pl/Table-Tableau.cfm?LANG=Eng&T=302&SR=1&S=51&O=A&RPP=9999&PR=48&CMA=0 with 5 neighbors:
+	http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/prof/details/page.cfm?Lang=E&Geo1=CSD&Code1=3530013&Geo2=CD&Code2=3530&Data=Count&SearchText=kitchener&SearchType=Begins&SearchPR=01&B1=All&Custom=&TABID=1
+	http://www12.statcan.gc.ca/nhs-enm/2011/dp-pd/prof/details/page.cfm?Lang=E&Geo1=CSD&Code1=3539036&Data=Count&SearchText=London&SearchType=Begins&SearchPR=01&A1=All&B1=All&GeoLevel=PR&GeoCode=3539036&TABID=1
+	http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/prof/index.cfm?Lang=E
+	http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/prof/details/page.cfm?Lang=E&Geo1=CSD&Code1=2404030&Geo2=PR&Code2=24&Data=Count&SearchText=La%20Martre&SearchType=Begins&SearchPR=01&B1=All&Custom=
+	http://www12.statcan.gc.ca/census-recensement/2011/dp-pd/hlt-fst/pd-pl/Table-Tableau.cfm?LANG=Eng&T=307&S=11&O=A&RPP=699
+
+Best url was http://www.youtube.com/watch?v=oXh1xd5DKbs with 5 neighbors:
+	http://www.youtube.com/watch?v=lAnXp_L6RjI
+	http://www.youtube.com/watch?v=HBbYYwX_LX4
+	http://www.youtube.com/watch?v=HQT2uwDXcF0
+	http://www.youtube.com/watch?v=RBPUwJaAoEM
+	http://w

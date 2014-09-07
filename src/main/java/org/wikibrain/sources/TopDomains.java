@@ -52,7 +52,7 @@ public class TopDomains {
 
     public void printTopDomains() {
         System.out.println("Most cited domains:");
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             String domain = topDomains.get(i);
             System.out.println(
                     String.format("%d. %s (%.2f%%)", (i+1), domain,
