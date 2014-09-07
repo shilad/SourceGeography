@@ -34,7 +34,7 @@ public class TopDomains {
 
         domainCounts = new HashMap<String, Double>();
         for (Citation citation : new ExtractReader(file)) {
-            String d = citation.getEffectiveDomain2();
+            String d = citation.getDomain2();
             if (d == null) {
                 continue;
             }
@@ -62,7 +62,7 @@ public class TopDomains {
     }
 
     public static void main(String args[]) {
-        TopDomains td = new TopDomains(new File("./source_urls.tsv"));
+        TopDomains td = new TopDomains(new File("./dat/source_urls.tsv"));
         td.printTopDomains();
     }
 }
