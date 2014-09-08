@@ -14,42 +14,42 @@
 14. factfinder2.census.gov (0.63%)      # Safe US
 15. www.recensement.insee.fr (0.58%)    # french stats
 16. www.stat.gov.pl (0.50%)             # Polish stats
-17. www.stats.gov.cn (0.46%)            # CHina stats
-18. geonames.nga.mil (0.40%)
-19. factfinder.census.gov (0.36%)
-20. nrhp.focus.nps.gov (0.30%)
-21. www.naco.org (0.26%)
-22. recensement.insee.fr (0.25%)
-23. www.statistiques-locales.insee.fr (0.25%)
-24. www.culture.gouv.fr (0.24%)
-25. books.google.com (0.24%)
-26. www.mosclassific.ru (0.24%)
-27. edwardbetts.com (0.23%)
-28. www.ibge.gov.br (0.21%)
-29. www.toutes-les-villes.com (0.20%)
-30. www.city-data.com (0.20%)
-31. vattenweb.smhi.se (0.19%)
-32. www.ine.es (0.18%)
-33. tools.wikimedia.de (0.16%)
-34. www.fallingrain.com (0.16%)
-35. www.czso.cz (0.15%)
-36. de.wikipedia.org (0.14%)
-37. www.statoids.com (0.13%)
-38. whc.unesco.org (0.13%)
-39. demo.istat.it (0.13%)
-40. www.stat.si (0.12%)
-41. www.worldcat.org (0.12%)
-42. www.kia.hu (0.11%)
-43. www.istat.it (0.11%)
-44. gska2.rada.gov.ua (0.11%)
-45. www.maplandia.com (0.11%)
-46. www.scb.se (0.11%)
-47. d-nb.info (0.10%)
-48. cassini.ehess.fr (0.10%)
-49. www.nsi.bg (0.10%)
-50. www.ign.fr (0.10%)
-51. www.ksh.hu (0.10%)
-52. pdfhost.focus.nps.gov (0.10%)
+17. www.stats.gov.cn (0.46%)            # China stats
+18. geonames.nga.mil (0.40%)            # Geonames search
+19. factfinder.census.gov (0.36%)       #
+20. nrhp.focus.nps.gov (0.30%)          # National registry of historic places
+21. www.naco.org (0.26%)                # National association of counties
+22. recensement.insee.fr (0.25%)        # French statistics institute
+23. www.statistiques-locales.insee.fr (0.25%) # French statistics institute
+24. www.culture.gouv.fr (0.24%)         # Fench agency
+25. books.google.com (0.24%)            # Google books ** REPUBLISHER
+26. www.mosclassific.ru (0.24%)         # Russian government docs
+27. edwardbetts.com (0.23%)             # Some kind of inlinks tool
+28. www.ibge.gov.br (0.21%)             # Brazilian institute of geo-statistis
+29. www.toutes-les-villes.com (0.20%)   # French gazetteer
+30. www.city-data.com (0.20%)           # Gazetteer
+31. vattenweb.smhi.se (0.19%)           # Swedish climate data
+32. www.ine.es (0.18%)                  # Spanish national statistics institute
+33. tools.wikimedia.de (0.16%)          # Toolserver
+34. www.fallingrain.com (0.16%)         # Gazetteer
+35. www.czso.cz (0.15%)                 # Same as falling rain (above)
+36. de.wikipedia.org (0.14%)            # German wikipedia
+37. www.statoids.com (0.13%)            # Gazetteer
+38. whc.unesco.org (0.13%)              # Unesco world heritage center
+39. demo.istat.it (0.13%)               # Italian statistics institute
+40. www.stat.si (0.12%)                 # Slovakian statistics institute
+41. www.worldcat.org (0.12%)            # Academic citations *** republisher
+42. www.kia.hu (0.11%)                  # Hungarian library
+43. www.istat.it (0.11%)                # Italian statistics institute
+44. gska2.rada.gov.ua (0.11%)           # Ukranian statistics institute
+45. www.maplandia.com (0.11%)           # Gazetteer / spam
+46. www.scb.se (0.11%)                  # Swedish statistics institute
+47. d-nb.info (0.10%)                   # German national archives
+48. cassini.ehess.fr (0.10%)            # French maps
+49. www.nsi.bg (0.10%)                  # Bulgaria national statistics institute
+50. www.ign.fr (0.10%)                  # French geo information institute
+51. www.ksh.hu (0.10%)                  # Hungarian central statistics office
+52. pdfhost.focus.nps.gov (0.10%)       # scrape?
 53. getamap.ordnancesurvey.co.uk (0.09%)
 54. worldaerodata.com (0.09%)
 55. www.citypopulation.de (0.09%)

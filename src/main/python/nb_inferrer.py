@@ -94,7 +94,18 @@ class WhoisFeature:
     def infer_dist(self, url_info):
         if not url_info.whois:
             return (0, {})
-        return (0.90, { url_info.whois : 1.0 })
+
+        pairs = [token.split('|') for token in url_info.whois.split(',')]
+        dist = {}
+        for (country, n) in pairs:
+            if n == 'p':    # a structure, parsed entry
+                return (0.90, { country : 1.0 })
+            else:
+                dist[country] = int(n)
+        total = sum(dist.values())
+        for (lang, n) in dist.items():
+            dist[lang] = 1.0 * n / total
+        return (0.88, dist)
 
 
 class WikidataFeature:

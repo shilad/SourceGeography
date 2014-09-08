@@ -9,7 +9,7 @@ import rule_inferrer
 import baseline_inferrer
 
 
-TEST_ALG = 'baseline'
+TEST_ALG = 'nb'
 
 def read_test(dao, path):
     test = {}

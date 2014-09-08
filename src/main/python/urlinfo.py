@@ -277,6 +277,7 @@ def silentremove(filename):
             raise # re-raise exception if a different error occured
 
 if __name__ == '__main__':
+    silentremove(PATH_DAO_CACHE)
     dao = UrlInfoDao()
 
     print dao.get_url('http://google.com')
