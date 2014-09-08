@@ -9,6 +9,7 @@ import collections
 import random
 import traceback
 
+
 import urlinfo
 import nb_inferrer
 from sg_utils import *
@@ -29,21 +30,24 @@ dao = urlinfo.UrlInfoDao()
 inf = nb_inferrer.NaiveBayesInferrer(dao)
 f = sg_open(PATH_URL_RESULT, 'w')
 counts = collections.defaultdict(int)
-for ui in dao.get_urls():
+
+for (n, ui) in enumerate(dao.get_urls()):
+    if n % 100000 == 0:
+        warn('infering result for url %d' % n)
     try:
         (conf, dist) = inf.infer_dist(ui)
         chosen = []
-        top = 'null'
-        rule = 'null'
+        top = u'null'
+        rule = u'null'
         if dist:
             top = sorted(dist.keys(), key=dist.get, reverse=True)[0]
-            rule = '%s-%.2d' % (inf.name , int(max(dist.values()) * 20))
+            rule = u'%s-%.2d' % (inf.name , int(max(dist.values()) * 20))
             chosen = [weighted_choice(dist) for i in range(ui.count)]
         tokens = [top, ','.join(chosen), rule, ui.url, ui.lang, ui.whois, ui.tld, ui.wikidata]
         for (i, t) in enumerate(tokens):
-            if i > 0: f.write('\t')
-            f.write('null' if t is None else t)
-        f.write('\n')
+            if i > 0: f.write(u'\t')
+            f.write(u'null' if t is None else unicode(t))
+        f.write(u'\n')
         counts[rule] += ui.count
     except:
         warn('decoding %s failed: ' % ui.url)

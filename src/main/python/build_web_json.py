@@ -1,6 +1,5 @@
 #!/usr/bin/python -O
 
-import codecs
 import collections
 import json
 
@@ -87,7 +86,11 @@ print('results for missing are ' + `missing`)
 
 data = []
 for ((lang, containing_country, predicted_country), n) in accumulator.items():
-    data.append((lang, containing_country.iso, predicted_country.iso, n))
+    article_native = containing_country.wp_nativity_rank(containing_country.iso)
+    source_native = containing_country.wp_nativity_rank(predicted_country.iso)
+    if article_native is None: article_native = -1
+    if source_native is None: source_native = -1
+    data.append((lang, containing_country.iso, article_native, predicted_country.iso, source_native, n))
 
 f = sg_open('../../../web/counts.json', 'w')
 json.dump(data, f)

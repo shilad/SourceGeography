@@ -3,6 +3,20 @@ import os
 from sg_utils import *
 
 
+# mapping from wp language codes to actual country codes, from
+# http://meta.wikimedia.org/wiki/List_of_Wikipedias#Nonstandard_language_codes
+WP_CODE_LANG_MAPPING = {
+                            'simple': 'en',
+                            'be-x-old': 'be',
+                            'roa-rup': 'rup',
+                            'nds-NL': 'nds',
+                            'nrm': 'roa',
+                            'fiu-vro': 'vro',
+                            'zh-yue': 'yue',
+                            'zh-min-nan': 'nan',
+                            'zh-classical': 'lzh',
+                    }
+
 class Country:
     def __init__(self, row_tokens):
         self.iso = row_tokens[0].lower()
@@ -18,6 +32,22 @@ class Country:
 
     def __str__(self):
         return self.name
+
+    def wp_nativity_rank(self, lang_edition):
+        possible_langs = [lang_edition]
+        possible_langs.append(lang_edition.lower().split('-')[0])
+        if lang_edition in WP_CODE_LANG_MAPPING:
+            possible_langs.append(WP_CODE_LANG_MAPPING[lang_edition])
+        min_rank = None
+        for l in possible_langs:
+            if l in self.cleaned_langs:
+                i = self.cleaned_langs.index(l)
+                if min_rank is None or i < min_rank:
+                    min_rank = i
+        return min_rank
+
+    def wp_is_native(self, lang_edition):
+        return self.wp_nativity_rank(lang_edition) is not None
 
     def __repr__(self):
         return (
@@ -73,4 +103,4 @@ def read_countries():
 
 if __name__ == '__main__':
     for c in read_countries():
-        print `c`
+        print c, c.wp_is_native('ar')

@@ -14,7 +14,7 @@ import org.wikibrain.core.dao.UniversalPageDao;
 import org.wikibrain.core.lang.Language;
 import org.wikibrain.core.model.LocalPage;
 import org.wikibrain.parser.wiki.WikitextRenderer;
-import org.wikibrain.spatial.core.dao.SpatialDataDao;
+import org.wikibrain.spatial.dao.SpatialDataDao;
 import org.wikibrain.utils.ParallelForEach;
 import org.wikibrain.utils.Procedure;
 import org.wikibrain.utils.WpIOUtils;

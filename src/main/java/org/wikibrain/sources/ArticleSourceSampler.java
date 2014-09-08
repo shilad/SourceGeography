@@ -13,7 +13,7 @@ import org.wikibrain.core.lang.Language;
 import org.wikibrain.core.model.LocalPage;
 import org.wikibrain.core.model.NameSpace;
 import org.wikibrain.parser.wiki.WikitextRenderer;
-import org.wikibrain.spatial.core.dao.SpatialDataDao;
+import org.wikibrain.spatial.dao.SpatialDataDao;
 import org.wikibrain.utils.WpIOUtils;
 
 import java.io.BufferedWriter;

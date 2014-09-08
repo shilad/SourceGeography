@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.wikibrainapi</groupId>
             <artifactId>wikibrain</artifactId>
-            <version>0.3.1</version>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
