@@ -55,7 +55,7 @@ function process_data() {
 }
 
 
-$(function(){
+function init_page(entity) {
 
     $.getJSON( "countries.json",
         function( data ) {
@@ -65,7 +65,7 @@ $(function(){
             }
         });
 
-    $.getJSON( "editor-counts.json",
+    $.getJSON( entity + "-counts.json",
         function( data ) {
             counts = data;
             if (countries.length > 0) {
@@ -73,7 +73,7 @@ $(function(){
             }
         });
     $("#go").click(visualize);
-});
+}
 
 /**
  * From http://www.mredkj.com/javascript/numberFormat.html
