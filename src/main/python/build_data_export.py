@@ -98,7 +98,7 @@ def write_sources(dao):
             url = tokens[3]
             chosen = tokens[1]
             if chosen:
-                predictions[url] = chosen
+                predictions[url] = tuple(chosen.split(','))
 
     # next, summarize counts by language and country
     url_counts = collections.defaultdict(int)
@@ -132,7 +132,7 @@ def write_sources(dao):
 
         n = url_counts[url]
         url_counts[url] += 1
-        choices = predictions[url].split(',')
+        choices = predictions[url]
         iso = choices[n % len(choices)]
         predicted_country = dao.iso_countries.get(iso)
         if not predicted_country:
