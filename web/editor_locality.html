@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Geographic Source Visualization</title>
+    <title>Editor Locality Visualization</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -32,21 +32,15 @@
             <td><a href="editor_locality.html">editor locality</a></td>
         </tr>
     </table>
-    <h1>Estimated geographic distribution of Wikipedia source publishers</h1>
+    <h1>Estimated locality of Wikipedia edits</h1>
 
     <table id="fields">
         <tbody>
-            <tr>
-                <td>
-                    WP language edition: <input type="text" size="4" name="lang" value="all">
-                </td>
-                <td>
-                    Show geospatial articles in: <input type="text" size="20" name="country" value="all">
-                </td>
-                <td>
-                    <input type="button" value="go" name="go" id="go">
-                </td>
-            </tr>
+        <tr>
+            <td>
+                WP language edition: <input type="text" size="4" name="lang" value="all">
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -58,15 +52,15 @@
                     <h4>LOADING....</h4>
                     <div class="world-map" style="width: 600px; height: 400px"></div>
                     <p>
-                        Click on a country to analyze geospatial articles in that country.
+                        Hover over a country to detail results from that country.
                     </p>
                 </td>
                 <td>
                     <table class="data">
                         <thead><tr>
                             <th>country</th>
-                            <th># citations from country</th>
-                            <th>%</th>
+                            <th>total edits</th>
+                            <th>% local</th>
                         </tr></thead>
                         <tbody>
                         </tbody>
@@ -85,9 +79,10 @@
 <script src="js/vendor/jquery-jvectormap-world-mill-en.js"></script>
 <script src="js/vendor/jquery.ba-hashchange.min.js"></script>
 <script src="js/plugins.js"></script>
-<script src="js/entity_geography.js"></script>
+<script src="js/entity_locality.js"></script>
+
 <script>
-    $(function(){ init_page('source'); });
+    $(function(){ init_page('editor'); });
 </script>
 </body>
 </html>
