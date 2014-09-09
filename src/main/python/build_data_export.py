@@ -37,7 +37,6 @@ def write_editors(dao):
         else:
             return s
 
-    remaining = {}
     data = []
     for (i, line) in enumerate(open('../../../dat/aggregated_edit_geodata.tsv')):
         if i == 0:
@@ -53,22 +52,7 @@ def write_editors(dao):
             if not editor_country: warn('unknown country: %s' % `tokens[2].lower()`)
             continue
         edits = int(tokens[3])
-        total = int(tokens[5])
         data.append((project, article_country, editor_country, edits))
-
-        key = (project, article_country)
-        remaining[key] = remaining.get(key, total) - edits
-
-    class OtherCountry:
-        def __init__(self):
-            self.iso = 'other'
-            self.distances = {}
-        def wp_is_native(self, lang):
-            return False
-
-    other = OtherCountry()
-    for ((project, article_country), n) in remaining.items():
-        data.append((project, article_country, other, n))
 
     write_data('editor-counts', data)
 

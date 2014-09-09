@@ -2,7 +2,7 @@ var iso2countries = {};
 var countries = [];
 var counts = [];
 
-function init() {
+function process_data() {
     for (var i = 0; i < countries.length; i++) {
         iso2countries[countries[i].iso] = countries[i];
     }
@@ -61,15 +61,15 @@ $(function(){
         function( data ) {
             countries = data;
             if (counts.length > 0) {
-                init();
+                process_data();
             }
         });
 
-    $.getJSON( "counts.json",
+    $.getJSON( "editor-counts.json",
         function( data ) {
             counts = data;
             if (countries.length > 0) {
-                init();
+                process_data();
             }
         });
     $("#go").click(visualize);
@@ -128,8 +128,11 @@ function visualize() {
         var row = counts[i];
         var l = row[0];
         var cc1 = row[1];
-        var cc2 = row[2].toUpperCase();
-        var n = row[3];
+        var cc1_native = row[2];
+        var cc2 = row[3].toUpperCase();
+        var cc2_native = row[4];
+        var kms = row[5];
+        var n = row[6];
         if (lang != 'all' && l != lang) {
             continue;
         }
@@ -168,7 +171,8 @@ function visualize() {
         var c = ordered_countries[i];
         var n = filtered[c];
         var p = 100.0 * n / total;
-        rows += "<tr><td>" + c + "</td><td>" + addCommas(n) + "</td><td>" + p.toFixed(2) + "%</td></tr>"
+        var row = "<tr><td>" + c + "</td><td>" + addCommas(n) + "</td><td>" + p.toFixed(2) + "%</td></tr>";
+        rows += row;
     }
     div.find("table.data tbody").html(rows);
 
