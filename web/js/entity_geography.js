@@ -169,9 +169,10 @@ function visualize() {
     var ordered_countries = keys_sorted_by_value(filtered);
     for (var i = 0; i < ordered_countries.length; i++) {
         var c = ordered_countries[i];
+        var cn = iso2countries[c.toLowerCase()].name;
         var n = filtered[c];
         var p = 100.0 * n / total;
-        var row = "<tr><td>" + c + "</td><td>" + addCommas(n) + "</td><td>" + p.toFixed(2) + "%</td></tr>";
+        var row = "<tr><td>" + cn + "</td><td>" + addCommas(n) + "</td><td>" + p.toFixed(2) + "%</td></tr>";
         rows += row;
     }
     div.find("table.data tbody").html(rows);

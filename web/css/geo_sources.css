@@ -12,6 +12,9 @@
 
 }
 
+.truncate {
+}
+
 #nav {
     width : 100%;
     background-color : #fff7e5;
@@ -44,13 +47,18 @@ table.data thead {
     font-size : 14px;
 }
 table.data td, table.data th {
-    width: 180px;
+    width: 120px;
+    text-align: right;
+    vertical-align: bottom;
+
 }
 table.data td:first-child, table.data th:first-child {
-    width: 80px;
+    width: 130px;
+    text-align: right;
 }
 table.data td:last-child, table.data th:last-child {
     width: 80px;
+    text-align: right;
 }
 
 table.data > tbody, table.data thead > tr {
