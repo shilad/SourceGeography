@@ -28,6 +28,9 @@ PATH_URL_COUNTS = '../../../dat/url_counts.tsv'
 # Country info from geonames
 PATH_COUNTRY_INFO = '../../../dat/countryInfo.txt'
 
+# Distances between countries
+PATH_COUNTRY_DISTANCES = '../../../dat/country_distances.tsv'
+
 # Path for prior distribution of countries, built by running build_overall_dists.py
 PATH_COUNTRY_PRIOR = '../../../dat/country_priors.txt'
 

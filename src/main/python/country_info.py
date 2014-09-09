@@ -1,4 +1,4 @@
-import codecs
+import collections
 import os
 from sg_utils import *
 
@@ -29,6 +29,7 @@ class Country:
         self.cleaned_langs = [l.lower().split('-')[0] for l in self.langs]
         self.prior = None  # Prior probability of the country generating a webpage
         self.title = None  # Article title in English Wikipedia
+        self.distances = {} # map from country to kms
 
     def __str__(self):
         return self.name
@@ -77,7 +78,9 @@ TITLE_MAPPING = {
 def read_countries():
     countries = []
     iso_countries = {}
-    f = codecs.open(PATH_COUNTRY_INFO, 'r', encoding='utf-8')
+    title_countries = {}
+
+    f = sg_open(PATH_COUNTRY_INFO)
     for line in f:
         if line.startswith('#'):
             continue
@@ -86,6 +89,7 @@ def read_countries():
         c.title = TITLE_MAPPING.get(c.name, c.name)
 
         iso_countries[c.iso] = c
+        title_countries[c.title] = c
 
     if os.path.isfile(PATH_COUNTRY_PRIOR):
         # initialize in case they don't appear in our dataset
@@ -97,6 +101,21 @@ def read_countries():
             iso = tokens[0]
             prior = float(tokens[1])
             iso_countries[iso].prior = prior
+
+    n = 0
+    missed = 0
+    for line in sg_open(PATH_COUNTRY_DISTANCES):
+        (title1, title2, dist) = line.strip().split('\t')
+        c1 = title_countries.get(title1)
+        c2 = title_countries.get(title2)
+        if c1 and c2:
+            c1.distances[c2] = float(dist)
+            n += 1
+        else:
+            missed += 1
+
+    warn('read %d distances, missed %d' % (n, missed))
+
 
     return countries
 
