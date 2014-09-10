@@ -17,6 +17,7 @@ WP_CODE_LANG_MAPPING = {
                             'zh-classical': 'lzh',
                     }
 
+
 class Country:
     def __init__(self, row_tokens):
         self.iso = row_tokens[0].lower()
@@ -30,6 +31,8 @@ class Country:
         self.prior = None  # Prior probability of the country generating a webpage
         self.title = None  # Article title in English Wikipedia
         self.distances = {} # map from country to kms
+        self.lang_speakers = {} # map from iso 639-1 codes to # speakers
+        self.lang_fraction = {} # map from iso 639-1 codes to fraction of speakers for that lang
 
     def __str__(self):
         return self.name
@@ -113,13 +116,55 @@ def read_countries():
             n += 1
         else:
             missed += 1
-
     warn('read %d distances, missed %d' % (n, missed))
 
+
+    # Read ISO 639-2 to 639-1 mapping
+    iso_639_mapping = {}
+    for (i, line) in enumerate(sg_open(PATH_ISO_639)):
+        if i == 0:
+            continue
+        tokens = line.strip().split('\t')
+        iso3 = tokens[0]
+        iso2 = tokens[3]
+        if iso2:
+            iso_639_mapping[iso3] = iso2
+
+
+    # Add in the language constituency information
+    n = 0
+    hits = 0
+    lang_totals = collections.defaultdict(int)
+    for (i, line) in enumerate(sg_open(PATH_ETHNOLOGUE)):
+        if i == 0:
+            continue
+
+        n += 1
+        tokens = unicode(line).strip().split('\t')
+        if tokens[0] not in iso_639_mapping:
+            continue
+        if not tokens[3].lower() in iso_countries:
+            continue
+        if not tokens[10]:
+            continue
+
+        hits += 1
+        lang_code = iso_639_mapping[tokens[0]]
+        country = iso_countries[tokens[3].lower()]
+        population = int(tokens[10])
+        if population > 0:
+            country.lang_speakers[lang_code] = population
+            lang_totals[lang_code] += population
+
+    warn('matched %d of %d lines in ethnologue counts' % (hits, n))
+
+    for c in countries:
+        for (l, n) in c.lang_speakers.items():
+            c.lang_fraction[l] = 1.0 * n / lang_totals[l]
 
     return countries
 
 
 if __name__ == '__main__':
     for c in read_countries():
-        print c, c.wp_is_native('ar')
+        print c, c.lang_fraction

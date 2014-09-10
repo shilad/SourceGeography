@@ -49,6 +49,12 @@ PATH_DAO_CACHE = '../../../dat/dao-cache.bin'
 # Path to the 2012 data
 PATH_2012 = '../../../dat/2012_test.tsv'
 
+# Path to the ISO 639 mapping file
+PATH_ISO_639 = '../../../dat/iso-639-3.tab.txt'
+
+# Path to ethnologue languages to countries file. Must be purchased.
+PATH_ETHNOLOGUE = '../../../dat/ethnologue_17_global_dataset/Table_of_LICs.tab'
+
 def warn(message):
     sys.stderr.write(message + '\n')
 
