@@ -1,10 +1,14 @@
 # CONSTANTS
 
-# path to raw soure urls file, created by running WmfExtractEnhancer on
-# the urls extracted by running get_labs_urls on tool labs
+import codecs
+import csv
 import urllib2
 import sys
 
+
+# path to raw soure urls file, created by running WmfExtractEnhancer on
+# the urls extracted by running get_labs_urls on tool labs
+import cStringIO
 
 PATH_SOURCE_URLS = '../../../dat/source_urls.tsv'
 
@@ -64,12 +68,114 @@ try:
     import io
     enc_open = io.open
 except:
-    import codecs
     enc_open = codecs.open
 
 
-def sg_open(path, mode='r'):
-    return enc_open(path, mode, encoding='utf-8')
+def sg_open(path, mode='r', encoding='utf-8'):
+    return enc_open(path, mode, encoding=encoding)
+
+class UTF8Recoder:
+    """
+    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    """
+    def __init__(self, f, encoding):
+        self.reader = codecs.getreader(encoding)(f)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.reader.next().encode("utf-8")
+
+class UnicodeDictReader:
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        self.f = f
+        f = UTF8Recoder(f, encoding)
+        self.reader = csv.reader(f, dialect=dialect, **kwds)
+        self.fieldnames = self.reader.next()
+
+    def next(self):
+        row = self.reader.next()
+        vals = [unicode(s, "utf-8") for s in row]
+        return dict((self.fieldnames[x], vals[x]) for x in range(len(self.fieldnames)))
+
+    def __iter__(self):
+        return self
+
+    def close(self):
+        self.f.close()
+
+class UnicodeWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = cStringIO.StringIO()
+        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        self.writer.writerow([unicode(s).encode("utf-8") for s in row])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+
+    def close(self):
+        self.stream.close()
+
+class UnicodeDictWriter(csv.DictWriter, object):
+    def __init__(self, f, fieldnames, restval="", extrasaction="raise", dialect="excel", *args, **kwds):
+        super(UnicodeDictWriter, self).__init__(f, fieldnames, restval="", extrasaction="raise", dialect="excel", *args, **kwds)
+        self.writer = UnicodeWriter(f, dialect, **kwds)
+
+    def writeheader(self):
+        self.writer.writerow(self.fieldnames)
+
+    def close(self):
+        self.writer.close()
+
+def sg_open_csvr(path, delimiter=None, encoding='utf-8'):
+    if not delimiter:
+        if path.endswith('tsv'):
+            delimiter = '\t'
+        elif path.endswith('csv'):
+            delimiter = ','
+        else:
+            raise Exception('no recognized delimiter for ' + path)
+
+    f = sg_open(path, encoding=encoding)
+    return UnicodeDictReader(f, delimiter=delimiter)
+
+def sg_open_csvw(path, fields, delimiter=None):
+    if not delimiter:
+        if path.endswith('tsv'):
+            delimiter = '\t'
+        elif path.endswith('csv'):
+            delimiter = ','
+        else:
+            raise Exception('no recognized delimiter for ' + path)
+
+    f = sg_open(path, 'w')
+    w = UnicodeDictWriter(f, fields, delimiter=delimiter)
+    w.writeheader()
+    return w
 
 def url2host(url):
     return urllib2.urlparse.urlparse(url).netloc
