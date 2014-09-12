@@ -32,7 +32,9 @@ class Country:
         self.title = None  # Article title in English Wikipedia
         self.distances = {} # map from country to kms
         self.lang_speakers = {} # map from iso 639-1 codes to # speakers
-        self.lang_fraction = {} # map from iso 639-1 codes to fraction of speakers for that lang
+        self.lang_share = {} # map from iso 639-1 codes to fraction of speakers for that lang
+        self.lang_speakers2 = {} # map from iso 639-1 codes to # speakers
+        self.lang_share2 = {} # map from iso 639-1 codes to fraction of speakers for that lang
 
     def __str__(self):
         return self.name
@@ -160,7 +162,20 @@ def read_countries():
 
     for c in countries:
         for (l, n) in c.lang_speakers.items():
-            c.lang_fraction[l] = 1.0 * n / lang_totals[l]
+            c.lang_share[l] = 1.0 * n / lang_totals[l]
+
+    lang_totals = collections.defaultdict(lambda: 0.00001)
+
+    for c in countries:
+        for (i, l) in enumerate(c.cleaned_langs):
+            p = c.population
+            s = p * 1.0 / ((i+1) ** 2.5)
+            c.lang_share2[l] = s
+            lang_totals[l] += s
+
+    for c in countries:
+        for l in c.lang_share2:
+            c.lang_share2[l] /= lang_totals[l]
 
     return countries
 

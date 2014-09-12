@@ -20,16 +20,22 @@ def main():
 def enhance(original, enhanced):
 
     f1 = sg_open_csvr(original)
-    f2 = sg_open_csvw(enhanced, f1.fieldnames + ['migration1', 'migration2', 'newspapers1', 'newspapers2', 'journals1', 'journals2'])
+    f2 = sg_open_csvw(enhanced, f1.fieldnames + ['migration1', 'migration2', 'newspapers1', 'newspapers2', 'journals1', 'journals2', 'langshare'])
     for row in f1:
+        lang = row['project']
         iso1 = row['article_country']
         iso2 = row['other_country']
+        c1 = find_country_by_iso(iso1)
+        c2 = find_country_by_iso(iso2)
         row['migration1'] = migration.get(iso1, {}).get(iso2, 0)
         row['migration2'] = migration.get(iso2, {}).get(iso1, 0)
         row['newspapers1'] = newspapers.get(iso1, 0)
         row['newspapers2'] = newspapers.get(iso2, 0)
         row['journals1'] = journals.get(iso1, 0)
         row['journals2'] = journals.get(iso2, 0)
+
+        row['langshare'] = c2.lang_share2.get(lang, 0)
+
         f2.writerow(row)
     f1.close()
     f2.close()
@@ -97,12 +103,14 @@ def read_migration():
     for row in  csv.DictReader(open('../../../dat/country_migration.txt'), delimiter='\t'):
         origin = find_country_by_iso3(row['Country Origin Code'])
         dest = find_country_by_iso3(row['Country Dest Code'])
-        if not origin in migration:
-            migration[origin] = {}
+        if not origin or not dest:
+            continue
+        if not origin.iso in migration:
+            migration[origin.iso] = {}
         if row['Value'] == '..':
-            migration[origin][dest] = 0
+            migration[origin.iso][dest.iso] = 0
         else:
-            migration[origin][dest] = int(row['Value'])
+            migration[origin.iso][dest.iso] = int(row['Value'])
 
 def find_country_by_name(name):
     for c in countries:
@@ -110,6 +118,15 @@ def find_country_by_name(name):
             return c
     warn('unknown country: %s' % `name`)
     return None
+
+def find_country_by_iso(iso):
+    iso = iso.lower()
+    for c in countries:
+        if c.iso == iso:
+            return c
+    warn('unknown country iso: %s' % `iso`)
+    return None
+
 
 def find_country_by_iso3(iso3):
     iso3 = iso3.lower()
