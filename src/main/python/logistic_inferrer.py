@@ -1,5 +1,8 @@
 import collections
 import math
+from sklearn.preprocessing import Imputer, scale
+
+import urlinfo
 
 from sg_utils import *
 
@@ -22,7 +25,9 @@ class LogisticInferrer:
     def __init__(self, dao):
         self.dao = dao
         self.name = 'logistic'
+        self.reg = None
         self.features = [
+            PriorFeature(dao),
             ParsedWhoisFeature(dao),
             NamedWhoisFeature(dao),
             MilGovFeature(dao),
@@ -30,35 +35,74 @@ class LogisticInferrer:
             LanguageFeature(dao),
             TldFeature(dao)
         ]
+        self.intercept = -6.08
+        self.coefficients = [2.06, 4.47, 3.28, 1.82, 0.73, 3.85, 3.00]
 
-        self.prior = {}
-        for (c, dist) in dao.country_priors.items():
-            self.prior[c.iso] = dist
-
-        if len(self.prior) == 0:
-            raise Exception('no country priors!')
-
-    def infer_dist(self, url_info):
-        result = {}
-
-        for (c, p) in self.prior.items():
-            result[c] = prob2sigmoid(p, 0.1)
-        result['uk'] = result['br']
+    def make_rows(self, url_info):
+        rows = collections.defaultdict(list)
+        countries = self.dao.get_countries()
 
         for f in self.features:
             (conf, dist) = f.infer_dist(url_info)
-            if conf == 0 or not dist:
-                continue
+            if dist:
+                for c in countries:
+                    rows[c.iso].append(dist.get(c.iso, 0.0))
+            else:
+                for c in countries:
+                    rows[c.iso].append(1.0 / len(countries))
 
-            for (c, p) in dist.items():
-                result[c] += prob2sigmoid(p, conf)
+        return rows
 
-        if not result:
-            return (0.0, {})
+    def train(self, data):
+        from sklearn.linear_model import LogisticRegression
 
-        for (c, prob) in result.items():
-            result[c] = logistic(prob)
-        print 'hgihest is', max(result.values()), sum(result.values())
+        countries = self.dao.get_countries()
+
+        Y = []  # 1 or 0
+        X = []  # feature vectors
+
+        for (urlinfo, actual) in data:
+            rows = self.make_rows(urlinfo)
+            for c in countries:
+                Y.append(1 if c.iso == actual else 0)
+                X.append(rows[c.iso])
+
+        self.reg = LogisticRegression(C=10)
+        self.reg.fit(X, Y)
+        # Y2 = reg.pre(X)
+        #
+        # fit_reg = LogisticRegression()
+        # fit_reg.fit(Y2, Y)
+
+        eq = '%.2f' % self.reg.intercept_
+        for (i, f) in enumerate(self.features):
+            eq += ' + %.2f * %s' % (self.reg.coef_[0][i], f.name)
+        print eq
+
+        self.intercept = self.reg.intercept_[0]
+        self.coefficients = self.reg.coef_[0]
+
+
+    def infer_dist(self, url_info):
+        countries = self.dao.get_countries()
+
+        result = {}
+
+        for c in countries:
+            result[c.iso] = self.intercept
+        for (i, f) in enumerate(self.features):
+            (conf, dist) = f.infer_dist(url_info)
+            if conf > 0 and dist:
+                for c in dist:
+                    c2 = u'gb' if c == u'uk' else c
+                    result[c2] += self.coefficients[i] * dist[c]
+            else:
+                for c in result:
+                    result[c] += self.coefficients[i] * 1.0 / len(result)
+
+        for (c, score) in result.items():
+            result[c] = logistic(score) ** 1.2
+
         total = sum(result.values())
         for (c, prob) in result.items():
             result[c] = result[c] / total
@@ -68,7 +112,7 @@ class LogisticInferrer:
     def infer(self, url_info):
         _, result = self.infer_dist(url_info)
         if not result:
-            return (None, 'nb-0')
+            return (None, 'lg-0')
 
         top = sorted(result, key=result.get, reverse=True)
         if DEBUG:
@@ -82,9 +126,9 @@ class LogisticInferrer:
 
         if best not in self.dao.iso_countries:
             warn('unknown country: %s' % best)
-            return (None, 'nb-0')
+            return (None, 'lg-0')
 
-        return (self.dao.iso_countries[best], 'nb-' + str(r))
+        return (self.dao.iso_countries[best], 'lg-' + str(r))
 
 
 class ParsedWhoisFeature:
@@ -99,9 +143,24 @@ class ParsedWhoisFeature:
         pairs = [token.split('|') for token in url_info.whois.split(',')]
         for (country, n) in pairs:
             if n == 'p':    # a structure, parsed entry
-                return (0.95, { country : 1.0 })
+                return (0.90, { country : 1.0 })
 
         return (0, {})
+
+
+class PriorFeature:
+    def __init__(self, dao):
+        self.dao = dao
+        self.name = 'prior'
+        self.prior = {}
+        for (c, dist) in dao.country_priors.items():
+            self.prior[c.iso] = dist
+
+        if len(self.prior) == 0:
+            raise Exception('no country priors!')
+
+    def infer_dist(self, url_info):
+        return (0.2, dict(self.prior))
 
 
 class NamedWhoisFeature:
@@ -178,10 +237,8 @@ class TldFeature:
             return (0, {})
 
 
+def test_against_tld():
 
-if __name__ == '__main__':
-
-    import urlinfo
     import random
 
     dao = urlinfo.UrlInfoDao()
@@ -246,7 +303,12 @@ if __name__ == '__main__':
             print '\tbin %.1f: %d of %d (%.1f%%)' % (k, nhits, len(g), p)
 
 
+if __name__ == '__main__':
+    import eval_inferrer
 
-
+    dao = urlinfo.UrlInfoDao()
+    inf = LogisticInferrer(dao)
+    data = eval_inferrer.read_test(dao, PATH_2012)
+    inf.train(data.values())
 
 

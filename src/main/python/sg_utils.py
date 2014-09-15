@@ -59,6 +59,12 @@ PATH_ISO_639 = '../../../dat/iso-639-3.tab.txt'
 # Path to ethnologue languages to countries file. Must be purchased.
 PATH_ETHNOLOGUE = '../../../dat/ethnologue_17_global_dataset/Table_of_LICs.tab'
 
+# Alternative country names to codes
+PATH_COUNTRY_NAMES = '../../../dat/country_names.tsv'
+
+# Final coded dataset
+PATH_CODED_URL_COUNTRIES = '../../../dat/final_coded_url_countries.tsv'
+
 def warn(message):
     sys.stderr.write(message + '\n')
 
