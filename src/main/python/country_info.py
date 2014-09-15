@@ -170,12 +170,12 @@ def read_countries():
         for (i, l) in enumerate(c.cleaned_langs):
             p = c.population
             s = p * 1.0 / ((i+1) ** 2.5)
-            c.lang_share2[l] = s
+            c.lang_speakers2[l] = s
             lang_totals[l] += s
 
     for c in countries:
-        for l in c.lang_share2:
-            c.lang_share2[l] /= lang_totals[l]
+        for l in c.lang_speakers2:
+            c.lang_share2[l] = c.lang_speakers2[l] / lang_totals[l]
 
     return countries
 

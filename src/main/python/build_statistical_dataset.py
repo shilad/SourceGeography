@@ -1,5 +1,5 @@
 #!/usr/bin/python -O
-
+import math
 
 import country_info
 from sg_utils import *
@@ -20,7 +20,31 @@ def main():
 def enhance(original, enhanced):
 
     f1 = sg_open_csvr(original)
-    f2 = sg_open_csvw(enhanced, f1.fieldnames + ['migration1', 'migration2', 'newspapers1', 'newspapers2', 'journals1', 'journals2', 'langshare'])
+    f2 = sg_open_csvw(enhanced, f1.fieldnames + [
+        # number of people migrating in each direction
+        'migration1',
+        'migration2',
+
+        # number of newspapers in both countries
+        'newspapers1',
+        'newspapers2',
+
+        # number of journal articles in both countries
+        'journals1',
+        'journals2',
+
+        # share of wp language addition accounted for by editor / citation country
+        'wplangshare',
+
+        # similarity of distribution of languages in the two countries
+        'langsim',
+
+        # the weighted average of people in country 2 who speak languages in country 1
+        'countrylangpop',
+
+        # the weighted average of the language share of country 2 for country 1's languages
+        'countrylangshare'
+    ])
     for row in f1:
         lang = row['project']
         iso1 = row['article_country']
@@ -33,12 +57,42 @@ def enhance(original, enhanced):
         row['newspapers2'] = newspapers.get(iso2, 0)
         row['journals1'] = journals.get(iso1, 0)
         row['journals2'] = journals.get(iso2, 0)
-
-        row['langshare'] = c2.lang_share2.get(lang, 0)
+        row['wplangshare'] = c2.lang_share2.get(lang, 0)
+        row['langsim'] = language_sim(c1, c2)
+        row['countrylangshare'] = language_share(c1, c2)
+        row['countrylangpop'] = language_pop(c1, c2)
 
         f2.writerow(row)
     f1.close()
     f2.close()
+
+def language_sim(cx, cy):
+    xdotx = sum([x*x for x in cx.lang_speakers2.values()])
+    ydoty = sum([y*y for y in cy.lang_speakers2.values()])
+    xdoty = 0.0
+    for lx in cx.lang_speakers2:
+        if lx in cy.lang_speakers2:
+            xdoty += cx.lang_speakers2[lx] * cy.lang_speakers2[lx]
+    if xdotx == 0 or ydoty == 0:
+        return 0.0
+    else:
+        return xdoty / math.sqrt(xdotx * ydoty)
+
+def language_share(c1, c2):
+    # How well c2 covers the set of languages in c1
+    total = sum(c1.lang_speakers2.values())  + 0.000001
+    result = 0.0
+    for l in c1.lang_speakers2:
+        result += 1.0 * c1.lang_speakers2[l] / total * c2.lang_share2.get(l, 0.0)
+    return result
+
+def language_pop(c1, c2):
+    # How well c2 covers the set of languages in c1
+    total = sum(c1.lang_speakers2.values())  + 0.000001
+    result = 0.0
+    for l in c1.lang_speakers2:
+        result += 1.0 * c1.lang_speakers2[l] / total * c2.lang_speakers2.get(l, 0)
+    return result
 
 def read_newspapers():
     rename = {

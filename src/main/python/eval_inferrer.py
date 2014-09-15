@@ -1,5 +1,6 @@
 # According to Google (https://support.google.com/webmasters/answer/1347922?hl=en)
 import sys
+import logistic_inferrer
 import urlinfo
 
 from sg_utils import *
@@ -9,7 +10,7 @@ import rule_inferrer
 import baseline_inferrer
 
 
-TEST_ALG = 'nb'
+TEST_ALG = 'logistic'
 
 def read_test(dao, path):
     test = {}
@@ -52,26 +53,34 @@ def test_feature(feat, test):
                 continue
 
             top = sorted(dist, key=dist.get, reverse=True)
+            top_prob = dist[top[0]]
             if normalize_cc(top[0]) == normalize_cc(actual_cc):
-                correct.append((url, actual_cc, top[:3]))
+                correct.append((url, actual_cc, top[:3], top_prob))
             else:
-                wrong.append((url, actual_cc, top[:3]))
+                wrong.append((url, actual_cc, top[:3], top_prob))
         else:
             (guess, rule) = feat.infer(ui)
             if not guess:
                 num_missing += 1
                 continue
             if normalize_cc(guess.iso) == normalize_cc(actual_cc):
-                correct.append((url, actual_cc, guess))
+                correct.append((url, actual_cc, guess, 0.9))
             else:
-                wrong.append((url, actual_cc, guess))
+                wrong.append((url, actual_cc, guess, 0.5))
 
-    print 'Feature %s had %d correct, %d wrong, %d missing. Wrong are:' % \
-          (feat.name, len(correct), len(wrong), num_missing)
+    overall_conf = sum([x[-1] for x in correct + wrong]) / len(correct + wrong)
+    correct_conf = sum([x[-1] for x in correct]) / len(correct)
+    if wrong:
+        wrong_conf = sum([x[-1] for x in wrong]) / len(wrong)
+    else:
+        wrong_conf = 0.0
+
+    print 'Feature %s had %d correct, %d wrong, %d missing, confs c=%.7f, w=%.7f, all=%.3f. Wrong are:' % \
+          (feat.name, len(correct), len(wrong), num_missing, correct_conf, wrong_conf, overall_conf)
     for w in correct:
-        print '\tcorrect: %s actual=%s pred=%s' % w
+        print '\tcorrect: %s actual=%s pred=%s conf=%.3f' % w
     for w in wrong:
-        print '\twrong: %s actual=%s pred=%s' % w
+        print '\twrong: %s actual=%s pred=%s conf=%.3f' % w
     print
 
 if __name__ == '__main__':
@@ -81,6 +90,16 @@ if __name__ == '__main__':
     if TEST_ALG == 'nb':
         # test each individual feature
         inf = nb_inferrer.NaiveBayesInferrer(dao)
+        for feat in inf.features:
+            test_feature(feat, test)
+
+
+        # test the feature on ourself
+        test_feature(inf, test)
+
+    elif TEST_ALG == 'logistic':
+        # test each individual feature
+        inf = logistic_inferrer.LogisticInferrer(dao)
         for feat in inf.features:
             test_feature(feat, test)
 

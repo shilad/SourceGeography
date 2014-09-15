@@ -1,0 +1,336 @@
+---
+title: "Analysis of Source Publisher Provenance"
+output: html_document
+---
+
+# Summary
+
+Our overall analyses of source publishers models the relationships between three entities:
+
+ * The WP language edition.
+ * The country associated with an article (ac).
+ * The country associated with the publisher of a source (pc).
+
+We count the number of citations that occur for each possible triple, and find all possible attributes associated with pc, ac, and wplang significant.
+Thus, we try to identify the most explanatory model variables.
+
+
+*Localness:* 
+
+For this analysis, ac = pc.
+For example: Across all articles located in Japan (ac) in the Chinese Wikipedia (wplang), how many are published by Japan (pc).
+
+Four country variables explain the vast majority of the overall variance:
+
+* The number of journal of articles
+* The country's population
+* Whether a country speaks the same language as the language edition
+* The share of speakers of the WP language edition a country accounts for explain the vast majority of the top-level contributions.
+
+The effect sizes we see are quite large:
+
+* For every doubling in the number of journal articles a country has published, the odds of its sources being local double.
+* If a country natively speaks the language of the WP edition, the odds of a source being local to the country increase by 47%.
+
+*Dipole provenance:*
+
+For example: Across all articles located in Japan (ac) in the Chinese Wikipedia (wplang), how many are published by the U.S. (pc).
+
+At a high-level we model the overall number of citations in a language edition that come from a country.
+Our model accounts for 85% of the deviance, and identifies two variables as extremely important:
+
+  * For every doubling in the number of journal articles in a country, the odds of a citation being from the country increase by 300%.
+  * For every increase of 10% in the amount a country represents of a language's worldwide base, the odds a citation coming froms that country increase by 600%.
+  
+After we subtract off this "top-level" country effect, we look to model the relationship between an article's country (ac) and a publisher country (pc).
+Again, two variables emerge as extremely significant:
+
+  * For every doubling in the distance between ac and pc, the odds of pc publishing a source in ac are roughly halved.
+  * For every doubling in the number of journal articles for pc, the odds of pc publishing a source in ac are roughly doubled.
+
+
+
+# Preparing the dataset
+
+Import required modules for renaming and world bank data:
+
+```{r}
+options(width=120);
+require('plyr');
+require('WDI');
+require('MASS');
+```
+
+Read in raw file, calculate totals for each "other" (source / editor) country and "article" country.
+
+```{r}
+df <- read.table('../../../dat/source-counts-enhanced.tsv', header=TRUE, sep="\t", fileEncoding="utf-8");
+totals <- rename(aggregate(count ~ project + article_country, df, sum), c("count"="article_total"));
+df <- merge(df, totals, by=c("project","article_country"));
+totals <- rename(aggregate(count ~ project + other_country, df, sum), c("count"="other_total"));
+df <- merge(df, totals, by=c("project","other_country"));
+totals <- rename(aggregate(count ~ project, df, sum), c("count"="project_total"));
+df <- merge(df, totals, by=c("project"));
+```
+
+Read in World bank data and fields: GDP, Population, tertiary grads, broadband population.
+Rename these fields and merge them into our table and impute zeros for missing data (TODO: something better).
+
+```{r}
+fields <- c("NY.GDP.MKTP.CD", "SP.POP.TOTL", "SE.TER.GRAD", "IT.NET.BBND");
+field_mapping <- c("GDP", "POP", "EDU", "INTERNET");
+names(field_mapping) = fields;
+
+wdi = WDI(indicator=fields, start=2012, end=2012);
+wdi$iso2c <- tolower(wdi$iso2c);
+wdi <- rename(wdi, field_mapping);
+df <- merge(df, wdi, by.x="other_country", by.y="iso2c");
+
+df$GDP[is.na(df$GDP)] <- 0;
+df$POP[is.na(df$POP)] <- 0;
+df$EDU[is.na(df$EDU)] <- 0;
+df$INTERNET[is.na(df$INTERNET)] <- 0;
+```
+Create log-transformed versions of skewed fields:
+
+```{r}
+df$logmigration1 <- log(df$migration1 + 2);
+df$logmigration2 <- log(df$migration2 + 2);
+df$logjournals1 <- log(df$journals1 + 2);
+df$logjournals2 <- log(df$journals2 + 2);
+df$lognewspapers1 <- log(df$newspapers1 + 2);
+df$lognewspapers2 <- log(df$newspapers2 + 2);
+df$logcountrylangpop <- log(df$countrylangpop + 2);
+df$logdist <- log(df$dist + 2);
+df$logGDP <- log(df$GDP + 2);
+df$logPOP <- log(df$POP + 2);
+df$logEDU <- log(df$EDU + 2);
+df$logINTERNET <- log(df$INTERNET + 2);
+```
+
+# Overview of dataset
+
+Our dataset models the relationship between language edition and the dipole of article country and the country of either the editor or source publisher (our two lenses of provenance).
+We interchangebly calls the second country (editor or publisher) other_country or country2 throughout the dataset.
+
+Four fields contain the key information being aggregated together by this dataset:
+
+ * project: WP language edition
+ * article_country: the country containing the article
+ * other_country: the country associated with an editor or publisher
+ * count: the number of edits or published citations associated with the triple (project, article_country, other_country) in our dataset.
+ 
+The remaining fields containing attributes that we will use to model the relationship among these four fields.
+For brevity, we'll use ac to reference the article country, oc to reference the publisher or source country, and wplang to refer to the wikipedia language.
+
+ * article-is-native: whether the WP edition language is "natively" spoken by the ac
+ * other-is-native: whether the WP edition language is "natively" spoken by the editor or pc
+ * distance: distance between ac and oc
+ * migration1: the number of people who migrated from ac to oc in 2012 (UN data)
+ * migration2: the reverse of migration1
+ * newspapers1: the number of newspapers published in ac (UN data)
+ * newspapers2: the number of newspapers published in oc (UN data)
+ * journals1: the number of journal articles published in ac (from Scopus via SCImago)
+ * journals2: the number of journal articles published in oc (from Scopus via SCImago)
+ * wplangshare: the fraction of worldwide speakers of wplang that live in oc
+ * countrylangshare: across all languages used in ac, the fraction of worldwide speakers that live in oc 
+ * countrylangpop: across all languages used in ac, the number of people who speak the language in the oc
+ * langsim: the cosine similarity between the languages spoken in ac and oc
+ 
+ Note that we use "raw counts" throughout most attributes (not per-captia values).
+ The justification behind this is that work output is more related to the raw number of people (and therefore potential editors / publishers).
+ A country with 1000 people, but 90% broadband access is going to have a much smaller pool of total Wikipedia work than a country with 1M people and 10% broadband access.
+
+```{r}
+head(df);
+```
+
+### Correlation between features
+
+Below you can see the correlation matrix between all the features.
+The first table contains actual values, and the second contains log-transformed values.
+
+Note that the basic demographic indicators (GDP, POP, etc) are all strongly correlated with each other (0.7 to 0.95). 
+The other variables are largely uncorrelated with each other, with a few moderate exceptions (e.g. migration in both directions = 0.4, journal vs newspaper is 0.36, population and newspaper is 0.76, etc.)
+
+Interestingly, although journals and GDP are extremely highly correlated (0.98), log transforming decreases this relationship significantly to 0.52. 
+This is probably because GDP and journals show high correlation in extreme values (e.g. the US), but after log transformation these have a much smaller effect. 
+This same effect occurs for a variety of other values (e.g. INTERNET vs education).
+
+Other variables show the opposite trend. 
+For example, log transforming newspapers2 vs journals2 raises the correlation from 0.38 to 0.74.
+This occurs when the two variables disagree on extreme values, but agree well on others.
+
+```{r}
+cor(unique(df[,c("distance", "GDP", "POP", "EDU", "INTERNET", "migration1", "migration2", "journals1", "journals2", "newspapers1", "newspapers2", "countrylangpop", "wplangshare", "langsim", "countrylangshare")]));
+
+cor(unique(df[,c("logdist", "logGDP", "logPOP", "logEDU", "logINTERNET", "logmigration1", "logmigration2", "logjournals1", "logjournals2", "lognewspapers1", "lognewspapers2", "logcountrylangpop")]));
+```
+
+# Localness
+
+First, we consider a statistical model of localness. We begin by filtering the dataset down to those records that have the same article-country and other-country:
+
+```{r}
+local_df <- subset(df, as.character(article_country) == as.character(other_country));
+head(local_df);
+nrow(local_df);
+```
+
+We now build the full model. 
+Since article_country and other_country are the same, we only include variables for one of the countries.
+Note that all coefficients are significant!
+
+```{r}
+fit <- glm(cbind(count, article_total - count) ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial(logit), data=local_df)
+summary(fit);
+```
+
+Despite the significance of the model terms, it is helpful to prune the model down to a set of variables after which we see diminshing returns.
+We use R's step function to consider every possible model, adding one variable at a time.
+
+We begin by carefully analyzing the effects of all variables individually. 
+log(journals) is the strongest independent signal of localness, explaining 36% of the model deviance, followed by log(GDP).
+
+```{r}
+min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=local_df);
+s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
+```
+
+We now build up the full model in stepwise fashion (starting with log journals).
+Since log(journals) is highly correlated with logGDP (0.52), it unsurprisingly pushes GDP to the bottom of the equation.
+
+```{r}
+s <- step(min_fit, scope=formula(fit), direction='forward', trace='false');
+s$anova;
+```
+
+We can now see that a few key variables can account for most of the model's explanatory power.
+In particular, the first four variables: logjournals1, logPOP, article_is_native, and wplangshare explain about half of the deviance in the model.
+
+
+```{r}
+small_fit <- glm(cbind(count, article_total - count) ~ logjournals1 + logPOP + article_is_native, family = binomial(logit), data=local_df)
+summary(small_fit);
+```
+
+To interpret our model, we can look at the confidence intervals and odds ratios associated with it.
+
+  * For every doubling in the number of journal articles in a country, the odds of a publisher / editor being local increase 105%
+  * For every doubling in the the population of a country, the odds of a publisher / editor being local DECREASES by 61% (due to a colinearity with num journal articles)
+  * If the country natively speaks the WP language edition, the oddsof a publisher / editor being local increases by 47%
+  * For every increase of 10% in the amount a country represents of a language's worldwide base, the oddsof a publisher / editor being local increases by 6.8%. For example, for Japan (who represents almost all Japanese speakers) this would suggest an increase in odds of close to 70% ON TOP of the 47% for language edition.
+
+```{r}
+exp(cbind(oddsRatio=coef(small_fit), confint(small_fit)));
+```
+
+
+
+# Full dipole provenance
+
+We now move on to modeling the dipole relationship.
+For example, focusing on Japane, can how can we model how likely China is to be a publisher of a source?
+
+### Modeling <language, country of source publisher>
+
+We begin  by modeling top-level effects at the (language, source publisher country) level.
+In other words, how likely is China to be the publisher of any citation in English Wikipedia?
+
+We restrict our dataset to this top-level information:
+
+```{r}
+top_df <- unique(df[,c("project", "project_total", "other_total", "other_country", "other_is_native",  "newspapers2", "journals2", "wplangshare", "GDP", "POP", "EDU", "INTERNET", "lognewspapers2", "logjournals2", "logGDP", "logPOP", "logEDU", "logINTERNET")]);
+head(top_df);
+```
+
+Now let's build and inspect a model.
+Note that the "localness" problem appears to be much more difficult; this model explains 85% of the deviance in the dataset.
+
+```{r}  
+fit <- glm(cbind(other_total, project_total-other_total) ~ . - other_country - project - project_total - other_total, family = binomial(logit), data=top_df);
+summary(fit);
+```
+Like before we will examine whether we can build a more compact and interpretable model.
+We first look at the strength of each individual predictor.
+Again, logJournals rises to the top.
+
+```{r}
+min_fit <- glm(cbind(other_total, project_total-other_total) ~ 1, family = binomial(logit), data=top_df);
+s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
+```
+
+We now run a forward stepwise regression. 
+Two variables, log journals and wplangshare rise to the top.
+
+```{r}
+s <- step(min_fit, scope=formula(fit), direction='forward', trace=FALSE);
+s$anova;
+```
+
+We inspect the pruend model:
+
+```{r}
+small_fit <- glm(cbind(other_total, project_total-other_total) ~ logjournals2 + wplangshare, family = binomial(logit), data=top_df);
+summary(small_fit);
+```
+
+To interpret our model, we can look at the confidence intervals and odds ratios associated with it.
+
+  * For every doubling in the number of journal articles in a country, the odds of a citation being from the country increase by 300%.
+  * For every increase of 10% in the amount a country represents of a language's worldwide base, the odds a citation coming froms that country increase by 600%.
+
+```{r}
+exp(cbind(oddsRatio=coef(small_fit), confint(small_fit)));
+```
+
+
+### Modeling dipoles
+
+Finally, we move on to dipoles. 
+Since we have already accounted for top-level effects, we introduce a variable that models the fraction of all citations a country accounts for in each language edition.
+
+```{r}
+df$top_level <- df$other_total / df$project_total;
+head(df);
+```
+
+We now try to model the remaining variance. 
+Once again, all terms in the model are extremely significant and the full model accounts for the vast majority (92%) of the variance.
+
+```{r}
+full <- glm(cbind(count, article_total-count) ~ . - article_country - other_country - project -project_total -article_total - country, family = binomial(logit), data=df);
+summary(full);
+```
+
+We now try to identify a smaller, more interpretable model.
+Unsurprisingly, the background popularity (analyzed in the previous section) of a country as a source publisher is by far the strongest term.
+
+We then move on to the second term in the model.
+log(distance) is most important, followed by countrylangshare.
+
+```{r}
+min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=df);
+s <- step(min_fit, scope=formula(full), direction='forward', steps=2);
+s <- step(min_fit, scope=formula(full), direction='forward', steps=6, trace=FALSE);
+s$anova;
+```
+
+```{r}
+#s <- step(min_fit, scope=formula(full), direction='forward', trace=FALSE);
+#s$anova;
+```
+
+```{r}
+small_fit <- glm(cbind(count, article_total-count) ~ top_level + logdist + logjournals2, family = binomial(logit), data=df);
+summary(small_fit);
+```
+
+To interpret our model, we can look at the confidence intervals and odds ratios associated with it.
+
+  * For every doubling in the distance between countries, the odds of a country being associated an article in another country are roughly halved.
+  * For every doubling in the number of journal articles for a country, the odds of a publisher in the country being cited roughly double.
+
+```{r}
+exp(cbind(oddsRatio=coef(small_fit), confint(small_fit)));
+```
