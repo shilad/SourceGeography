@@ -79,7 +79,9 @@ def write_data(name, counts):
         tsvf.write(u'\t'.join([str(x) for x in row]) + '\n')
         data.append(row)
 
-    jsonf = codecs.open('../../../web/' + name + '.json', 'w', encoding='utf-8')
+    var_name = name.split('-')[0].upper() + '_DATA' # e.g. EDITOR_DATA
+    jsonf = codecs.open('../../../web/' + name + '.js', 'w', encoding='utf-8')
+    jsonf.write('var ' + var_name + ' = ')
     json.dump(data, jsonf)
     jsonf.close()
     tsvf.close()
