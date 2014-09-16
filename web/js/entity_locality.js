@@ -1,8 +1,9 @@
 var iso2countries = {};
 var countries = [];
 var counts = [];
+var entity = null;
 
-function process_data() {
+var process_data = function() {
     for (var i = 0; i < countries.length; i++) {
         iso2countries[countries[i].iso] = countries[i];
     }
@@ -48,27 +49,20 @@ function process_data() {
 
 
     visualize();
-}
+};
 
 
 function init_page(entity) {
-
-    $.getJSON( "countries.json",
-        function( data ) {
-            countries = data;
-            if (counts.length > 0) {
-                process_data();
-            }
-        });
-
-    $.getJSON( entity + "-counts.json",
-        function( data ) {
-            counts = data;
-            if (countries.length > 0) {
-                process_data();
-            }
-        });
-    $("#go").click(visualize);
+    window.entity = entity;
+    countries = COUNTRY_DATA;
+    if (entity == 'editor') {
+        counts = EDITOR_DATA;
+    } else if (entity == 'publisher') {
+        counts = PUBLISHER_DATA;
+    } else {
+        alert("unknown entity: " + entity);
+    }
+    process_data();
 }
 
 /**

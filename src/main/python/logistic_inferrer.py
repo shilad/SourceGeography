@@ -35,8 +35,8 @@ class LogisticInferrer:
             LanguageFeature(dao),
             TldFeature(dao)
         ]
-        self.intercept = -6.08
-        self.coefficients = [2.06, 4.47, 3.28, 1.82, 0.73, 3.85, 3.00]
+        self.intercept = -8.07
+        self.coefficients = [8.40, 7.94, 4.66, 5.42, 5.78, 6.85, 8.96]
 
     def make_rows(self, url_info):
         rows = collections.defaultdict(list)
@@ -142,6 +142,8 @@ class ParsedWhoisFeature:
 
         pairs = [token.split('|') for token in url_info.whois.split(',')]
         for (country, n) in pairs:
+            if country == '??':
+                continue
             if n == 'p':    # a structure, parsed entry
                 return (0.90, { country : 1.0 })
 
@@ -175,6 +177,8 @@ class NamedWhoisFeature:
         pairs = [token.split('|') for token in url_info.whois.split(',')]
         dist = {}
         for (country, n) in pairs:
+            if country == '??':
+                continue
             if n != 'p':    # a structure, parsed entry
                 dist[country] = int(n)
 

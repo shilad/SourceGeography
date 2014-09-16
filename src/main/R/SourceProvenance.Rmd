@@ -299,7 +299,7 @@ We now try to model the remaining variance.
 Once again, all terms in the model are extremely significant and the full model accounts for the vast majority (92%) of the variance.
 
 ```{r}
-full <- glm(cbind(count, article_total-count) ~ . - article_country - other_country - project -project_total -article_total - country, family = binomial(logit), data=df);
+full <- glm(count / article_total ~ . - article_country - other_country - project -project_total -article_total - country, family = binomial(logit), data=df);
 summary(full);
 ```
 
@@ -310,15 +310,15 @@ We then move on to the second term in the model.
 log(distance) is most important, followed by countrylangshare.
 
 ```{r}
-min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=df);
+min_fit <- glm(count/ article_total ~ 1, family = binomial(logit), data=df);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=2);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=6, trace=FALSE);
 s$anova;
 ```
 
 ```{r}
-#s <- step(min_fit, scope=formula(full), direction='forward', trace=FALSE);
-#s$anova;
+s <- step(min_fit, scope=formula(full), direction='forward', trace=FALSE);
+s$anova;
 ```
 
 ```{r}

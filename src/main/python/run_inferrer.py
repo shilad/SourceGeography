@@ -11,7 +11,7 @@ import traceback
 
 
 import urlinfo
-import nb_inferrer
+import logistic_inferrer
 from sg_utils import *
 
 # From http://stackoverflow.com/a/3679747/141245
@@ -27,7 +27,7 @@ def weighted_choice(choices):
     assert False, "Shouldn't get here"
 
 dao = urlinfo.UrlInfoDao()
-inf = nb_inferrer.NaiveBayesInferrer(dao)
+inf = logistic_inferrer.LogisticInferrer(dao)
 f = sg_open(PATH_URL_RESULT, 'w')
 counts = collections.defaultdict(int)
 

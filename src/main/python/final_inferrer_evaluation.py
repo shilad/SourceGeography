@@ -9,8 +9,8 @@ def main():
 
     folds = 7
     subsets = list([[] for i in range(folds)])
-    for (i, data) in enumerate(data):
-        subsets[i % folds].append(data)
+    for (i, d) in enumerate(data):
+        subsets[i % folds].append(d)
 
     correct = 0
     total = 0
@@ -36,6 +36,10 @@ def main():
                 missed_ps.append(maxp)
                 print 'missed', ui.url, '- guessed', bestc
     print correct, total, sum(correct_ps) / len(correct_ps), sum(missed_ps) / len(missed_ps)
+
+    print 'final model:'
+    inf = logistic_inferrer.LogisticInferrer(dao)
+    inf.train(data)
 
 def read_data(dao):
     names = {}
