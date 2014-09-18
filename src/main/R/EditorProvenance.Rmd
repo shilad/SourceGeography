@@ -163,7 +163,7 @@ Since article_country and other_country are the same, we only include variables 
 Note that all coefficients are significant!
 
 ```{r}
-fit <- glm(cbind(count, article_total - count) ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial(logit), data=local_df)
+fit <- glm(count / article_total ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial, data=local_df)
 summary(fit);
 ```
 
@@ -174,7 +174,7 @@ We begin by carefully analyzing the effects of all variables individually.
 article_is_native is the strongest independent signal of localness, explaining 58% of the model deviance, followed by wplangshare.
 
 ```{r}
-min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=local_df);
+min_fit <- glm(count / article_total ~ 1, family = binomial, data=local_df);
 s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
 ```
 
@@ -182,7 +182,7 @@ We now build up the full model in stepwise fashion (starting with log journals).
 Since log(journals) is highly correlated with logGDP (0.52), it unsurprisingly pushes GDP to the bottom of the equation.
 
 ```{r}
-s <- step(min_fit, scope=formula(fit), direction='forward', trace='false');
+s <- step(min_fit, scope=formula(fit), direction='forward', trace=FALSE);
 s$anova;
 ```
 
@@ -191,19 +191,8 @@ In particular, the first four variables: article_is_native, logINTERNET, wplangs
 
 
 ```{r}
-small_fit <- glm(cbind(count, article_total - count) ~ article_is_native + logINTERNET + wplangshare, family = binomial(logit), data=local_df)
+small_fit <- glm(count / article_total ~ article_is_native + logINTERNET + wplangshare, family = binomial(logit), data=local_df)
 summary(small_fit);
-```
-
-```{r}
-
-fit <- glm(count/article_total ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial(logit), data=local_df)
-summary(fit);
-min_fit <- glm(count / article_total ~ 1, family = binomial(logit), data=local_df);
-s <- step(min_fit, scope=formula(fit), direction='forward');
-s$anova;
-#small_fit <- glm(count/article_total  ~ article_is_native + logINTERNET + wplangshare, family = binomial(logit), data=local_df)
-#summary(small_fit);
 ```
 
 To interpret our model, we can look at the confidence intervals and odds ratios associated with it.
@@ -239,7 +228,7 @@ Now let's build and inspect a model.
 Note that the "localness" problem appears to be much more difficult; this model explains 85% of the deviance in the dataset.
 
 ```{r}  
-fit <- glm(cbind(other_total, project_total-other_total) ~ . - other_country - project - project_total - other_total, family = binomial(logit), data=top_df);
+fit <- glm(other_total / project_total ~ . - other_country - project - project_total - other_total, family = binomial, data=top_df);
 summary(fit);
 ```
 Like before we will examine whether we can build a more compact and interpretable model.
@@ -247,7 +236,7 @@ We first look at the strength of each individual predictor.
 Again, wplangshare rises to the top.
 
 ```{r}
-min_fit <- glm(cbind(other_total, project_total-other_total) ~ 1, family = binomial(logit), data=top_df);
+min_fit <- glm(other_total / project_total ~ 1, family = binomial, data=top_df);
 s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
 ```
 
@@ -262,7 +251,7 @@ s$anova;
 We inspect the pruend model:
 
 ```{r}
-small_fit <- glm(cbind(other_total, project_total-other_total) ~ wplangshare + logjournals2 + other_is_native, family = binomial(logit), data=top_df);
+small_fit <- glm(other_total/project_total ~ wplangshare + logjournals2, family = binomial(logit), data=top_df);
 summary(small_fit);
 ```
 
@@ -284,14 +273,21 @@ Since we have already accounted for top-level effects, we introduce a variable t
 
 ```{r}
 df$top_level <- df$other_total / df$project_total;
+df$is_local <- (as.character(df$article_country) == as.character(df$other_country));
 head(df);
 ```
 
-We now try to model the remaining variance. 
+
+We now try to model the remaining deviance (top-level explains 69% of variance):
+
+```{r}
+summary(glm(count / article_total ~ top_level, family = binomial, data=df));
+```
+
 Once again, all terms in the model are extremely significant and the full model accounts for the vast majority (92%) of the variance.
 
 ```{r}
-full <- glm(cbind(count, article_total-count) ~ . - article_country - other_country - project -project_total -article_total - country, family = binomial(logit), data=df);
+full <- glm(count / article_total ~ top_level + countrylangshare + countrylangpop + langsim + migration1 + migration2 + distance + logdist+ logmigration1 + logmigration2 + is_local, family = binomial, data=df);
 summary(full);
 ```
 
@@ -302,14 +298,14 @@ We then move on to the second term in the model.
 log(distance) between ac and ec is most predictive, followed by log(num-journals for ac)) and other-is-native.
 
 ```{r}
-min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=df);
+min_fit <- glm(count/ article_total ~ 1, family = binomial, data=df);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=2);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=6, trace=FALSE);
 s$anova;
 ```
 
 ```{r}
-small_fit <- glm(cbind(count, article_total-count) ~ top_level + logdist + logjournals2 + other_is_native, family = binomial(logit), data=df);
+small_fit <- glm(count/article_total ~ top_level + countrylangshare +   logmigration1 + is_local, family = binomial(logit), data=df);
 summary(small_fit);
 ```
 

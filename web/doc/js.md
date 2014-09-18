@@ -5,7 +5,7 @@ table of contents](TOC.md)
 
 Information about the default JavaScript included in the project.
 
-## entity_geography.js
+## entity_provenance.js
 
 This file can be used to contain or reference your site/app JavaScript code.
 For larger projects, you can make use of a JavaScript module loader, like

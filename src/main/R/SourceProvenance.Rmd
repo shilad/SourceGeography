@@ -7,18 +7,17 @@ output: html_document
 
 Our overall analyses of source publishers models the relationships between three entities:
 
- * The WP language edition.
- * The country associated with an article (ac).
- * The country associated with the publisher of a source (pc).
+ * wp-lang: The WP language edition.
+ * ac: The country an article is about.
+ * pc: The country where a source publisher is located.
 
-We count the number of citations that occur for each possible triple, and find all possible attributes associated with pc, ac, and wplang significant.
-Thus, we try to identify the most explanatory model variables.
+We count the number of citations that occur for each possible triple of (wp-lang, ac, pc).
 
 
 *Localness:* 
 
 For this analysis, ac = pc.
-For example: Across all articles located in Japan (ac) in the Chinese Wikipedia (wplang), how many are published by Japan (pc).
+For example: Across all articles about Japan (ac) in the Chinese Wikipedia (wplang), how many citations are published by Japanese publishers (pc).
 
 Four country variables explain the vast majority of the overall variance:
 
@@ -179,21 +178,19 @@ nrow(local_df);
 
 We now build the full model. 
 Since article_country and other_country are the same, we only include variables for one of the countries.
-Note that all coefficients are significant!
 
 ```{r}
-fit <- glm(cbind(count, article_total - count) ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial(logit), data=local_df)
+fit <- glm(count / article_total ~ article_is_native + newspapers1 + journals1 + wplangshare + GDP + EDU + INTERNET + lognewspapers1 + logjournals1 + logGDP + logPOP + logEDU + logINTERNET, family = binomial, data=local_df)
 summary(fit);
 ```
 
-Despite the significance of the model terms, it is helpful to prune the model down to a set of variables after which we see diminshing returns.
 We use R's step function to consider every possible model, adding one variable at a time.
 
 We begin by carefully analyzing the effects of all variables individually. 
 log(journals) is the strongest independent signal of localness, explaining 36% of the model deviance, followed by log(GDP).
 
 ```{r}
-min_fit <- glm(cbind(count, article_total-count) ~ 1, family = binomial(logit), data=local_df);
+min_fit <- glm(count / article_total ~ 1, family = binomial, data=local_df);
 s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
 ```
 
@@ -201,7 +198,7 @@ We now build up the full model in stepwise fashion (starting with log journals).
 Since log(journals) is highly correlated with logGDP (0.52), it unsurprisingly pushes GDP to the bottom of the equation.
 
 ```{r}
-s <- step(min_fit, scope=formula(fit), direction='forward', trace='false');
+s <- step(min_fit, scope=formula(fit), direction='forward', trace=FALSE);
 s$anova;
 ```
 
@@ -210,7 +207,7 @@ In particular, the first four variables: logjournals1, logPOP, article_is_native
 
 
 ```{r}
-small_fit <- glm(cbind(count, article_total - count) ~ logjournals1 + logPOP + article_is_native, family = binomial(logit), data=local_df)
+small_fit <- glm(count/ article_total ~ logjournals1 + logPOP + wplangshare, family = binomial, data=local_df)
 summary(small_fit);
 ```
 
@@ -248,7 +245,7 @@ Now let's build and inspect a model.
 Note that the "localness" problem appears to be much more difficult; this model explains 85% of the deviance in the dataset.
 
 ```{r}  
-fit <- glm(cbind(other_total, project_total-other_total) ~ . - other_country - project - project_total - other_total, family = binomial(logit), data=top_df);
+fit <- glm(other_total / project_total ~ . - other_country - project - project_total - other_total, family = binomial, data=top_df);
 summary(fit);
 ```
 Like before we will examine whether we can build a more compact and interpretable model.
@@ -256,7 +253,7 @@ We first look at the strength of each individual predictor.
 Again, logJournals rises to the top.
 
 ```{r}
-min_fit <- glm(cbind(other_total, project_total-other_total) ~ 1, family = binomial(logit), data=top_df);
+min_fit <- glm(other_total / project_total ~ 1, family = binomial, data=top_df);
 s <- step(min_fit, scope=formula(fit), direction='forward', steps=1);
 ```
 
@@ -271,7 +268,7 @@ s$anova;
 We inspect the pruend model:
 
 ```{r}
-small_fit <- glm(cbind(other_total, project_total-other_total) ~ logjournals2 + wplangshare, family = binomial(logit), data=top_df);
+small_fit <- glm(other_total/ project_total ~ logjournals2 + wplangshare, family = binomial, data=top_df);
 summary(small_fit);
 ```
 
@@ -292,14 +289,23 @@ Since we have already accounted for top-level effects, we introduce a variable t
 
 ```{r}
 df$top_level <- df$other_total / df$project_total;
+df$is_local <- (as.character(df$article_country) == as.character(df$other_country));
+#df$article_country;
+#df$other_country;
 head(df);
 ```
 
-We now try to model the remaining variance. 
+We now try to model the remaining deviance (top-level explains 22% of variance):
+
+```{r}
+summary(glm(count / article_total ~ top_level, family = binomial, data=df));
+```
+
 Once again, all terms in the model are extremely significant and the full model accounts for the vast majority (92%) of the variance.
 
 ```{r}
-full <- glm(count / article_total ~ . - article_country - other_country - project -project_total -article_total - country, family = binomial(logit), data=df);
+
+full <- glm(count / article_total ~ top_level + countrylangshare + countrylangpop + langsim + migration1 + migration2 + distance + logdist+ logmigration1 + logmigration2 + is_local, family = binomial, data=df);
 summary(full);
 ```
 
@@ -310,19 +316,14 @@ We then move on to the second term in the model.
 log(distance) is most important, followed by countrylangshare.
 
 ```{r}
-min_fit <- glm(count/ article_total ~ 1, family = binomial(logit), data=df);
+min_fit <- glm(count/ article_total ~ 1, family = binomial, data=df);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=2);
 s <- step(min_fit, scope=formula(full), direction='forward', steps=6, trace=FALSE);
 s$anova;
 ```
 
 ```{r}
-s <- step(min_fit, scope=formula(full), direction='forward', trace=FALSE);
-s$anova;
-```
-
-```{r}
-small_fit <- glm(cbind(count, article_total-count) ~ top_level + logdist + logjournals2, family = binomial(logit), data=df);
+small_fit <- glm(count / article_total ~ top_level + is_local +  logmigration1, family = binomial(logit), data=df);
 summary(small_fit);
 ```
 

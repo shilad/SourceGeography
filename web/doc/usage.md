@@ -27,7 +27,7 @@ A basic HTML5 Boilerplate site initially looks something like this:
 ├── doc
 ├── img
 ├── js
-│   ├── entity_geography.js
+│   ├── entity_provenance.js
 │   ├── plugins.js
 │   └── vendor
 │       ├── jquery.min.js

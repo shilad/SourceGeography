@@ -315,4 +315,19 @@ if __name__ == '__main__':
     data = eval_inferrer.read_test(dao, PATH_2012)
     inf.train(data.values())
 
+    counts = collections.Counter()
+    for d in data.values():
+        available = []
+        for f in inf.features:
+            (conf, dist) = f.infer_dist(d[0])
+            if conf and dist:
+                available.append(f.name)
+        counts['-'.join(available)] += 1
+    total = sum(counts.values())
+    for (k, v) in counts.most_common(len(counts)):
+        print k, v, 1.0 * v / total
+
+
+
+
 

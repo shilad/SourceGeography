@@ -65,6 +65,8 @@ PATH_COUNTRY_NAMES = '../../../dat/country_names.tsv'
 # Final coded dataset
 PATH_CODED_URL_COUNTRIES = '../../../dat/final_coded_url_countries.tsv'
 
+GENERIC_TLDS = set('ad,as,bz,cc,cd,co,dj,fm,io,la,me,ms,nu,sc,sr,su,tv,tk,ws,int'.split(','))
+
 def warn(message):
     sys.stderr.write(message + '\n')
 

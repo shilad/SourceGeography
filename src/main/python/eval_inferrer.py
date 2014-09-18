@@ -10,37 +10,53 @@ import rule_inferrer
 import baseline_inferrer
 
 
-TEST_ALG = 'logistic'
+TEST_ALG = 'baseline'
 
 def read_test(dao, path):
-    test = {}
-    missing = []
-    #for line in ['http://rsssf.com/tablesi/ital-intres1970.html nl']:
-    for line in open('../../../dat/2012_test.tsv'):
-        tokens = line.strip().split()
-        url = tokens[0]
-        cc = tokens[1]
+
+    names = {}
+    for line in sg_open(PATH_COUNTRY_NAMES):
+        (cc, name) = line.lower().strip().split(' ', 1)
+        names[name.strip()] = cc.strip()
+
+    data = {}
+    for line in sg_open(PATH_CODED_URL_COUNTRIES):
+        tokens = line.strip().split('\t', 1)
+        if len(tokens) != 2:
+            continue
+        (url, name) = tokens
+        name = name.lower()
+        if name not in names:
+            warn('unknown name: %s' % (`name`, ))
+            continue
         ui = dao.get_url(url)
         if not ui:
-            missing.append(url)
-        else:
-            test[url] = (ui, cc.lower())
+            warn('unknown url: %s' % (`url`, ))
+            continue
+        data[url] = (ui, names[name].lower())
 
-    print 'missing urls: (%d of %d)' % (len(missing), len(missing) + len(test))
-    #for url in missing:
-    #    print '\t%s' % (url,)
-    print
+    warn('retained %d urls' % len(data))
 
-    return test
+    return data
 
 def normalize_cc(cc):
     cc = cc.lower()
     if cc == 'uk': cc = 'gb'
     return cc
 
+def is_hard(dao, ui):
+    if ui.tld in ('mil', 'gov'):
+        return False
+    elif ui.tld not in GENERIC_TLDS and ui.tld in dao.tld_countries:
+        return False
+    else:
+        return True
+
 def test_feature(feat, test):
     num_missing = 0
 
+    hard_correct = []
+    hard_wrong = []
     correct = []
     wrong = []
 
@@ -54,19 +70,26 @@ def test_feature(feat, test):
 
             top = sorted(dist, key=dist.get, reverse=True)
             top_prob = dist[top[0]]
+            k = (url, actual_cc, top[:3], top_prob)
             if normalize_cc(top[0]) == normalize_cc(actual_cc):
-                correct.append((url, actual_cc, top[:3], top_prob))
+                correct.append(k)
+                if is_hard(dao, ui): hard_correct.append(k)
             else:
-                wrong.append((url, actual_cc, top[:3], top_prob))
+                wrong.append(k)
+                if is_hard(dao, ui): hard_wrong.append(k)
         else:
             (guess, rule) = feat.infer(ui)
             if not guess:
                 num_missing += 1
                 continue
             if normalize_cc(guess.iso) == normalize_cc(actual_cc):
-                correct.append((url, actual_cc, guess, 0.9))
+                k = (url, actual_cc, guess, 0.9)
+                correct.append(k)
+                if is_hard(dao, ui): hard_correct.append(k)
             else:
-                wrong.append((url, actual_cc, guess, 0.5))
+                k = (url, actual_cc, guess, 0.5)
+                wrong.append(k)
+                if is_hard(dao, ui): hard_wrong.append(k)
 
     overall_conf = sum([x[-1] for x in correct + wrong]) / len(correct + wrong)
     correct_conf = sum([x[-1] for x in correct]) / len(correct)
@@ -75,8 +98,12 @@ def test_feature(feat, test):
     else:
         wrong_conf = 0.0
 
-    print 'Feature %s had %d correct, %d wrong, %d missing, confs c=%.7f, w=%.7f, all=%.3f. Wrong are:' % \
-          (feat.name, len(correct), len(wrong), num_missing, correct_conf, wrong_conf, overall_conf)
+    total = len(test)
+    print 'Feature %s had %d correct, %d wrong (%.1f%%), %d missing, coverage=%.1f%% confs c=%.7f, w=%.7f, all=%.3f. Wrong are:' % \
+          (feat.name, len(correct), len(wrong), 100.0 * len(correct) / len(correct + wrong),
+           num_missing, 100.0 * (total - num_missing) / total, correct_conf, wrong_conf, overall_conf)
+    if hard_correct or hard_wrong:
+        print 'Hard domains: %d correct, %d wrong (%.1f%%)' % (len(hard_correct), len(hard_wrong), 100.0 * len(hard_correct) / len(hard_wrong + hard_correct))
     for w in correct:
         print '\tcorrect: %s actual=%s pred=%s conf=%.3f' % w
     for w in wrong:
