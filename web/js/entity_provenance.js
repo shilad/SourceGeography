@@ -201,7 +201,7 @@ function visualize() {
     div.find("table.data tbody").html(rows);
 
     var map_params = {
-        backgroundColor: '#fff',
+        backgroundColor: '#ddd',
         map: 'world_mill_en',
         series: {
             regions: [{
@@ -222,7 +222,7 @@ function visualize() {
             initial: {
                 fill: 'white',
                 "fill-opacity": 1,
-                stroke: '#bbb',
+                stroke: '#999',
                 "stroke-width": 1,
                 "stroke-opacity": 1
             },
