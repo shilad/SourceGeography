@@ -201,15 +201,17 @@ function visualize() {
     div.find("table.data tbody").html(rows);
 
     var map_params = {
-        backgroundColor: '#666',
+        backgroundColor: '#fff',
         map: 'world_mill_en',
         series: {
             regions: [{
                 min: 0.0,
-                max: 1.0,
+                max: 0.65,
                 values: provenance,
-                scale: ['#C8EEFF', '#0071A4'],
-                normalizeFunction: 'polynomial'
+                scale: ['#FFFFFF', '#0071BB'],
+                normalizeFunction: function (value) {
+                    return Math.pow(value, 0.333);
+                }
             }]
         },
         onRegionLabelShow   : function(e, el, code){
@@ -220,8 +222,8 @@ function visualize() {
             initial: {
                 fill: 'white',
                 "fill-opacity": 1,
-                stroke: 'none',
-                "stroke-width": 0,
+                stroke: '#bbb',
+                "stroke-width": 1,
                 "stroke-opacity": 1
             },
             hover: {
@@ -229,7 +231,7 @@ function visualize() {
             },
             selected: {
                 stroke: 'red',
-                "stroke-width": 2
+                "stroke-width": 1
             },
             selectedHover: {
             }
