@@ -305,6 +305,11 @@ s$anova;
 ```
 
 ```{r}
+small_fit <- glm(count/article_total ~ top_level +  countrylangshare +   logmigration1 + is_local, family = binomial(logit), data=df);
+summary(small_fit);
+```
+
+```{r}
 small_fit <- glm(count/article_total ~ top_level + countrylangshare +   logmigration1 + is_local, family = binomial(logit), data=df);
 summary(small_fit);
 ```

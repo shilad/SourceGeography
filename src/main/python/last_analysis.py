@@ -3,7 +3,7 @@ from sg_utils import *
 
 
 PROJS = ['fr', 'ar']
-ARTICLE_COUNTRIES = ['Overall', 'ir', 'iq', 'tn']
+ARTICLE_COUNTRIES = ['Overall', 'eg', 'ir', 'iq', 'tn']
 TO_COUNT = ['dz', 'eg', 'ir', 'iq', 'sa', 'tn', 'fr', 'be', 'ca', 'gb', 'us', 'Other']
 
 def main():

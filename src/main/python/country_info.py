@@ -182,4 +182,4 @@ def read_countries():
 
 if __name__ == '__main__':
     for c in read_countries():
-        print c, c.lang_fraction
+        print c, c.lang_speakers2

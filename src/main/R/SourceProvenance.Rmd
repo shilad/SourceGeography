@@ -202,12 +202,20 @@ s <- step(min_fit, scope=formula(fit), direction='forward', trace=FALSE);
 s$anova;
 ```
 
+```{r}
+fitz <- glm(count / article_total ~ article_is_native * wplangshare *  wplangshare:logjournals1 * logINTERNET, family = binomial, data=local_df)
+summary(fitz);
+
+s2 <- step(min_fit, scope=formula(fitz), direction='forward', trace=FALSE);
+s2$anova;
+```
+
 We can now see that a few key variables can account for most of the model's explanatory power.
 In particular, the first four variables: logjournals1, logPOP, article_is_native, and wplangshare explain about half of the deviance in the model.
 
 
 ```{r}
-small_fit <- glm(count/ article_total ~ logjournals1 + logPOP + wplangshare, family = binomial, data=local_df)
+small_fit <- glm(count/ article_total ~ logjournals1  + wplangshare, family = binomial, data=local_df)
 summary(small_fit);
 ```
 
@@ -268,7 +276,7 @@ s$anova;
 We inspect the pruend model:
 
 ```{r}
-small_fit <- glm(other_total/ project_total ~ logjournals2 + wplangshare, family = binomial, data=top_df);
+small_fit <- glm(other_total/ project_total ~ logjournals1 + wplangshare, family = binomial, data=top_df);
 summary(small_fit);
 ```
 
@@ -325,7 +333,14 @@ s$anova;
 ```{r}
 small_fit <- glm(count / article_total ~ top_level + is_local +  logmigration1, family = binomial(logit), data=df);
 summary(small_fit);
+
+```{r}
+small_fit2 <- glm(count / article_total ~ top_level + is_local * logjournals1 +  logmigration1, family = binomial(logit), data=df);
+summary(small_fit2);
+
+anova(small_fit, small_fit2, test='Chisq');
 ```
+
 
 To interpret our model, we can look at the confidence intervals and odds ratios associated with it.
 
@@ -334,4 +349,5 @@ To interpret our model, we can look at the confidence intervals and odds ratios 
 
 ```{r}
 exp(cbind(oddsRatio=coef(small_fit), confint(small_fit)));
+exp(cbind(oddsRatio=coef(small_fit2), confint(small_fit2)));
 ```

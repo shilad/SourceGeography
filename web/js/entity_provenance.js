@@ -128,7 +128,7 @@ function visualize() {
         return;
     }
 
-    // whether to group results by publisher country (default) or article country
+    // whether to group results by source country (default) or article country
     var by_publisher = (publisher_iso == 'all' || article_iso != 'all');
 
     console.log(article_iso + ', ' + publisher_iso + ', ' + by_publisher);
@@ -237,7 +237,7 @@ function visualize() {
             }
         },
         onRegionClick : function(e, iso, isSelected) {
-            $("input[name='publisher']").val(iso2countries[iso.toLowerCase()].name);
+            $("input[name='article']").val(iso2countries[iso.toLowerCase()].name);
             $(".jvectormap-label").remove();
             visualize();
         }
@@ -251,7 +251,7 @@ function visualize() {
     var map = $('.world-map:first-of-type').empty().vectorMap(map_params);
     var caption = '';
     if (entity == 'publisher' && by_publisher) {
-        caption = '# citations from publishers in country';
+        caption = '# citations from sources in country';
     } else if (entity == 'publisher' && !by_publisher) {
         caption = '# citations in articles about country';
     } else if (entity == 'editor' && by_publisher) {
