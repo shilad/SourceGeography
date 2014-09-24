@@ -103,8 +103,8 @@ class UrlInfoDao:
             country_scores.reverse()
             sum_scores = 1.0 * sum([s for (s, c) in country_scores]) + 0.000001
             self.lang_countries[lang] = [(c, score/sum_scores) for (score, c) in country_scores]
-            if len(country_scores) > 2:
-               print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
+            #if len(country_scores) > 2:
+            #   print 'countries for %s are %s' % (lang, [(c.name,s) for (c, s) in self.lang_countries[lang]])
 
     def read_page_langs(self, urls):
         if not os.path.isfile(PATH_URL_LANGS):
